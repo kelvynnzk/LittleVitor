@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus eventos — Agenda</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="wrap header-inner">
+            <a href="index.html" class="logo">Agenda<span class="logo-dot">.</span></a>
+            <nav class="main-nav">
+                <a href="painel.html" class="is-active">Meus eventos</a>
+                <a href="index.html#eventos">Ver agenda</a>
+            </nav>
+            <a href="#" class="btn btn-ghost">Sair</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="painel">
+            <div class="wrap">
+
+                <div class="painel-head">
+                    <div>
+                        <h1>Meus eventos</h1>
+                        <p>Gerencie o que você criou, acompanhe vendas e edite os detalhes.</p>
+                    </div>
+                    <a href="criar-evento.html" class="btn btn-primary">+ Criar evento</a>
+                </div>
+
+                <!-- RESUMO -->
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <span class="stat-num">3</span>
+                        <span class="stat-label">Eventos ativos</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-num">184</span>
+                        <span class="stat-label">Ingressos vendidos</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-num">R$ 12.640</span>
+                        <span class="stat-label">Total arrecadado</span>
+                    </div>
+                </div>
+
+                <!-- LISTA DE EVENTOS -->
+                <div class="painel-lista">
+
+                    <article class="painel-card">
+                        <div class="painel-card-info">
+                            <span class="tag tag-musica">Música</span>
+                            <h3>Noite Eletrônica no Cais</h3>
+                            <p class="painel-card-meta">Sex, 19 de dezembro · Armazém 4</p>
+                            <div class="painel-progress">
+                                <div class="painel-progress-bar" style="width: 68%"></div>
+                            </div>
+                            <p class="painel-progress-label">136 / 200 ingressos vendidos</p>
+                        </div>
+                        <div class="painel-card-actions">
+                            <a href="evento.html" class="btn btn-outline">Ver anúncio</a>
+                            <a href="criar-evento.html" class="btn btn-outline">Editar</a>
+                            <button type="button" class="btn-icon-delete" aria-label="Excluir evento">&times;</button>
+                        </div>
+                    </article>
+
+                    <article class="painel-card">
+                        <div class="painel-card-info">
+                            <span class="tag tag-negocios">Negócios</span>
+                            <h3>Encontro de Founders — Coworking Vértice</h3>
+                            <p class="painel-card-meta">Sex, 19 de dezembro · Coworking Vértice</p>
+                            <div class="painel-progress">
+                                <div class="painel-progress-bar" style="width: 32%"></div>
+                            </div>
+                            <p class="painel-progress-label">32 / 100 ingressos vendidos</p>
+                        </div>
+                        <div class="painel-card-actions">
+                            <a href="evento.html" class="btn btn-outline">Ver anúncio</a>
+                            <a href="criar-evento.html" class="btn btn-outline">Editar</a>
+                            <button type="button" class="btn-icon-delete" aria-label="Excluir evento">&times;</button>
+                        </div>
+                    </article>
+
+                    <article class="painel-card is-rascunho">
+                        <div class="painel-card-info">
+                            <span class="tag tag-gastronomia">Gastronomia</span>
+                            <span class="badge-rascunho">Rascunho</span>
+                            <h3>Feira de Food Trucks — Parque Ibirapuera</h3>
+                            <p class="painel-card-meta">Ainda não publicado</p>
+                        </div>
+                        <div class="painel-card-actions">
+                            <a href="criar-evento.html" class="btn btn-outline">Continuar edição</a>
+                            <button type="button" class="btn-icon-delete" aria-label="Excluir evento">&times;</button>
+                        </div>
+                    </article>
+
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap footer-inner">
+            <p>Agenda<span class="logo-dot">.</span> — feito para conectar pessoas a experiências reais.</p>
+            <p class="footer-meta">&copy; 2026 Agenda. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

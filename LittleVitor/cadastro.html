@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar conta — Agenda</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="wrap header-inner">
+            <a href="index.html" class="logo">Agenda<span class="logo-dot">.</span></a>
+            <nav class="main-nav">
+                <a href="index.html#eventos">Eventos</a>
+                <a href="index.html#categorias">Categorias</a>
+                <a href="index.html#sobre">Sobre</a>
+            </nav>
+            <a href="login.html" class="btn btn-ghost">Entrar</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="auth-page">
+            <div class="wrap auth-wrap">
+                <div class="auth-card">
+                    <h1>Criar conta</h1>
+                    <p class="auth-sub">Cadastre-se para comprar ingressos ou publicar seus próprios eventos.</p>
+
+                    <!-- em caso de erro, o Python renderiza esta mensagem -->
+                    <!-- <p class="auth-error">Esse e-mail já está cadastrado.</p> -->
+
+                    <form class="auth-form" action="#" method="post">
+                        <div class="form-group">
+                            <label class="form-label" for="nome">Nome completo</label>
+                            <input type="text" id="nome" name="nome" placeholder="Seu nome" required autofocus>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="email">E-mail</label>
+                            <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="senha">Senha</label>
+                            <input type="password" id="senha" name="senha" placeholder="Mínimo 8 caracteres"
+                                minlength="8" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="confirmar_senha">Confirmar senha</label>
+                            <input type="password" id="confirmar_senha" name="confirmar_senha"
+                                placeholder="Repita a senha" minlength="8" required>
+                        </div>
+
+                        <label class="checkbox-label checkbox-terms">
+                            <input type="checkbox" name="aceite_termos" required>
+                            Li e aceito os <a href="#" class="auth-link">termos de uso</a>
+                        </label>
+
+                        <button type="submit" class="btn btn-primary btn-full">Criar conta</button>
+                    </form>
+
+                    <p class="auth-footer">
+                        Já tem conta? <a href="login.html" class="auth-link">Entrar</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap footer-inner">
+            <p>Agenda<span class="logo-dot">.</span> — feito para conectar pessoas a experiências reais.</p>
+            <p class="footer-meta">&copy; 2026 Agenda. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

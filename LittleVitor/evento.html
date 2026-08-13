@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noite Eletrônica no Cais — Agenda</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="wrap header-inner">
+            <a href="index.html" class="logo">Agenda<span class="logo-dot">.</span></a>
+            <nav class="main-nav">
+                <a href="index.html#eventos">Eventos</a>
+                <a href="index.html#categorias">Categorias</a>
+                <a href="index.html#sobre">Sobre</a>
+            </nav>
+            <a href="login.html" class="btn btn-ghost">Entrar</a>
+        </div>
+    </header>
+
+    <main>
+
+        <div class="wrap">
+            <a href="index.html" class="back-link">&larr; Voltar pra agenda</a>
+        </div>
+
+        <!-- CABEÇALHO DO EVENTO -->
+        <section class="evento-hero">
+            <div class="wrap evento-hero-inner">
+                <div>
+                    <span class="tag tag-musica">Música</span>
+                    <h1>Noite Eletrônica no Cais</h1>
+                    <p class="evento-sub">Uma noite de sets ao vivo com line-up nacional, à beira do rio, num dos
+                        armazéns mais icônicos da cidade.</p>
+
+                    <ul class="evento-facts">
+                        <li>
+                            <span class="fact-label">Quando</span>
+                            <span class="fact-value">Sex, 19 de dezembro · 20:00</span>
+                        </li>
+                        <li>
+                            <span class="fact-label">Onde</span>
+                            <span class="fact-value">Armazém 4 — Cais Mauá</span>
+                        </li>
+                        <li>
+                            <span class="fact-label">Organizador</span>
+                            <span class="fact-value">Coletivo Maré</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Card de compra -->
+                <aside class="compra-card">
+                    <div class="ticket-top">
+                        <span class="ticket-label is-live">Vendas abertas</span>
+                        <h3>Escolha seu ingresso</h3>
+                    </div>
+
+                    <div class="ticket-perf"></div>
+
+                    <form class="compra-form" action="#" method="post">
+                        <div class="ingresso-opcao">
+                            <label>
+                                <input type="radio" name="tipo_ingresso" value="pista" checked>
+                                <span class="opcao-nome">Pista</span>
+                                <span class="opcao-preco">R$ 60</span>
+                            </label>
+                        </div>
+                        <div class="ingresso-opcao">
+                            <label>
+                                <input type="radio" name="tipo_ingresso" value="vip">
+                                <span class="opcao-nome">Área VIP</span>
+                                <span class="opcao-preco">R$ 120</span>
+                            </label>
+                        </div>
+
+                        <div class="qtd-row">
+                            <label for="quantidade">Quantidade</label>
+                            <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="10">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-full">Comprar ingresso</button>
+                        <p class="compra-aviso">Pagamento processado com segurança. Você recebe o ingresso por e-mail.
+                        </p>
+                    </form>
+                </aside>
+            </div>
+        </section>
+
+        <!-- SOBRE O EVENTO -->
+        <section class="evento-sobre">
+            <div class="wrap evento-sobre-inner">
+                <div class="evento-descricao">
+                    <h2>Sobre o evento</h2>
+                    <p>O Coletivo Maré retorna ao Armazém 4 com uma line-up que atravessa house, techno e breaks, em um
+                        espaço industrial reformado às margens do Cais Mauá. Bares locais, food trucks e uma pista de
+                        dança a céu aberto completam a experiência.</p>
+                    <p>Chegue cedo: o line-up de abertura começa pontualmente às 20h, e os portões fecham para novas
+                        entradas à 1h.</p>
+
+                    <h3>O que levar</h3>
+                    <ul class="evento-lista">
+                        <li>Documento com foto</li>
+                        <li>Ingresso digital (print ou celular)</li>
+                        <li>Roupa confortável — parte da pista é ao ar livre</li>
+                    </ul>
+                </div>
+
+                <div class="evento-mapa-box">
+                    <h3>Localização</h3>
+                    <p>Armazém 4, Cais Mauá<br>Porto Alegre — RS</p>
+                    <div class="mapa-placeholder" aria-hidden="true"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="sobre" class="site-footer">
+        <div class="wrap footer-inner">
+            <p>Agenda<span class="logo-dot">.</span> — feito para conectar pessoas a experiências reais.</p>
+            <p class="footer-meta">&copy; 2026 Agenda. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
