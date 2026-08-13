@@ -1,0 +1,428 @@
+/* ============================================
+   Agenda — Design tokens
+   ============================================ */
+:root {
+  --ink:        #14171F;
+  --ink-soft:   #1C202B;
+  --paper:      #F2F0EA;
+  --paper-dim:  #A7ACBC;
+  --amber:      #FFB238;
+  --amber-dim:  #3A2E17;
+  --live-red:   #E4572E;
+  --line:       #2A2F3D;
+
+  --font-display: 'Fraunces', serif;
+  --font-body:    'Inter', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0;
+}
+
+em { font-style: italic; color: var(--amber); }
+
+a { color: inherit; text-decoration: none; }
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+
+.btn-primary {
+  background: var(--amber);
+  color: #201404;
+}
+.btn-primary:hover { background: #ffc35f; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--paper);
+  border-color: var(--line);
+}
+.btn-ghost:hover { border-color: var(--amber); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--paper);
+  border-color: var(--line);
+  padding: 10px 18px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.btn-outline:hover { border-color: var(--amber); color: var(--amber); }
+
+/* ============================================
+   Header
+   ============================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(20, 23, 31, 0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.logo-dot { color: var(--amber); }
+
+.main-nav {
+  display: flex;
+  gap: 32px;
+}
+.main-nav a {
+  font-size: 0.92rem;
+  color: var(--paper-dim);
+  transition: color .15s ease;
+}
+.main-nav a:hover { color: var(--paper); }
+
+/* ============================================
+   Hero
+   ============================================ */
+.hero {
+  padding: 88px 0 72px;
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1.1fr 0.7fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin: 0 0 18px;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 4.4vw, 3.6rem);
+  max-width: 12ch;
+}
+
+.hero-sub {
+  color: var(--paper-dim);
+  max-width: 46ch;
+  margin: 22px 0 32px;
+  font-size: 1.05rem;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  max-width: 480px;
+}
+.search-bar input {
+  flex: 1;
+  padding: 13px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--ink-soft);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+}
+.search-bar input::placeholder { color: var(--paper-dim); }
+.search-bar input:focus { outline: none; border-color: var(--amber); }
+
+/* --- Ticket card: signature element --- */
+.ticket-card {
+  background: var(--ink-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+}
+
+.ticket-top {
+  padding: 26px 24px 22px;
+}
+
+.ticket-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--live-red);
+  border: 1px solid var(--live-red);
+  border-radius: 999px;
+  padding: 3px 10px;
+  margin-bottom: 14px;
+}
+
+.ticket-top h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.ticket-meta {
+  color: var(--paper-dim);
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+.ticket-perf {
+  position: relative;
+  height: 0;
+  border-top: 2px dashed var(--line);
+  margin: 0 24px;
+}
+.ticket-perf::before,
+.ticket-perf::after {
+  content: "";
+  position: absolute;
+  top: -11px;
+  width: 22px;
+  height: 22px;
+  background: var(--ink);
+  border-radius: 50%;
+}
+.ticket-perf::before { left: -33px; }
+.ticket-perf::after  { right: -33px; }
+
+.ticket-stub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 26px;
+  font-family: var(--font-mono);
+}
+.stub-code { color: var(--paper-dim); font-size: 0.8rem; }
+.stub-date {
+  font-size: 0.85rem;
+  line-height: 1.1;
+  text-align: right;
+  color: var(--amber);
+  font-weight: 500;
+}
+
+/* ============================================
+   Categorias
+   ============================================ */
+.categorias {
+  border-bottom: 1px solid var(--line);
+  padding: 26px 0;
+}
+.cat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.cat-pill {
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--paper-dim);
+  transition: all .15s ease;
+}
+.cat-pill:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+/* ============================================
+   Programação / agenda list
+   ============================================ */
+.programacao { padding: 80px 0; }
+
+.section-head { margin-bottom: 40px; max-width: 52ch; }
+.section-head h2 { font-size: 2rem; margin-bottom: 10px; }
+.section-head p { color: var(--paper-dim); margin: 0; }
+
+.agenda-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.agenda-item {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  align-items: center;
+  gap: 28px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.agenda-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-mono);
+}
+.agenda-time .day {
+  font-size: 0.72rem;
+  color: var(--paper-dim);
+  letter-spacing: 0.05em;
+}
+.agenda-time .date {
+  font-size: 1.6rem;
+  color: var(--paper);
+  font-weight: 500;
+}
+
+.agenda-item.is-live .agenda-time .date { color: var(--live-red); }
+
+.tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+.tag-musica      { background: var(--amber-dim); color: var(--amber); }
+.tag-negocios    { background: #1C2B3A; color: #6FB8E8; }
+.tag-gastronomia { background: #2A2117; color: #E8A96F; }
+
+.agenda-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.agenda-info p {
+  margin: 0;
+  color: var(--paper-dim);
+  font-size: 0.9rem;
+}
+
+/* ============================================
+   Newsletter
+   ============================================ */
+.newsletter {
+  background: var(--ink-soft);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 64px 0;
+}
+.newsletter-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.newsletter h2 { font-size: 1.7rem; margin-bottom: 8px; }
+.newsletter p { color: var(--paper-dim); margin: 0; max-width: 40ch; }
+
+.newsletter-form {
+  display: flex;
+  gap: 10px;
+}
+.newsletter-form input {
+  padding: 13px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  min-width: 240px;
+}
+.newsletter-form input:focus { outline: none; border-color: var(--amber); }
+
+/* ============================================
+   Footer
+   ============================================ */
+.site-footer { padding: 36px 0; }
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--paper-dim);
+  font-size: 0.85rem;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 860px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .agenda-item {
+    grid-template-columns: 56px 1fr;
+  }
+  .agenda-item .btn-outline {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 560px) {
+  .main-nav { display: none; }
+  .search-bar { flex-direction: column; }
+  .newsletter-inner { flex-direction: column; align-items: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; scroll-behavior: auto !important; }
+}
