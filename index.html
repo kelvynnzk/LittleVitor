@@ -1,11 +1,167 @@
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda — Encontre eventos perto de você</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>Eu e saulo sempre</h1>
+
+    <header class="site-header">
+        <div class="wrap header-inner">
+            <a href="#" class="logo">Agenda<span class="logo-dot">.</span></a>
+            <nav class="main-nav">
+                <a href="#eventos">Eventos</a>
+                <a href="#categorias">Categorias</a>
+                <a href="#sobre">Sobre</a>
+            </nav>
+            <a href="#" class="btn btn-ghost">Entrar</a>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="wrap hero-inner">
+                <div class="hero-copy">
+                    <p class="eyebrow">Sáb, 13 de dez · São Paulo</p>
+                    <h1>O que vai acontecer<br>essa semana <em>perto de você</em>.</h1>
+                    <p class="hero-sub">Shows, festas, workshops e encontros — organizados por data, prontos pra você
+                        marcar presença.</p>
+                    <form class="search-bar" action="#" method="get">
+                        <input type="text" name="busca" placeholder="Buscar por cidade, artista ou tipo de evento">
+                        <button type="submit" class="btn btn-primary">Buscar</button>
+                    </form>
+                </div>
+
+                <!-- Elemento de assinatura: canhoto de ingresso -->
+                <div class="ticket-card" aria-hidden="true">
+                    <div class="ticket-top">
+                        <span class="ticket-label">Em destaque</span>
+                        <h3>Noite Eletrônica<br>no Cais</h3>
+                        <p class="ticket-meta">20:00 · Armazém 4</p>
+                    </div>
+                    <div class="ticket-perf"></div>
+                    <div class="ticket-stub">
+                        <span class="stub-code">SET-2213</span>
+                        <span class="stub-date">DEZ<br>19</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORIAS -->
+        <section id="categorias" class="categorias">
+            <div class="wrap">
+                <div class="cat-row">
+                    <a href="#" class="cat-pill">Música</a>
+                    <a href="#" class="cat-pill">Gastronomia</a>
+                    <a href="#" class="cat-pill">Arte &amp; Cultura</a>
+                    <a href="#" class="cat-pill">Negócios</a>
+                    <a href="#" class="cat-pill">Esporte</a>
+                    <a href="#" class="cat-pill">Bem-estar</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROGRAMAÇÃO -->
+        <section id="eventos" class="programacao">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>Programação da semana</h2>
+                    <p>Atualizada em tempo real conforme novos eventos são publicados.</p>
+                </div>
+
+                <ul class="agenda-list">
+
+                    <li class="agenda-item">
+                        <div class="agenda-time">
+                            <span class="day">QUI</span>
+                            <span class="date">18</span>
+                        </div>
+                        <div class="agenda-info">
+                            <span class="tag tag-musica">Música</span>
+                            <h3>Sarau Acústico — Praça das Artes</h3>
+                            <p>19:30 · Entrada gratuita · Centro</p>
+                        </div>
+                        <a href="#" class="btn btn-outline">Ver evento</a>
+                    </li>
+
+                    <li class="agenda-item">
+                        <div class="agenda-time">
+                            <span class="day">SEX</span>
+                            <span class="date">19</span>
+                        </div>
+                        <div class="agenda-info">
+                            <span class="tag tag-negocios">Negócios</span>
+                            <h3>Encontro de Founders — Coworking Vértice</h3>
+                            <p>09:00 · A partir de R$ 40 · Zona Sul</p>
+                        </div>
+                        <a href="#" class="btn btn-outline">Ver evento</a>
+                    </li>
+
+                    <li class="agenda-item is-live">
+                        <div class="agenda-time">
+                            <span class="day">SEX</span>
+                            <span class="date">19</span>
+                        </div>
+                        <div class="agenda-info">
+                            <span class="tag tag-musica">Música</span>
+                            <h3>Noite Eletrônica no Cais</h3>
+                            <p>20:00 · A partir de R$ 60 · Armazém 4</p>
+                        </div>
+                        <a href="#" class="btn btn-outline">Ver evento</a>
+                    </li>
+
+                    <li class="agenda-item">
+                        <div class="agenda-time">
+                            <span class="day">SÁB</span>
+                            <span class="date">20</span>
+                        </div>
+                        <div class="agenda-info">
+                            <span class="tag tag-gastronomia">Gastronomia</span>
+                            <h3>Feira de Food Trucks — Parque Ibirapuera</h3>
+                            <p>12:00 · Entrada gratuita · Ibirapuera</p>
+                        </div>
+                        <a href="#" class="btn btn-outline">Ver evento</a>
+                    </li>
+
+                </ul>
+            </div>
+        </section>
+
+        <!-- NEWSLETTER -->
+        <section class="newsletter">
+            <div class="wrap newsletter-inner">
+                <div>
+                    <h2>Não perca o próximo evento.</h2>
+                    <p>Receba a agenda da semana direto no seu e-mail, toda segunda-feira.</p>
+                </div>
+                <form class="newsletter-form" action="#" method="post">
+                    <input type="email" name="email" placeholder="seu@email.com" required>
+                    <button type="submit" class="btn btn-primary">Quero receber</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="sobre" class="site-footer">
+        <div class="wrap footer-inner">
+            <p>Agenda<span class="logo-dot">.</span> — feito para conectar pessoas a experiências reais.</p>
+            <p class="footer-meta">&copy; 2026 Agenda. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
 </body>
 
 </html>
