@@ -110,8 +110,8 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 18px;
-  padding-bottom: 18px;
+  padding-top: 15px;
+  padding-bottom: 10px;
 }
 
 .logo {
@@ -128,7 +128,8 @@ a { color: inherit; text-decoration: none; }
 .main-nav a {
   font-size: 0.92rem;
   color: var(--paper-dim);
-  transition: color .15s ease;
+  transition: var(--transition);
+  position: relative;
 }
 .main-nav a:hover { color: var(--paper); }
 
