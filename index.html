@@ -13,6 +13,7 @@
 </head>
 
 <body>
+  <div class="mouse-glow"></div>
 
   <div id="bolinha"></div>
 
@@ -282,6 +283,26 @@
       }, 250);
     }, 3000);
     el.style.transition = 'opacity .25s ease';
+    const glow = document.querySelector('.mouse-glow');
+
+    document.addEventListener('mousemove', (e) => {
+      glow.style.transform = `translate(${e.clientX - 210}px, ${e.clientY - 210}px)`;
+    });
+    let mouseX = 0, mouseY = 0;
+    let glowX = 0, glowY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function animate() {
+      glowX += (mouseX - glowX) * 0.08; // quanto menor, mais "atraso"
+      glowY += (mouseY - glowY) * 0.08;
+      glow.style.transform = `translate(${glowX - 210}px, ${glowY - 210}px)`;
+      requestAnimationFrame(animate);
+    }
+    animate();
   </script>
 
 </body>
