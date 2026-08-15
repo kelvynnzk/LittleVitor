@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperar senha — LittleVitor.com</title>
+    <title>Criar conta — LittleVitor.com</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
@@ -20,9 +20,10 @@
             <div class="logo">LittleVitor<span>.com</span></div>
 
             <div class="auth-visual-quote">
-                <div class="eyebrow"><span class="dot"></span> RECUPERAÇÃO DE ACESSO</div>
-                <h2>Acontece. <em>Vamos resolver.</em></h2>
-                <p>Em poucos passos você volta a acessar seus eventos salvos e comunidades favoritas.</p>
+                <div class="eyebrow"><span class="dot"></span> JUNTE-SE À COMUNIDADE</div>
+                <h2>Seus eventos favoritos, <em>num só lugar.</em></h2>
+                <p>Crie sua conta gratuita e comece a seguir comunidades, salvar eventos e montar seu roteiro da semana.
+                </p>
 
                 <div class="auth-mini-card">
                     <span class="featured-badge">● EM DESTAQUE</span>
@@ -37,50 +38,54 @@
         <div class="auth-form-panel">
             <div class="auth-form-box">
 
-                <a href="login.html" class="back-link">← Voltar para o login</a>
+                <a href="index.html" class="back-link">← Voltar ao início</a>
 
-                <!-- ESTADO 1: pedir e-mail -->
-                <div id="step-request">
-                    <div class="step-dots">
-                        <div class="step-dot active"></div>
-                        <div class="step-dot"></div>
+                <h1>Crie sua conta</h1>
+                <p class="auth-sub">Já tem uma conta? <a href="login.html">Entrar</a></p>
+
+                <form id="cadastro-form">
+                    <button type="button" class="btn-social"><span class="icon">G</span> Cadastrar com Google</button>
+                    <button type="button" class="btn-social"><span class="icon">◆</span> Cadastrar com Apple</button>
+
+                    <div class="auth-divider">ou cadastre-se com e-mail</div>
+
+                    <div class="field-group">
+                        <label for="nome">Nome completo</label>
+                        <input class="field-input" type="text" id="nome" placeholder="Como você se chama">
                     </div>
 
-                    <h1>Esqueceu sua senha?</h1>
-                    <p class="auth-sub">Sem problema. Digite o e-mail da sua conta e enviamos um link de redefinição.
-                    </p>
+                    <div class="field-group">
+                        <label for="email">E-mail</label>
+                        <input class="field-input" type="email" id="email" placeholder="voce@exemplo.com">
+                    </div>
 
-                    <form id="request-form">
-                        <div class="field-group">
-                            <label for="email">E-mail</label>
-                            <input class="field-input" type="email" id="email" placeholder="voce@exemplo.com" required>
+                    <div class="field-group">
+                        <label for="senha">Senha</label>
+                        <div class="field-password-wrap">
+                            <input class="field-input" type="password" id="senha" placeholder="Crie uma senha">
+                            <button type="button" class="field-toggle">mostrar</button>
                         </div>
-
-                        <button type="submit" class="btn-auth-primary">Enviar link de redefinição</button>
-                    </form>
-
-                    <p class="auth-footer-note">Lembrou a senha? <a href="login.html">Voltar ao login</a></p>
-                </div>
-
-                <!-- ESTADO 2: confirmação de envio -->
-                <div id="step-sent" style="display:none;">
-                    <div class="step-dots">
-                        <div class="step-dot"></div>
-                        <div class="step-dot active"></div>
+                        <div class="strength-meter">
+                            <div class="bar" id="bar1"></div>
+                            <div class="bar" id="bar2"></div>
+                            <div class="bar" id="bar3"></div>
+                        </div>
+                        <div class="field-hint" id="strength-hint">Use ao menos 8 caracteres, com números e letras.
+                        </div>
                     </div>
 
-                    <div class="success-icon">✓</div>
+                    <div class="field-row-between" style="margin-bottom:22px;">
+                        <label class="checkbox-line">
+                            <input type="checkbox" required>
+                            Aceito os <a href="#" class="link-quiet" style="margin-left:4px;">Termos de uso</a>
+                        </label>
+                    </div>
 
-                    <h1>Verifique seu e-mail</h1>
-                    <p class="auth-sub">Enviamos um link de redefinição para <strong id="sent-email"
-                            style="color:var(--text-hi);">seu e-mail</strong>. Ele expira em 30 minutos.</p>
+                    <button type="submit" class="btn-auth-primary">Criar conta grátis</button>
+                </form>
 
-                    <button type="button" class="btn-auth-primary" id="btn-abrir-email">Abrir caixa de entrada</button>
-                    <button type="button" class="btn-social" id="btn-reenviar">Reenviar link</button>
-
-                    <p class="auth-footer-note">Não recebeu? Verifique o spam ou <a href="#" id="link-outro-email">tente
-                            outro e-mail</a>.</p>
-                </div>
+                <p class="auth-footer-note">Ao se cadastrar, você concorda em receber avisos de eventos por e-mail.
+                    Cancele quando quiser.</p>
 
             </div>
         </div>
@@ -88,28 +93,41 @@
     </div>
 
     <script>
-        const requestForm = document.getElementById('request-form');
-        const stepRequest = document.getElementById('step-request');
-        const stepSent = document.getElementById('step-sent');
-        const emailInput = document.getElementById('email');
-        const sentEmail = document.getElementById('sent-email');
-
-        requestForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            sentEmail.textContent = emailInput.value || 'seu e-mail';
-            stepRequest.style.display = 'none';
-            stepSent.style.display = 'block';
+        const toggle = document.querySelector('.field-toggle');
+        const senha = document.getElementById('senha');
+        toggle.addEventListener('click', () => {
+            const isPassword = senha.type === 'password';
+            senha.type = isPassword ? 'text' : 'password';
+            toggle.textContent = isPassword ? 'ocultar' : 'mostrar';
         });
 
-        document.getElementById('link-outro-email').addEventListener('click', (e) => {
-            e.preventDefault();
-            stepSent.style.display = 'none';
-            stepRequest.style.display = 'block';
-        });
+        const bars = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3')];
+        const hint = document.getElementById('strength-hint');
 
-        document.getElementById('btn-reenviar').addEventListener('click', (e) => {
-            e.target.textContent = 'Link reenviado ✓';
-            setTimeout(() => { e.target.textContent = 'Reenviar link'; }, 2500);
+        senha.addEventListener('input', () => {
+            const val = senha.value;
+            let score = 0;
+            if (val.length >= 8) score++;
+            if (/[0-9]/.test(val) && /[a-zA-Z]/.test(val)) score++;
+            if (/[A-Z]/.test(val) && /[^a-zA-Z0-9]/.test(val)) score++;
+
+            bars.forEach(b => b.className = 'bar');
+
+            if (val.length === 0) {
+                hint.textContent = 'Use ao menos 8 caracteres, com números e letras.';
+                return;
+            }
+            if (score <= 1) {
+                bars[0].classList.add('active-weak');
+                hint.textContent = 'Senha fraca. Adicione números e letras maiúsculas.';
+            } else if (score === 2) {
+                bars[0].classList.add('active-mid');
+                bars[1].classList.add('active-mid');
+                hint.textContent = 'Senha média. Considere adicionar um símbolo.';
+            } else {
+                bars.forEach(b => b.classList.add('active-strong'));
+                hint.textContent = 'Senha forte.';
+            }
         });
     </script>
 

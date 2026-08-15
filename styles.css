@@ -39,6 +39,18 @@
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
+  #bolinha {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #667eea, #764ba2);
+    border-radius: 50%;
+    pointer-events: none; /* IMPORTANTE: permite clicar em elementos abaixo */
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s;
+    z-index: 9999;
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+}
 
   a{ color:inherit; text-decoration:none; }
 
@@ -151,6 +163,13 @@
     margin-bottom: 22px;
   }
   h1 .rotating{
+    font-style: italic;
+    font-weight: 500;
+    color: var(--purple-400);
+    display: inline-block;
+    position: relative;
+  }
+  h2 .rotating{
     font-style: italic;
     font-weight: 500;
     color: var(--purple-400);
