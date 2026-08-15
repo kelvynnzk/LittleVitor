@@ -157,6 +157,13 @@
     display: inline-block;
     position: relative;
   }
+  h2 .rotating{
+    font-style: italic;
+    font-weight: 500;
+    color: var(--purple-400);
+    display: inline-block;
+    position: relative;
+  }
 
   .hero-sub{
     color: var(--text-mid);
