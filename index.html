@@ -14,6 +14,8 @@
 
 <body>
 
+  <div id="bolinha"></div>
+
   <header>
     <nav>
       <div class="logo">LittleVitor<span>.com</span></div>
@@ -63,6 +65,7 @@
       </div>
     </div>
   </section>
+  <div id="bolinha"></div>
 
   <section class="block" id="programacao">
     <div class="wrap">
@@ -280,6 +283,18 @@
       }, 250);
     }, 3000);
     el.style.transition = 'opacity .25s ease';
+    const bolinha = document.getElementById('bolinha');
+
+    document.addEventListener('mousemove', function (e) {
+      bolinha.style.left = e.clientX + 'px';
+      bolinha.style.top = e.clientY + 'px';
+    });
+    const luz = document.getElementById('luz');
+
+    document.addEventListener('mousemove', function (e) {
+      luz.style.left = e.clientX + 'px';
+      luz.style.top = e.clientY + 'px';
+    });
   </script>
 
 </body>

@@ -104,6 +104,13 @@
             }, 250);
         }, 3000);
         el.style.transition = 'opacity .25s ease';
+
+        const bolinha = document.getElementById('bolinha');
+
+        document.addEventListener('mousemove', function (e) {
+            bolinha.style.left = e.clientX + 'px';
+            bolinha.style.top = e.clientY + 'px';
+        });
     </script>
 
 </body>
