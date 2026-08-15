@@ -4,75 +4,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrar — Agenda</title>
+    <title>Entrar — LittleVitor.com</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-    <header class="site-header">
-        <div class="wrap header-inner">
-            <a href="index.html" class="logo">Agenda<span class="logo-dot">.</span></a>
-            <nav class="main-nav">
-                <a href="index.html#eventos">Eventos</a>
-                <a href="index.html#categorias">Categorias</a>
-                <a href="index.html#sobre">Sobre</a>
-            </nav>
-            <a href="criar-evento.html" class="btn btn-ghost">Criar evento</a>
-        </div>
-    </header>
+    <div class="auth-page">
 
-    <main>
-        <section class="auth-page">
-            <div class="wrap auth-wrap">
-                <div class="auth-card">
-                    <h1>Entrar</h1>
-                    <p class="auth-sub">Acesse sua conta para comprar ingressos ou gerenciar seus eventos.</p>
+        <div class="auth-visual">
+            <div class="logo">LittleVitor<span>.com</span></div>
 
-                    <!-- em caso de erro, o Python renderiza esta mensagem -->
-                    <!-- <p class="auth-error">E-mail ou senha incorretos.</p> -->
+            <div class="auth-visual-quote">
+                <div class="eyebrow"><span class="dot"></span> SÁB, 13 DE DEZ · SÃO PAULO</div>
+                <h2>O que vai acontecer<br>essa semana <em>perto de você.</em></h2>
+                <p>Entre pra salvar eventos, seguir comunidades e receber avisos antes de todo mundo.</p>
 
-                    <form class="auth-form" action="#" method="post">
-                        <div class="form-group">
-                            <label class="form-label" for="email">E-mail</label>
-                            <input type="email" id="email" name="email" placeholder="seu@email.com" required autofocus>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="senha">Senha</label>
-                            <input type="password" id="senha" name="senha" placeholder="••••••••" required>
-                        </div>
-
-                        <div class="auth-row">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="lembrar">
-                                Manter conectado
-                            </label>
-                            <a href="#" class="auth-link">Esqueci minha senha</a>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-full">Entrar</button>
-                    </form>
-
-                    <p class="auth-footer">
-                        Ainda não tem conta? <a href="cadastro.html" class="auth-link">Criar conta</a>
-                    </p>
+                <div class="auth-mini-card">
+                    <span class="featured-badge">● EM DESTAQUE</span>
+                    <h4>Noite Eletrônica no Cais</h4>
+                    <span>20:00 · Armazém 4, Santos</span>
                 </div>
             </div>
-        </section>
-    </main>
 
-    <footer class="site-footer">
-        <div class="wrap footer-inner">
-            <p>Agenda<span class="logo-dot">.</span> — feito para conectar pessoas a experiências reais.</p>
-            <p class="footer-meta">&copy; 2026 Agenda. Todos os direitos reservados.</p>
+            <div></div>
         </div>
-    </footer>
+
+        <div class="auth-form-panel">
+            <div class="auth-form-box">
+
+                <a href="index.html" class="back-link">← Voltar ao início</a>
+
+                <h1>Bem-vindo de volta</h1>
+                <p class="auth-sub">Ainda não tem conta? <a href="cadastro.html">Cadastre-se grátis</a></p>
+
+                <form>
+                    <button type="button" class="btn-social"><span class="icon">G</span> Continuar com Google</button>
+                    <button type="button" class="btn-social"><span class="icon">◆</span> Continuar com Apple</button>
+
+                    <div class="auth-divider">ou entre com e-mail</div>
+
+                    <div class="field-group">
+                        <label for="email">E-mail</label>
+                        <input class="field-input" type="email" id="email" placeholder="voce@exemplo.com">
+                    </div>
+
+                    <div class="field-group">
+                        <label for="senha">Senha</label>
+                        <div class="field-password-wrap">
+                            <input class="field-input" type="password" id="senha" placeholder="Sua senha">
+                            <button type="button" class="field-toggle">mostrar</button>
+                        </div>
+                    </div>
+
+                    <div class="field-row-between">
+                        <label class="checkbox-line">
+                            <input type="checkbox">
+                            Manter conectado
+                        </label>
+                        <a href="esqueci-senha.html" class="link-quiet">Esqueci minha senha</a>
+                    </div>
+
+                    <button type="submit" class="btn-auth-primary">Entrar</button>
+                </form>
+
+                <p class="auth-footer-note">Ao entrar, você concorda com os <a href="#">Termos de uso</a> e a <a
+                        href="#">Política de privacidade</a>.</p>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const toggle = document.querySelector('.field-toggle');
+        const senha = document.getElementById('senha');
+        toggle.addEventListener('click', () => {
+            const isPassword = senha.type === 'password';
+            senha.type = isPassword ? 'text' : 'password';
+            toggle.textContent = isPassword ? 'ocultar' : 'mostrar';
+        });
+    </script>
 
 </body>
 

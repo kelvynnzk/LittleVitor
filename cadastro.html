@@ -4,84 +4,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar conta — Agenda</title>
+    <title>Criar conta — LittleVitor.com</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-    <header class="site-header">
-        <div class="wrap header-inner">
-            <a href="index.html" class="logo">Agenda<span class="logo-dot">.</span></a>
-            <nav class="main-nav">
-                <a href="index.html#eventos">Eventos</a>
-                <a href="index.html#categorias">Categorias</a>
-                <a href="index.html#sobre">Sobre</a>
-            </nav>
-            <a href="login.html" class="btn btn-ghost">Entrar</a>
-        </div>
-    </header>
+    <div class="auth-page">
 
-    <main>
-        <section class="auth-page">
-            <div class="wrap auth-wrap">
-                <div class="auth-card">
-                    <h1>Criar conta</h1>
-                    <p class="auth-sub">Cadastre-se para comprar ingressos ou publicar seus próprios eventos.</p>
+        <div class="auth-visual">
+            <div class="logo">LittleVitor<span>.com</span></div>
 
-                    <!-- em caso de erro, o Python renderiza esta mensagem -->
-                    <!-- <p class="auth-error">Esse e-mail já está cadastrado.</p> -->
+            <div class="auth-visual-quote">
+                <div class="eyebrow"><span class="dot"></span> JUNTE-SE À COMUNIDADE</div>
+                <h2>Seus eventos favoritos, <em>num só lugar.</em></h2>
+                <p>Crie sua conta gratuita e comece a seguir comunidades, salvar eventos e montar seu roteiro da semana.
+                </p>
 
-                    <form class="auth-form" action="#" method="post">
-                        <div class="form-group">
-                            <label class="form-label" for="nome">Nome completo</label>
-                            <input type="text" id="nome" name="nome" placeholder="Seu nome" required autofocus>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="email">E-mail</label>
-                            <input type="email" id="email" name="email" placeholder="seu@email.com" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="senha">Senha</label>
-                            <input type="password" id="senha" name="senha" placeholder="Mínimo 8 caracteres"
-                                minlength="8" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="confirmar_senha">Confirmar senha</label>
-                            <input type="password" id="confirmar_senha" name="confirmar_senha"
-                                placeholder="Repita a senha" minlength="8" required>
-                        </div>
-
-                        <label class="checkbox-label checkbox-terms">
-                            <input type="checkbox" name="aceite_termos" required>
-                            Li e aceito os <a href="#" class="auth-link">termos de uso</a>
-                        </label>
-
-                        <button type="submit" class="btn btn-primary btn-full">Criar conta</button>
-                    </form>
-
-                    <p class="auth-footer">
-                        Já tem conta? <a href="login.html" class="auth-link">Entrar</a>
-                    </p>
+                <div class="auth-mini-card">
+                    <span class="featured-badge">● EM DESTAQUE</span>
+                    <h4>Noite Eletrônica no Cais</h4>
+                    <span>20:00 · Armazém 4, Santos</span>
                 </div>
             </div>
-        </section>
-    </main>
 
-    <footer class="site-footer">
-        <div class="wrap footer-inner">
-            <p>Agenda<span class="logo-dot">.</span> — feito para conectar pessoas a experiências reais.</p>
-            <p class="footer-meta">&copy; 2026 Agenda. Todos os direitos reservados.</p>
+            <div></div>
         </div>
-    </footer>
+
+        <div class="auth-form-panel">
+            <div class="auth-form-box">
+
+                <a href="index.html" class="back-link">← Voltar ao início</a>
+
+                <h1>Crie sua conta</h1>
+                <p class="auth-sub">Já tem uma conta? <a href="login.html">Entrar</a></p>
+
+                <form id="cadastro-form">
+                    <button type="button" class="btn-social"><span class="icon">G</span> Cadastrar com Google</button>
+                    <button type="button" class="btn-social"><span class="icon">◆</span> Cadastrar com Apple</button>
+
+                    <div class="auth-divider">ou cadastre-se com e-mail</div>
+
+                    <div class="field-group">
+                        <label for="nome">Nome completo</label>
+                        <input class="field-input" type="text" id="nome" placeholder="Como você se chama">
+                    </div>
+
+                    <div class="field-group">
+                        <label for="email">E-mail</label>
+                        <input class="field-input" type="email" id="email" placeholder="voce@exemplo.com">
+                    </div>
+
+                    <div class="field-group">
+                        <label for="senha">Senha</label>
+                        <div class="field-password-wrap">
+                            <input class="field-input" type="password" id="senha" placeholder="Crie uma senha">
+                            <button type="button" class="field-toggle">mostrar</button>
+                        </div>
+                        <div class="strength-meter">
+                            <div class="bar" id="bar1"></div>
+                            <div class="bar" id="bar2"></div>
+                            <div class="bar" id="bar3"></div>
+                        </div>
+                        <div class="field-hint" id="strength-hint">Use ao menos 8 caracteres, com números e letras.
+                        </div>
+                    </div>
+
+                    <div class="field-row-between" style="margin-bottom:22px;">
+                        <label class="checkbox-line">
+                            <input type="checkbox" required>
+                            Aceito os <a href="#" class="link-quiet" style="margin-left:4px;">Termos de uso</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-auth-primary">Criar conta grátis</button>
+                </form>
+
+                <p class="auth-footer-note">Ao se cadastrar, você concorda em receber avisos de eventos por e-mail.
+                    Cancele quando quiser.</p>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const toggle = document.querySelector('.field-toggle');
+        const senha = document.getElementById('senha');
+        toggle.addEventListener('click', () => {
+            const isPassword = senha.type === 'password';
+            senha.type = isPassword ? 'text' : 'password';
+            toggle.textContent = isPassword ? 'ocultar' : 'mostrar';
+        });
+
+        const bars = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3')];
+        const hint = document.getElementById('strength-hint');
+
+        senha.addEventListener('input', () => {
+            const val = senha.value;
+            let score = 0;
+            if (val.length >= 8) score++;
+            if (/[0-9]/.test(val) && /[a-zA-Z]/.test(val)) score++;
+            if (/[A-Z]/.test(val) && /[^a-zA-Z0-9]/.test(val)) score++;
+
+            bars.forEach(b => b.className = 'bar');
+
+            if (val.length === 0) {
+                hint.textContent = 'Use ao menos 8 caracteres, com números e letras.';
+                return;
+            }
+            if (score <= 1) {
+                bars[0].classList.add('active-weak');
+                hint.textContent = 'Senha fraca. Adicione números e letras maiúsculas.';
+            } else if (score === 2) {
+                bars[0].classList.add('active-mid');
+                bars[1].classList.add('active-mid');
+                hint.textContent = 'Senha média. Considere adicionar um símbolo.';
+            } else {
+                bars.forEach(b => b.classList.add('active-strong'));
+                hint.textContent = 'Senha forte.';
+            }
+        });
+    </script>
 
 </body>
 
