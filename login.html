@@ -75,36 +75,33 @@
                     <button type="submit" class="btn-auth-primary">Entrar</button>
                 </form>
 
-                <p class="auth-footer-note">Ao entrar, você concorda com os <a href="#">Termos de uso</a> e a <a
-                        href="#">Política de privacidade</a>.</p>
-
+                <p class="auth-footer-note">Ao entrar, você concorda com os <a href="#">Termos de uso</a> e a <a </div>
             </div>
+
         </div>
 
-    </div>
+        <script>
+            const toggle = document.querySelector('.field-toggle');
+            const senha = document.getElementById('senha');
+            toggle.addEventListener('click', () => {
+                const isPassword = senha.type === 'password';
+                senha.type = isPassword ? 'text' : 'password';
+                toggle.textContent = isPassword ? 'ocultar' : 'mostrar';
+            });
 
-    <script>
-        const toggle = document.querySelector('.field-toggle');
-        const senha = document.getElementById('senha');
-        toggle.addEventListener('click', () => {
-            const isPassword = senha.type === 'password';
-            senha.type = isPassword ? 'text' : 'password';
-            toggle.textContent = isPassword ? 'ocultar' : 'mostrar';
-        });
-
-        const words = ["perto de você.", "hoje à noite.", "esse fim de semana.", "na sua cidade."];
-        let i = 0;
-        const el = document.getElementById('rotating-word');
-        setInterval(() => {
-            i = (i + 1) % words.length;
-            el.style.opacity = 0;
-            setTimeout(() => {
-                el.textContent = words[i];
-                el.style.opacity = 1;
-            }, 250);
-        }, 3000);
-        el.style.transition = 'opacity .25s ease';
-    </script>
+            const words = ["perto de você.", "hoje à noite.", "esse fim de semana.", "na sua cidade."];
+            let i = 0;
+            const el = document.getElementById('rotating-word');
+            setInterval(() => {
+                i = (i + 1) % words.length;
+                el.style.opacity = 0;
+                setTimeout(() => {
+                    el.textContent = words[i];
+                    el.style.opacity = 1;
+                }, 250);
+            }, 3000);
+            el.style.transition = 'opacity .25s ease';
+        </script>
 
 </body>
 
