@@ -1,171 +1,281 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda — Encontre eventos perto de você</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LittleVitor.com — O que vai acontecer perto de você</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-    <header class="site-header">
-        <div class="wrap header-inner">
-            <a href="#" class="logo">Agenda<span class="logo-dot">.</span></a>
-            <nav class="main-nav">
-                <a href="#eventos">Eventos</a>
-                <a href="#categorias">Categorias</a>
-                <a href="#sobre">Sobre</a>
-            </nav>
-            <a href="login.html" class="btn btn-ghost">Entrar</a>
+<header>
+  <nav>
+    <div class="logo">LittleVitor<span>.com</span></div>
+    <div class="nav-links">
+      <a href="#programacao">Eventos</a>
+      <a href="#comunidades">Comunidades</a>
+      <a href="#cidades">Cidades</a>
+      <a href="#">Sobre</a>
+    </div>
+    <a href="#" class="btn-entrar">Entrar</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> SÁB, 13 DE DEZ · SÃO PAULO</div>
+      <h1>O que vai acontecer<br>essa semana<br><span class="rotating" id="rotating-word">perto de você.</span></h1>
+      <p class="hero-sub">Shows, festas, workshops e encontros — organizados por data, prontos pra você marcar presença.</p>
+
+      <div class="search-bar">
+        <input type="text" placeholder="Buscar por cidade, artista ou tipo de evento">
+        <button class="btn-buscar">Buscar</button>
+      </div>
+
+      <div class="pills">
+        <a href="#" class="pill">Música <span class="count">128</span></a>
+        <a href="#" class="pill">Gastronomia <span class="count">64</span></a>
+        <a href="#" class="pill">Arte &amp; Cultura <span class="count">97</span></a>
+        <a href="#" class="pill">Negócios <span class="count">41</span></a>
+        <a href="#" class="pill">Esporte <span class="count">53</span></a>
+        <a href="#" class="pill">Bem-estar <span class="count">36</span></a>
+      </div>
+    </div>
+
+    <div class="featured-card">
+      <span class="featured-badge">● EM DESTAQUE</span>
+      <div class="featured-art"></div>
+      <div class="featured-title">Noite Eletrônica no Cais</div>
+      <div class="featured-meta">20:00 · Armazém 4, Santos</div>
+      <div class="spots">▲ 32 vagas restantes de 200</div>
+      <div class="featured-footer">
+        <span class="id">SET-2213</span>
+        <span class="date">DEZ<br>19</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="programacao">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Programação da semana</h2>
+        <p>Atualizada em tempo real conforme novos eventos são publicados.</p>
+      </div>
+      <a href="#" class="section-link">Ver tudo →</a>
+    </div>
+
+    <div class="event-grid">
+
+      <div class="event-card">
+        <div class="event-thumb t1">
+          <div class="event-date-badge">DEZ<span class="day">14</span></div>
+          <div class="event-save">♡</div>
         </div>
-    </header>
-
-    <main>
-
-        <!-- HERO -->
-        <section class="hero">
-            <div class="wrap hero-inner">
-                <div class="hero-copy">
-                    <p class="eyebrow">Sáb, 13 de dez · São Paulo</p>
-                    <h1>O que vai acontecer<br>essa semana <em>perto de você</em>.</h1>
-                    <p class="hero-sub">Shows, festas, workshops e encontros — organizados por data, prontos pra você
-                        marcar presença.</p>
-                    <form class="search-bar" action="#" method="get">
-                        <input type="text" name="busca" placeholder="Buscar por cidade, artista ou tipo de evento">
-                        <button type="submit" class="btn btn-primary">Buscar</button>
-                    </form>
-                </div>
-
-                <!-- Elemento de assinatura: canhoto de ingresso -->
-                <div class="ticket-card">
-                    <div class="ticket-top">
-                        <span class="ticket-label">Em destaque</span>
-                        <h3>
-                            <a href="/eventos/noite-eletronica-cais" class="ticket-link">
-                                Noite Eletrônica<br>no Cais
-                            </a>
-                        </h3>
-                        <p class="ticket-meta">20:00 · Armazém 4</p>
-                    </div>
-                    <div class="ticket-perf"></div>
-                    <div class="ticket-stub">
-                        <span class="stub-code">SET-2213</span>
-                        <span class="stub-date">DEZ<br>19</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CATEGORIAS -->
-        <section id="categorias" class="categorias">
-            <div class="wrap">
-                <div class="cat-row">
-                    <a href="#" class="cat-pill">Música</a>
-                    <a href="#" class="cat-pill">Gastronomia</a>
-                    <a href="#" class="cat-pill">Arte &amp; Cultura</a>
-                    <a href="#" class="cat-pill">Negócios</a>
-                    <a href="#" class="cat-pill">Esporte</a>
-                    <a href="#" class="cat-pill">Bem-estar</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- PROGRAMAÇÃO -->
-        <section id="eventos" class="programacao">
-            <div class="wrap">
-                <div class="section-head">
-                    <h2>Programação da semana</h2>
-                    <p>Atualizada em tempo real conforme novos eventos são publicados.</p>
-                </div>
-
-                <ul class="agenda-list">
-
-                    <li class="agenda-item">
-                        <div class="agenda-time">
-                            <span class="day">QUI</span>
-                            <span class="date">18</span>
-                        </div>
-                        <div class="agenda-info">
-                            <span class="tag tag-musica">Música</span>
-                            <h3>Sarau Acústico — Praça das Artes</h3>
-                            <p>19:30 · Entrada gratuita · Centro</p>
-                        </div>
-                        <a href="#" class="btn btn-outline">Ver evento</a>
-                    </li>
-
-                    <li class="agenda-item">
-                        <div class="agenda-time">
-                            <span class="day">SEX</span>
-                            <span class="date">19</span>
-                        </div>
-                        <div class="agenda-info">
-                            <span class="tag tag-negocios">Negócios</span>
-                            <h3>Encontro de Founders — Coworking Vértice</h3>
-                            <p>09:00 · A partir de R$ 40 · Zona Sul</p>
-                        </div>
-                        <a href="#" class="btn btn-outline">Ver evento</a>
-                    </li>
-
-                    <li class="agenda-item is-live">
-                        <div class="agenda-time">
-                            <span class="day">SEX</span>
-                            <span class="date">19</span>
-                        </div>
-                        <div class="agenda-info">
-                            <span class="tag tag-musica">Música</span>
-                            <h3>Noite Eletrônica no Cais</h3>
-                            <p>20:00 · A partir de R$ 60 · Armazém 4</p>
-                        </div>
-                        <a href="#" class="btn btn-outline">Ver evento</a>
-                    </li>
-
-                    <li class="agenda-item">
-                        <div class="agenda-time">
-                            <span class="day">SÁB</span>
-                            <span class="date">20</span>
-                        </div>
-                        <div class="agenda-info">
-                            <span class="tag tag-gastronomia">Gastronomia</span>
-                            <h3>Feira de Food Trucks — Parque Ibirapuera</h3>
-                            <p>12:00 · Entrada gratuita · Ibirapuera</p>
-                        </div>
-                        <a href="#" class="btn btn-outline">Ver evento</a>
-                    </li>
-
-                </ul>
-            </div>
-        </section>
-
-        <!-- NEWSLETTER -->
-        <section class="newsletter">
-            <div class="wrap newsletter-inner">
-                <div>
-                    <h2>Não perca o próximo evento.</h2>
-                    <p>Receba a agenda da semana direto no seu e-mail, toda segunda-feira.</p>
-                </div>
-                <form class="newsletter-form" action="#" method="post">
-                    <input type="email" name="email" placeholder="seu@email.com" required>
-                    <button type="submit" class="btn btn-primary">Quero receber</button>
-                </form>
-            </div>
-        </section>
-
-    </main>
-
-    <footer id="sobre" class="site-footer">
-        <div class="wrap footer-inner">
-            <p>Agenda<span class="logo-dot">.</span> — feito para conectar pessoas a experiências reais.</p>
-            <p class="footer-meta">&copy; 2026 Agenda. Todos os direitos reservados.</p>
+        <div class="event-body">
+          <div class="event-cat">Música</div>
+          <h3>Sarau na Vila Madalena</h3>
+          <div class="meta">19h30 · Vila Madalena, SP</div>
+          <div class="event-foot">
+            <span class="price">Grátis</span>
+            <span class="going">48 confirmados</span>
+          </div>
         </div>
-    </footer>
+      </div>
+
+      <div class="event-card">
+        <div class="event-thumb t2">
+          <div class="event-date-badge">DEZ<span class="day">15</span></div>
+          <div class="event-save">♡</div>
+        </div>
+        <div class="event-body">
+          <div class="event-cat">Gastronomia</div>
+          <h3>Feira Gastronômica do Ibirapuera</h3>
+          <div class="meta">11h · Parque Ibirapuera, SP</div>
+          <div class="event-foot">
+            <span class="price">R$ 20</span>
+            <span class="going">312 confirmados</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-thumb t3">
+          <div class="event-date-badge">DEZ<span class="day">16</span></div>
+          <div class="event-save">♡</div>
+        </div>
+        <div class="event-body">
+          <div class="event-cat">Negócios</div>
+          <h3>Workshop de IA para Criadores</h3>
+          <div class="meta">14h · Pinheiros, SP</div>
+          <div class="event-foot">
+            <span class="price">R$ 89</span>
+            <span class="going">61 confirmados</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-thumb t4">
+          <div class="event-date-badge">DEZ<span class="day">17</span></div>
+          <div class="event-save">♡</div>
+        </div>
+        <div class="event-body">
+          <div class="event-cat">Arte &amp; Cultura</div>
+          <h3>Noite de Curtas no MASP</h3>
+          <div class="meta">20h · Av. Paulista, SP</div>
+          <div class="event-foot">
+            <span class="price">R$ 35</span>
+            <span class="going">89 confirmados</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-thumb t5">
+          <div class="event-date-badge">DEZ<span class="day">18</span></div>
+          <div class="event-save">♡</div>
+        </div>
+        <div class="event-body">
+          <div class="event-cat">Esporte</div>
+          <h3>Corrida Noturna no Parque Villa-Lobos</h3>
+          <div class="meta">19h · Villa-Lobos, SP</div>
+          <div class="event-foot">
+            <span class="price">Grátis</span>
+            <span class="going">204 confirmados</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-thumb t6">
+          <div class="event-date-badge">DEZ<span class="day">19</span></div>
+          <div class="event-save">♡</div>
+        </div>
+        <div class="event-body">
+          <div class="event-cat">Música</div>
+          <h3>Noite Eletrônica no Cais</h3>
+          <div class="meta">20h · Armazém 4, Santos</div>
+          <div class="event-foot">
+            <span class="price">R$ 60</span>
+            <span class="going">168 confirmados</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="block" id="comunidades">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Comunidades para seguir</h2>
+        <p>Coletivos e organizadores recorrentes. Siga e receba aviso a cada novo evento.</p>
+      </div>
+      <a href="#" class="section-link">Ver todas →</a>
+    </div>
+
+    <div class="comm-grid">
+      <div class="comm-card">
+        <div class="comm-avatar">AC</div>
+        <h4>Armazém do Cais</h4>
+        <p>Casa de eventos eletrônicos em Santos. Line-ups semanais e festas temáticas.</p>
+        <button class="btn-follow">+ Seguir</button>
+      </div>
+      <div class="comm-card">
+        <div class="comm-avatar">SP</div>
+        <h4>Sarau Coletivo</h4>
+        <p>Noites de poesia e música ao vivo pela cidade de São Paulo, toda quinta.</p>
+        <button class="btn-follow">+ Seguir</button>
+      </div>
+      <div class="comm-card">
+        <div class="comm-avatar">BC</div>
+        <h4>Build Club Brasil</h4>
+        <p>A comunidade de builders e IA mais ativa do país. Encontros mensais.</p>
+        <button class="btn-follow">+ Seguir</button>
+      </div>
+      <div class="comm-card">
+        <div class="comm-avatar">FG</div>
+        <h4>Feira Gastronômica SP</h4>
+        <p>Curadoria de food trucks e chefs independentes em parques da cidade.</p>
+        <button class="btn-follow">+ Seguir</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="cidades">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Explore por cidade</h2>
+        <p>Eventos ativos agora, organizados por onde você está.</p>
+      </div>
+    </div>
+
+    <div class="city-grid">
+      <a href="#" class="city-chip"><span class="name">São Paulo</span><span class="count">312 eventos</span></a>
+      <a href="#" class="city-chip"><span class="name">Rio de Janeiro</span><span class="count">198 eventos</span></a>
+      <a href="#" class="city-chip"><span class="name">Belo Horizonte</span><span class="count">74 eventos</span></a>
+      <a href="#" class="city-chip"><span class="name">Curitiba</span><span class="count">51 eventos</span></a>
+      <a href="#" class="city-chip"><span class="name">Porto Alegre</span><span class="count">46 eventos</span></a>
+      <a href="#" class="city-chip"><span class="name">Salvador</span><span class="count">39 eventos</span></a>
+      <a href="#" class="city-chip"><span class="name">Recife</span><span class="count">28 eventos</span></a>
+      <a href="#" class="city-chip"><span class="name">Florianópolis</span><span class="count">22 eventos</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="cta-organizer">
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>Organiza eventos? Publique o seu.</h2>
+      <p>Crie sua página, venda ingressos e alcance quem está procurando exatamente o que você organiza.</p>
+      <div class="cta-buttons">
+        <button class="btn-primary">Publicar evento</button>
+        <button class="btn-secondary">Ver planos</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div class="logo" style="font-size:1.05rem;">LittleVitor<span>.com</span></div>
+    <div class="footer-links">
+      <a href="#">Eventos</a>
+      <a href="#">Categorias</a>
+      <a href="#">Preços</a>
+      <a href="#">Ajuda</a>
+    </div>
+    <div class="footer-social">
+      <a href="#">Instagram</a>
+      <a href="#">X</a>
+      <a href="#">contato@littlevitor.com</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const words = ["perto de você.", "hoje à noite.", "esse fim de semana.", "na sua cidade."];
+  let i = 0;
+  const el = document.getElementById('rotating-word');
+  setInterval(() => {
+    i = (i + 1) % words.length;
+    el.style.opacity = 0;
+    setTimeout(() => {
+      el.textContent = words[i];
+      el.style.opacity = 1;
+    }, 250);
+  }, 3000);
+  el.style.transition = 'opacity .25s ease';
+</script>
 
 </body>
-
 </html>
