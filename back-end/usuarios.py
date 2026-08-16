@@ -17,7 +17,7 @@ def cadastro (nome,email,senha):
     # Por isso, paramos a função aqui com "return" (sem valor nenhum).
  if conexao is None:
     print("Não foi possível conectar ao banco.")
-    return
+    return False
     # O cursor é o "objeto" responsável por executar comandos SQL
     # usando a conexão que acabamos de abrir.
  cursor = conexao.cursor()
@@ -43,11 +43,12 @@ def cadastro (nome,email,senha):
         conexao.commit()
 
         print("Usuário cadastrado com sucesso!")
-
+        return True
+ 
  except Exception as e:
         # Se der erro (ex: email duplicado), mostramos qual foi.
         print(f"Erro ao cadastrar: {e}")
-
+        return False
  finally:
         # finally roda sempre, tenha dado erro ou não.
         # Fechamos cursor e conexão para não deixar nada "pendurado".

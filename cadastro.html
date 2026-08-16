@@ -93,6 +93,56 @@
     </div>
 
     <script>
+        //pega o formulario pelo id existente no html
+        const formCadastro = document.getElementById('cadastro-form');
+        
+        //escuta o evento de envio do formulario quando o botão criar conta gratis é clicado
+        formCadastro.addEventListener('submit', async (evento) => {
+        
+        //impede o comportamento padrão do navegador, que seria recarregar a pagina inteira ao enviar o forumlário.
+        evento.preventDefault();
+
+        //pega os valores em cada campo dos ids
+        const nome = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('senha').value;
+        
+        try{
+     //faz a req para o back end
+      const resposta = await fetch('http://127.0.0.1:5000/cadastro',{
+        method: 'POST',
+        headers:{
+            'Content-Type':'application/json'
+        },
+       //transforma o texto de js para json, que é o formato que o flask espera receber
+       body:JSON.stringify({nome,email,senha})
+       });
+        
+        // Transforma a resposta do Flask (que também vem em JSON)
+        // de volta num objeto JavaScript que conseguimos usar. 
+        const dados = await resposta.json();
+
+        //mostra a mensagem que o flask devolveu
+          alert(dados.mensagem)
+            
+      
+     } catch (erro) {
+
+//se der algum erro na conxão capturamos aqui em vez de travar a página
+      console.error('Erro ao cadastrar : ', erro);
+      alert('não foi possivel conectar ao servidor. Tente novamente');
+
+
+     }
+    });
+        
+        
+        
+        
+        
+        
+        
+        
         const toggle = document.querySelector('.field-toggle');
         const senha = document.getElementById('senha');
         toggle.addEventListener('click', () => {
