@@ -71,7 +71,7 @@
           <h2>Programação da semana</h2>
           <p>Atualizada em tempo real conforme novos eventos são publicados.</p>
         </div>
-        <a href="#" class="section-link">Ver tudo →</a>
+        <a href="evento.html" class="section-link">Ver tudo →</a>
       </div>
 
       <div class="event-grid">
@@ -292,8 +292,8 @@
       }, 250);
     }, 3000);
     el.style.transition = 'opacity .25s ease';
-    const glow = document.querySelector('.mouse-glow');
 
+    const glow = document.querySelector('.mouse-glow');
     document.addEventListener('mousemove', (e) => {
       glow.style.transform = `translate(${e.clientX - 210}px, ${e.clientY - 210}px)`;
     });
