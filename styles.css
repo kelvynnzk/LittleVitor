@@ -1361,7 +1361,7 @@
  /* ================= EVENTO PAGE ================= */
 .evento-hero{
   padding: 88px 0 64px;
-  border-bottom: 1px solid var();
+  border-bottom: 1px solid var(--line-soft);
   position: relative;
   overflow: hidden;
 }
@@ -1402,6 +1402,141 @@
   flex-direction: column;
   gap: 16px;
   margin-top: 24px;
+}
+.evento-facts li{
+  display: flex;
+  flex-direction: column;
+}
+.fact-label{
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--green-400);
+  margin-bottom: 4px;
+}
+.fact-value{
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-hi);
+}
+.compra-card{
+  background: linear-gradient(165deg, var(--bg-card) 0%, #1a1428 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: 0 0 60px -20px var(--purple-glow);
+  position: sticky;
+  top: 100px;
+  overflow: hidden;
+}
+.compra-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 22px);
+  pointer-events: none;
+}
+
+.ingresso-opcao{
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+.ingresso-opcao:hover, .ingresso-opcao:has(input:checked) {
+  border-color: var(--purple-500);
+  background: rgba(139,92,246,0.08);
+  transform: translateY(-2px);
+}
+.ingresso-opcao label{
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  cursor: pointer;
+  width: 100%;
+}
+.ingresso-opcao input{
+  margin-right: 12px;
+  accent-color: var(--purple-500);
+}
+.opcao-nome{
+  flex: 1;
+  font-weight: 600;
+}
+.opcao-preco{
+  font-weight: 700;
+  color: var(--text-hi);
+}
+.qtd-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+.qtd-row label{
+  font-weight: 600;
+  color: var(--text-mid);
+  font-size: 0.9rem;
+}
+.qtd-row input{
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  color: var(--text-hi);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  width: 80px;
+  font-size: 0.9rem;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+ 
+.evento-sobre{
+  padding: 72px 0;
+}
+.evento-sobre-inner{
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 56px;
+}
+.evento-descricao h2{
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 2rem;
+  margin-bottom: 24px;
+}
+.evento-descricao h3{
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.35rem;
+  margin: 40px 0 16px;
+}
+.evento-descricao p{
+  color: var(--text-mid);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+.evento-lista{
+  list-style: none;
+}
+.evento-lista li{
+    position: relative;
+  padding-left: 20px;
+  margin-bottom: 10px;
+  color: var(--text-mid);
+}
+.evento-lista li::before{
+  content: "•";
+  color: var(--purple-400);
+  position: absolute;
+  left: 0;
+}
+.evento-mapa-box{
+  background: linear-gradient(165deg, var(--bg-card) 0%, #1a1428 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
   padding: 32px;
   position: relative;
   overflow: hidden;
