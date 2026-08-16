@@ -248,7 +248,6 @@
     font-size: 0.7rem;
     color: var(--purple-400);
   }
-
   /* ---------- FEATURED CARD ---------- */
   .featured-card{
     background: linear-gradient(165deg, var(--bg-card) 0%, #1a1428 100%);
@@ -362,7 +361,43 @@
     overflow:hidden;
     transition: transform .2s, border-color .2s;
     cursor:pointer;
+    position: relative;
   }
+   /* ---------- BOTÃO DE LIKE ---------- */
+  .btn-like {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    background: rgba(0, 0, 0, 0.4);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #eee;
+    transition: all 0.3s ease;
+  }
+.btn-like i {
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+.btn-like:hover { 
+  background: rgba(255, 255, 255, 0.1);
+}
+.btn-like.ativo {
+  background: rgba(255, 59, 59, 0.15);
+  color: #ff3b3b;
+}
+.btn-like.ativo i {
+  font-family: "Font Awesone 6 Free";
+  font-weight: 900;  /* icone sólido */
+  color: #ff3b3b;
+}
   .event-card:hover{
     transform: translateY(-4px);
     border-color: var(--purple-500);

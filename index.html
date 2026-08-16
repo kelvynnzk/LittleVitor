@@ -82,7 +82,9 @@
         <div class="event-card">
           <div class="event-thumb t1">
             <div class="event-date-badge">DEZ<span class="day">14</span></div>
-            <div class="event-save">♡</div>
+            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
+              <i class="fa-regular fa-heart">♡</i>
+            </button>
           </div>
           <div class="event-body">
             <div class="event-cat">Música</div>
@@ -98,7 +100,9 @@
         <div class="event-card">
           <div class="event-thumb t2">
             <div class="event-date-badge">DEZ<span class="day">15</span></div>
-            <div class="event-save">♡</div>
+            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
+              <i class="fa-regular fa-heart">♡</i>
+            </button>
           </div>
           <div class="event-body">
             <div class="event-cat">Gastronomia</div>
@@ -114,7 +118,9 @@
         <div class="event-card">
           <div class="event-thumb t3">
             <div class="event-date-badge">DEZ<span class="day">16</span></div>
-            <div class="event-save">♡</div>
+            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
+              <i class="fa-regular fa-heart">♡</i>
+            </button>
           </div>
           <div class="event-body">
             <div class="event-cat">Negócios</div>
@@ -130,7 +136,9 @@
         <div class="event-card">
           <div class="event-thumb t4">
             <div class="event-date-badge">DEZ<span class="day">17</span></div>
-            <div class="event-save">♡</div>
+            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
+              <i class="fa-regular fa-heart">♡</i>
+            </button>
           </div>
           <div class="event-body">
             <div class="event-cat">Arte &amp; Cultura</div>
@@ -146,7 +154,9 @@
         <div class="event-card">
           <div class="event-thumb t5">
             <div class="event-date-badge">DEZ<span class="day">18</span></div>
-            <div class="event-save">♡</div>
+            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
+              <i class="fa-regular fa-heart">♡</i>
+            </button>
           </div>
           <div class="event-body">
             <div class="event-cat">Esporte</div>
@@ -162,7 +172,9 @@
         <div class="event-card">
           <div class="event-thumb t6">
             <div class="event-date-badge">DEZ<span class="day">19</span></div>
-            <div class="event-save">♡</div>
+            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
+              <i class="fa-regular fa-heart">♡</i>
+            </button>
           </div>
           <div class="event-body">
             <div class="event-cat">Música</div>
@@ -290,12 +302,12 @@
     });
     let mouseX = 0, mouseY = 0;
     let glowX = 0, glowY = 0;
-
+    // Movimentação da bolinha
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
     });
-
+    // Animação da bolinha que segue o mouse
     function animate() {
       glowX += (mouseX - glowX) * 0.08; // quanto menor, mais "atraso"
       glowY += (mouseY - glowY) * 0.08;
@@ -303,6 +315,22 @@
       requestAnimationFrame(animate);
     }
     animate();
+    // Seleciona Todos os botões de curtir
+    document.querySelectorAll('.btn-like').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('ativo');
+
+        const icon = btn.querySelector('i');
+        if (btn.classList.contains('ativo')) {
+          icon.classList.remove('fa-regular', 'fa-heart');
+          icon.classList.add('fa-solid', 'fa-heart');
+          // Aqui você pode salvar no localStorage ou no back 
+        } else {
+          icon.classList.remove('fa-solid', 'fa-heart');
+          icon.classList.add('fa-regular')
+        }
+      });
+    });
   </script>
 
 </body>
