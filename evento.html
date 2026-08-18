@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noite Eletrônica no Cais — Agenda</title>
+    <title>Noite Eletrônica no Cais — LittleVitor.com</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -19,9 +19,9 @@
         <div class="wrap header-inner">
             <a href="index.html" class="logo">LittleVitor<span class="logo-dot">.com</span></a>
             <nav class="main-nav">
-                <a href="index.html#eventos">Eventos</a>
-                <a href="index.html#categorias">Categorias</a>
-                <a href="index.html#sobre">Sobre</a>
+                <a href="evento.html">Eventos</a>
+                <a href="categorias.html">Categorias</a>
+                <a href="sobre.html">Sobre</a>
             </nav>
             <a href="login.html" class="btn btn-ghost">Entrar</a>
         </div>
@@ -29,108 +29,333 @@
 
     <main>
 
-        <div class="wrap">
-            <a href="index.html" class="back-link">&larr; Voltar pra agenda</a>
-        </div>
-
-        <!-- CABEÇALHO DO EVENTO -->
-        <section class="evento-hero">
-            <div class="wrap evento-hero-inner">
-                <div>
-                    <span class="tag tag-musica">Música</span>
-                    <h1>Noite Eletrônica no Cais</h1>
-                    <p class="evento-sub">Uma noite de sets ao vivo com line-up nacional, à beira do rio, num dos
-                        armazéns mais icônicos da cidade.</p>
-
-                    <ul class="evento-facts">
-                        <li>
-                            <span class="fact-label">Quando</span>
-                            <span class="fact-value">Sex, 19 de dezembro · 20:00</span>
-                        </li>
-                        <li>
-                            <span class="fact-label">Onde</span>
-                            <span class="fact-value">Armazém 4 — Cais Mauá</span>
-                        </li>
-                        <li>
-                            <span class="fact-label">Organizador</span>
-                            <span class="fact-value">Coletivo Maré</span>
-                        </li>
-                    </ul>
+        <!-- ============ VISTA: LISTA DE EVENTOS (evento.html sem ?id) ============ -->
+        <section id="vista-lista" class="block">
+            <div class="wrap">
+                <div class="section-head">
+                    <div>
+                        <h2>Todos os eventos</h2>
+                        <p>Encontre a próxima experiência pra você.</p>
+                    </div>
                 </div>
 
-                <!-- Card de compra -->
-                <aside class="compra-card">
-                    <div class="ticket-top">
-                        <span class="ticket-label is-live">Vendas abertas</span>
-                        <h3>Escolha seu ingresso</h3>
+                <div class="event-grid" id="eventos-grid">
+                    <!-- cards gerados via JS a partir de EVENTOS -->
+                </div>
+
+                <p id="eventos-vazio" class="hidden" style="color:var(--text-mid); margin-top:24px;">
+                    Nenhum evento encontrado no momento.
+                </p>
+            </div>
+        </section>
+
+        <!-- ============ VISTA: DETALHE DO EVENTO (evento.html?id=X) ============ -->
+        <section id="vista-detalhe" class="hidden">
+
+            <div class="wrap">
+                <a href="evento.html" class="back-link">&larr; Voltar para o inicio</a>
+            </div>
+
+            <!-- CABEÇALHO DO EVENTO -->
+            <section class="evento-hero">
+                <div class="wrap evento-hero-inner">
+                    <div>
+                        <span id="det-tag" class="tag tag-musica">Música</span>
+                        <h1 id="det-titulo">Carregando…</h1>
+                        <p id="det-sub" class="evento-sub"></p>
+
+                        <ul class="evento-facts">
+                            <li>
+                                <span class="fact-label">Quando</span>
+                                <span id="det-quando" class="fact-value"></span>
+                            </li>
+                            <li>
+                                <span class="fact-label">Onde</span>
+                                <span id="det-onde" class="fact-value"></span>
+                            </li>
+                            <li>
+                                <span class="fact-label">Organizador</span>
+                                <span id="det-organizador" class="fact-value"></span>
+                            </li>
+                        </ul>
                     </div>
 
-                    <div class="ticket-perf"></div>
-
-                    <form class="compra-form" action="#" method="post">
-                        <div class="ingresso-opcao">
-                            <label>
-                                <input type="radio" name="tipo_ingresso" value="pista" checked>
-                                <span class="opcao-nome">Pista</span>
-                                <span class="opcao-preco">R$ 60</span>
-                            </label>
-                        </div>
-                        <div class="ingresso-opcao">
-                            <label>
-                                <input type="radio" name="tipo_ingresso" value="vip">
-                                <span class="opcao-nome">Área VIP</span>
-                                <span class="opcao-preco">R$ 120</span>
-                            </label>
+                    <!-- Card de compra -->
+                    <aside class="compra-card">
+                        <div class="ticket-top">
+                            <span class="ticket-label is-live">Vendas abertas</span>
+                            <h3>Escolha seu ingresso</h3>
                         </div>
 
-                        <div class="qtd-row">
-                            <label for="quantidade">Quantidade</label>
-                            <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="10">
+                        <div class="ticket-perf"></div>
+
+                        <form class="compra-form" action="#" method="post">
+                            <div id="ingressos-lista">
+                                <!-- opções de ingresso geradas via JS -->
+                            </div>
+
+                            <div class="qtd-row">
+                                <label for="quantidade">Quantidade</label>
+                                <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="10">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-full">Comprar ingresso</button>
+                            <p class="compra-aviso">Pagamento processado com segurança. Você recebe o ingresso por
+                                e-mail.</p>
+                        </form>
+                    </aside>
+                </div>
+            </section>
+
+            <!-- SOBRE O EVENTO -->
+            <section class="evento-sobre">
+                <div class="wrap evento-sobre-inner">
+                    <div class="evento-descricao">
+                        <h2>Sobre o evento</h2>
+                        <div id="det-descricao">
+                            <!-- parágrafos gerados via JS -->
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-full">Comprar ingresso</button>
-                        <p class="compra-aviso">Pagamento processado com segurança. Você recebe o ingresso por e-mail.
-                        </p>
-                    </form>
-                </aside>
-            </div>
+                        <h3>O que levar</h3>
+                        <ul class="evento-lista" id="det-lista">
+                            <!-- itens gerados via JS -->
+                        </ul>
+                    </div>
+
+                    <div class="evento-mapa-box">
+                        <h3>Localização</h3>
+                        <p id="det-endereco"></p>
+                        <div class="mapa-placeholder" aria-hidden="true"></div>
+                    </div>
+                </div>
+            </section>
+
         </section>
 
-        <!-- SOBRE O EVENTO -->
-        <section class="evento-sobre">
-            <div class="wrap evento-sobre-inner">
-                <div class="evento-descricao">
-                    <h2>Sobre o evento</h2>
-                    <p>O Coletivo Maré retorna ao Armazém 4 com uma line-up que atravessa house, techno e breaks, em um
-                        espaço industrial reformado às margens do Cais Mauá. Bares locais, food trucks e uma pista de
-                        dança a céu aberto completam a experiência.</p>
-                    <p>Chegue cedo: o line-up de abertura começa pontualmente às 20h, e os portões fecham para novas
-                        entradas à 1h.</p>
-
-                    <h3>O que levar</h3>
-                    <ul class="evento-lista">
-                        <li>Documento com foto</li>
-                        <li>Ingresso digital (print ou celular)</li>
-                        <li>Roupa confortável — parte da pista é ao ar livre</li>
-                    </ul>
-                </div>
-
-                <div class="evento-mapa-box">
-                    <h3>Localização</h3>
-                    <p>Armazém 4, Cais Mauá<br>Porto Alegre — RS</p>
-                    <div class="mapa-placeholder" aria-hidden="true"></div>
-                </div>
-            </div>
-        </section>
+        <!-- ============ VISTA: EVENTO NÃO ENCONTRADO ============ -->
+        <div id="evento-nao-encontrado" class="wrap evento-nao-encontrado hidden">
+            <h2>Evento não encontrado</h2>
+            <p style="margin-top:10px;">O evento que você tentou acessar não existe ou foi removido.</p>
+            <p style="margin-top:18px;"><a href="evento.html">&larr; Voltar pra agenda</a></p>
+        </div>
 
     </main>
 
     <footer id="sobre" class="site-footer">
         <div class="wrap footer-inner">
-            <p>Agenda<span class="logo-dot">.</span> — feito para conectar pessoas a experiências reais.</p>
-            <p class="footer-meta">&copy; 2026 Agenda. Todos os direitos reservados.</p>
+            <p>LittleVitor<span class="logo-dot">.com</span> — feito para conectar pessoas a experiências reais.</p>
+            <p class="footer-meta">&copy; 2026 LittleVitor. Todos os direitos reservados.</p>
         </div>
     </footer>
+
+    <script>
+        // ------------------------------------------------------------------
+        // DADOS DOS EVENTOS
+        // Isso aqui é só um mock pra você ter a página funcionando enquanto
+        // o back-end não fica pronto. Quando a API estiver de pé, troque o
+        // array EVENTOS por uma chamada real, por exemplo:
+        //
+        //   let EVENTOS = [];
+        //   async function carregarEventos() {
+        //     const resp = await fetch('/api/eventos');
+        //     EVENTOS = await resp.json();
+        //   }
+        //   await carregarEventos();
+        //
+        // O formato de cada objeto abaixo é o "contrato" que a sua API
+        // (e a aba "criar evento") precisam respeitar pra tudo continuar
+        // funcionando sem mudar o resto do código.
+        // ------------------------------------------------------------------
+        const EVENTOS = [
+            {
+                id: 1,
+                titulo: "Noite Eletrônica no Cais",
+                categoria: "Música",
+                tagClass: "tag-musica",
+                thumbClass: "t1",
+                dataBadge: { dia: "19", mes: "DEZ" },
+                quando: "Sex, 19 de dezembro · 20:00",
+                onde: "Armazém 4 — Cais Mauá",
+                organizador: "Coletivo Maré",
+                sub: "Uma noite de sets ao vivo com line-up nacional, à beira do rio, num dos armazéns mais icônicos da cidade.",
+                descricao: [
+                    "O Coletivo Maré retorna ao Armazém 4 com uma line-up que atravessa house, techno e breaks, em um espaço industrial reformado às margens do Cais Mauá. Bares locais, food trucks e uma pista de dança a céu aberto completam a experiência.",
+                    "Chegue cedo: o line-up de abertura começa pontualmente às 20h, e os portões fecham para novas entradas à 1h."
+                ],
+                oQueLevar: [
+                    "Documento com foto",
+                    "Ingresso digital (print ou celular)",
+                    "Roupa confortável — parte da pista é ao ar livre"
+                ],
+                endereco: "Armazém 4, Cais Mauá<br>Porto Alegre — RS",
+                ingressos: [
+                    { nome: "Pista", preco: 60 },
+                    { nome: "Área VIP", preco: 120 }
+                ]
+            },
+            {
+                id: 2,
+                titulo: "Feira Gastronômica da Vila",
+                categoria: "Gastronomia",
+                tagClass: "tag-gastronomia",
+                thumbClass: "t2",
+                dataBadge: { dia: "27", mes: "DEZ" },
+                quando: "Sáb, 27 de dezembro · 12:00",
+                onde: "Praça da Vila Flores",
+                organizador: "Associação de Chefs da Vila",
+                sub: "Um dia inteiro de comida de rua, produtores locais e música ao vivo na praça mais charmosa da cidade.",
+                descricao: [
+                    "Mais de 30 expositores entre food trucks, cervejarias artesanais e produtores locais se reúnem na Vila Flores para um dia de gastronomia e cultura.",
+                    "Programação musical ao longo do dia, com atrações confirmadas a partir das 15h."
+                ],
+                oQueLevar: [
+                    "Ingresso digital (print ou celular)",
+                    "Protetor solar",
+                    "Disposição pra provar de tudo"
+                ],
+                endereco: "Praça da Vila Flores<br>Porto Alegre — RS",
+                ingressos: [
+                    { nome: "Entrada", preco: 25 }
+                ]
+            },
+            {
+                id: 3,
+                titulo: "Summit de Empreendedorismo Digital",
+                categoria: "Negócios",
+                tagClass: "tag-negocios",
+                thumbClass: "t4",
+                dataBadge: { dia: "05", mes: "JAN" },
+                quando: "Ter, 05 de janeiro · 09:00",
+                onde: "Centro de Eventos Zeppelin",
+                organizador: "Câmara de Comércio Digital",
+                sub: "Um dia de palestras e networking com fundadores e investidores sobre o futuro dos negócios digitais.",
+                descricao: [
+                    "Palestrantes de peso vindos de startups e fundos de investimento discutem tendências, captação e crescimento no cenário digital brasileiro.",
+                    "Credenciamento a partir das 8h, com coffee break incluso e sessões de networking entre os blocos de palestras."
+                ],
+                oQueLevar: [
+                    "Documento com foto",
+                    "Ingresso digital (print ou celular)",
+                    "Cartão de visitas, se tiver"
+                ],
+                endereco: "Centro de Eventos Zeppelin<br>Porto Alegre — RS",
+                ingressos: [
+                    { nome: "Ingresso padrão", preco: 180 },
+                    { nome: "Ingresso + workshop", preco: 260 }
+                ]
+            }
+        ];
+
+        function formatarPreco(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function renderLista() {
+            const grid = document.getElementById('eventos-grid');
+            const vazio = document.getElementById('eventos-vazio');
+
+            grid.innerHTML = '';
+
+            if (!EVENTOS.length) {
+                vazio.classList.remove('hidden');
+                return;
+            }
+            vazio.classList.add('hidden');
+
+            EVENTOS.forEach(ev => {
+                const precoMin = Math.min(...ev.ingressos.map(i => i.preco));
+
+                const card = document.createElement('article');
+                card.className = 'event-card';
+                card.innerHTML = `
+                    <div class="event-thumb ${ev.thumbClass}">
+                        <div class="event-date-badge">
+                            <span class="day">${ev.dataBadge.dia}</span>${ev.dataBadge.mes}
+                        </div>
+                    </div>
+                    <div class="event-body">
+                        <div class="event-cat">${ev.categoria}</div>
+                        <h3>${ev.titulo}</h3>
+                        <div class="meta">${ev.onde}</div>
+                        <div class="event-foot">
+                            <span class="price">A partir de ${formatarPreco(precoMin)}</span>
+                            <a href="evento.html?id=${ev.id}" class="btn btn-primary">Ver evento</a>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderDetalhe(ev) {
+            document.title = ev.titulo + ' — Agenda';
+
+            const tagEl = document.getElementById('det-tag');
+            tagEl.textContent = ev.categoria;
+            tagEl.className = 'tag ' + ev.tagClass;
+
+            document.getElementById('det-titulo').textContent = ev.titulo;
+            document.getElementById('det-sub').textContent = ev.sub;
+            document.getElementById('det-quando').textContent = ev.quando;
+            document.getElementById('det-onde').textContent = ev.onde;
+            document.getElementById('det-organizador').textContent = ev.organizador;
+
+            document.getElementById('ingressos-lista').innerHTML = ev.ingressos.map((ing, i) => `
+                <div class="ingresso-opcao">
+                    <label>
+                        <input type="radio" name="tipo_ingresso" value="${ing.nome.toLowerCase()}" ${i === 0 ? 'checked' : ''}>
+                        <span class="opcao-nome">${ing.nome}</span>
+                        <span class="opcao-preco">${formatarPreco(ing.preco)}</span>
+                    </label>
+                </div>
+            `).join('');
+
+            document.getElementById('det-descricao').innerHTML =
+                ev.descricao.map(p => `<p>${p}</p>`).join('');
+
+            document.getElementById('det-lista').innerHTML =
+                ev.oQueLevar.map(item => `<li>${item}</li>`).join('');
+
+            document.getElementById('det-endereco').innerHTML = ev.endereco;
+        }
+
+        function mostrarView(nome) {
+            document.getElementById('vista-lista').classList.toggle('hidden', nome !== 'lista');
+            document.getElementById('vista-detalhe').classList.toggle('hidden', nome !== 'detalhe');
+            document.getElementById('evento-nao-encontrado').classList.toggle('hidden', nome !== 'nao-encontrado');
+        }
+
+        function init() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+
+            if (!id) {
+                mostrarView('lista');
+                renderLista();
+                return;
+            }
+
+            const evento = EVENTOS.find(e => String(e.id) === String(id));
+
+            if (!evento) {
+                mostrarView('nao-encontrado');
+                return;
+            }
+
+            mostrarView('detalhe');
+            renderDetalhe(evento);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Placeholder de envio do formulário de compra, até o back-end real existir.
+        document.addEventListener('submit', function (e) {
+            if (e.target.matches('.compra-form')) {
+                e.preventDefault();
+                alert('Compra simulada! Quando o back-end estiver pronto, isso vai enviar o pedido pra sua API.');
+            }
+        });
+    </script>
 
 </body>
 
