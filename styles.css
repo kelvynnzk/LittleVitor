@@ -872,7 +872,14 @@
     transition: border-color .2s, background .2s;
   }
   .btn-social:hover{ border-color: var(--purple-500); background: rgba(139,92,246,0.06); }
-  .btn-social .icon{ font-family: var(--font-mono); font-size: 0.9rem; }
+  .btn-social .icon{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
 
   .auth-footer-note{
     text-align: center;
