@@ -13,7 +13,8 @@
 </head>
 
 <body>
-  <div class="mouse-glow"></div>
+
+
   <header>
     <nav>
       <div class="logo">LittleVitor<span>.com</span></div>
@@ -30,7 +31,11 @@
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <div class="eyebrow"><span class="dot"></span> SÁB, 13 DE DEZ · SÃO PAULO</div>
+        <div class="mouse-glow"></div>
+        <div class="badge">
+          <span class="dot">●</span>
+          <span id="badge-text">Carregando...</span>
+        </div>
         <h1>O que vai acontecer<br><span class="rotating" id="rotating-word">perto de você.</span></h1>
         <p class="hero-sub">Shows, festas, workshops e encontros — organizados por data, prontos pra você marcar
           presença.</p>
@@ -328,7 +333,35 @@
         }
       });
     });
- </script>
+    // ---  Formata a data atual em português  ---
+    function formatarData() {
+      const dias = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"];
+      const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+      const hoje = new Date();
+      const diaSemana = dias[hoje.getDay()];
+      const dia = String(hoje.getDate()).padStart(2, "0");
+      const mes = meses[hoje.getMonth()];
+      return `${diaSemana}, ${dia} DE ${mes}`;
+    }
+    // ---  Detecta a cidade do visitante automaticamente pelo IP --- 
+    async function detectarCidade() {
+      try {
+        const resposta = await fetch("https://ipapi.co/json/");
+        const dados = await resposta.json();
+        return (dados.city || "LOCAL DESCONHECIDO").toUpperCase();
+      } catch (erro) {
+        return "LOCAL DESCONHECIDO";
+      }
+    }
+
+    // ---  Monta o texto final e injeta no HTML ---
+    async function atualizarBadge() {
+      const data = formatarData();
+      const cidade = await detectarCidade();
+      document.getElementById("badge-text").textContent = `${data} · ${cidade}`;
+    }
+    atualizarBadge();
+  </script>
 
 </body>
 
