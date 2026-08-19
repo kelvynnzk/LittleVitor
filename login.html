@@ -10,7 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-     <script src="toast.js"></script>
+    <script src="toast.js"></script>
 </head>
 
 <body>
@@ -118,32 +118,29 @@ formLogin.addEventListener('submit', async (evento) => {
 
         const dados = await resposta.json();
 
-        if (resposta.ok) {
-            // Login deu certo: guarda os dados do usuário no navegador
-            localStorage.setItem('usuario', JSON.stringify(dados.usuario));
+       if (resposta.ok) {
+    localStorage.setItem('usuario', JSON.stringify(dados.usuario));
+    mostrarToast(dados.mensagem, 'sucesso');
 
-            alert(dados.mensagem);
+    setTimeout(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const paginaRetorno = urlParams.get('retorno');
 
-             // Verifica se existe um parâmetro "retorno" na URL atual.
-            const urlParams = new URLSearchParams(window.location.search);
-            const paginaRetorno = urlParams.get('retorno');
-
-            // Se existir, redireciona pra lá. Se não, vai pro painel normalmente.
-            if (paginaRetorno) {
-                window.location.href = paginaRetorno;
-            } else {
-                window.location.href = 'painel.html';
-            }
-
+        if (paginaRetorno) {
+            window.location.href = paginaRetorno;
         } else {
-            // Login falhou (email/senha errados)
-            alert(dados.mensagem);
+            window.location.href = 'painel.html';
         }
+    }, 1500);
 
-    } catch (erro) {
-        console.error('Erro ao fazer login:', erro);
-        alert('Não foi possível conectar ao servidor. Tente novamente.');
-    }
+} else {
+    mostrarToast(dados.mensagem, 'erro');
+}
+
+   } catch (erro) {
+    console.error('Erro ao fazer login:', erro);
+    mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
+}
 });
         
         
