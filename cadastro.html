@@ -10,6 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+     <script src="toast.js"></script>
 </head>
 
 <body>
@@ -122,15 +123,33 @@
         // de volta num objeto JavaScript que conseguimos usar. 
         const dados = await resposta.json();
 
-        //mostra a mensagem que o flask devolveu
-          alert(dados.mensagem)
-            
+if (resposta.ok) {
+    mostrarToast(dados.mensagem, 'sucesso');
+
+    // Espera 1.5s pra pessoa ver o toast antes de sair da página
+    setTimeout(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const paginaRetorno = urlParams.get('retorno');
+
+        if (paginaRetorno) {
+            window.location.href = `login.html?retorno=${paginaRetorno}`;
+        } else {
+            window.location.href = 'login.html';
+        }
+    }, 1500);
+
+} else {
+    mostrarToast(dados.mensagem, 'erro');
+    // Sem redirecionamento aqui — a pessoa continua na página
+    // pra poder corrigir os dados e tentar de novo.
+}
+
       
      } catch (erro) {
 
 //se der algum erro na conxão capturamos aqui em vez de travar a página
       console.error('Erro ao cadastrar : ', erro);
-      alert('não foi possivel conectar ao servidor. Tente novamente');
+        mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
 
 
      }

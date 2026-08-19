@@ -10,6 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+     <script src="toast.js"></script>
 </head>
 
 <body>
@@ -45,7 +46,7 @@
                 <h1>Bem-vindo de volta</h1>
                 <p class="auth-sub">Ainda não tem conta? <a href="cadastro.html">Cadastre-se grátis</a></p>
 
-                <form>
+                <form id="login-form">
                     <button type="button" class="btn-social"><span class="icon">G</span> Continuar com Google</button>
                     <button type="button" class="btn-social"><span class="icon">◆</span> Continuar com Apple</button>
 
@@ -85,6 +86,69 @@
     </div>
 
     <script>
+  
+  // Se existir um parâmetro "retorno" na URL, repassa ele também
+// pro link de cadastro, para não perder essa informação.
+const urlParamsAtual = new URLSearchParams(window.location.search);
+const retornoAtual = urlParamsAtual.get('retorno');
+
+if (retornoAtual) {
+    const linkCadastro = document.querySelector('a[href="cadastro.html"]');
+    linkCadastro.href = `cadastro.html?retorno=${retornoAtual}`;
+}
+  
+ 
+  // Pega o formulário de login pelo ID que acabamos de adicionar
+const formLogin = document.getElementById('login-form');
+
+formLogin.addEventListener('submit', async (evento) => {
+    evento.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('senha').value;
+
+    try {
+        const resposta = await fetch('http://127.0.0.1:5000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, senha })
+        });
+
+        const dados = await resposta.json();
+
+        if (resposta.ok) {
+            // Login deu certo: guarda os dados do usuário no navegador
+            localStorage.setItem('usuario', JSON.stringify(dados.usuario));
+
+            alert(dados.mensagem);
+
+             // Verifica se existe um parâmetro "retorno" na URL atual.
+            const urlParams = new URLSearchParams(window.location.search);
+            const paginaRetorno = urlParams.get('retorno');
+
+            // Se existir, redireciona pra lá. Se não, vai pro painel normalmente.
+            if (paginaRetorno) {
+                window.location.href = paginaRetorno;
+            } else {
+                window.location.href = 'painel.html';
+            }
+
+        } else {
+            // Login falhou (email/senha errados)
+            alert(dados.mensagem);
+        }
+
+    } catch (erro) {
+        console.error('Erro ao fazer login:', erro);
+        alert('Não foi possível conectar ao servidor. Tente novamente.');
+    }
+});
+        
+        
+
+        
         const toggle = document.querySelector('.field-toggle');
         const senha = document.getElementById('senha');
         toggle.addEventListener('click', () => {

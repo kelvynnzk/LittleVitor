@@ -11,6 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    
 </head>
 
 <body>
@@ -40,7 +41,7 @@
                 </div>
 
                 <!-- em modo edição, o Python troca action/valores dos campos e o texto do botão -->
-                <form class="evento-form" action="#" method="post" enctype="multipart/form-data">
+                <form class="evento-form" action="#" method="post" enctype="multipart/form-data " id="form-evento">
 
                     <!-- CAPA -->
                     <div class="form-group">
@@ -144,7 +145,70 @@
     </footer>
 
     <script>
-        // Preview da imagem de capa
+ 
+ // Ao carregar a página, verifica se existe um rascunho salvo
+// (isso acontece quando a pessoa foi mandada pro login/cadastro
+// no meio do preenchimento do formulário).
+const rascunhoSalvo = localStorage.getItem('rascunho_evento');
+
+if (rascunhoSalvo) {
+    const rascunho = JSON.parse(rascunhoSalvo);
+
+    // Preenche cada campo do formulário com o valor salvo.
+    document.getElementById('titulo').value = rascunho.titulo || '';
+    document.getElementById('categoria').value = rascunho.categoria || '';
+    document.getElementById('descricao').value = rascunho.descricao || '';
+    document.getElementById('data').value = rascunho.data || '';
+    document.getElementById('horario').value = rascunho.horario || '';
+    document.getElementById('local').value = rascunho.local || '';
+    document.getElementById('cidade').value = rascunho.cidade || '';
+}
+
+       // Pega o formulário de criação de evento
+const formEvento = document.getElementById('form-evento');
+
+formEvento.addEventListener('submit', (evento) => {
+    // Impede o envio padrão por enquanto — vamos decidir manualmente
+    // o que fazer, dependendo se tem usuário logado ou não.
+    evento.preventDefault();
+
+    // Verifica se existe um usuário logado
+    const usuarioSalvo = localStorage.getItem('usuario');
+
+    if (usuarioSalvo) {
+        // Já está logado: por enquanto, só confirma no console.
+        // (Na Parte 2, vamos publicar de verdade aqui.)
+          alert('Evento publicado com sucesso!');
+
+    // Limpa o rascunho, já que o evento foi "publicado"
+    localStorage.removeItem('rascunho_evento');
+
+    // Redireciona pro painel, onde o evento apareceria listado
+    window.location.href = 'painel.html';
+    } else {
+        // Não está logado: precisamos salvar os dados do formulário
+        // antes de mandar a pessoa pro login.
+
+        // Monta um objeto com os dados dos campos principais.
+        const rascunho = {
+            titulo: document.getElementById('titulo').value,
+            categoria: document.getElementById('categoria').value,
+            descricao: document.getElementById('descricao').value,
+            data: document.getElementById('data').value,
+            horario: document.getElementById('horario').value,
+            local: document.getElementById('local').value,
+            cidade: document.getElementById('cidade').value
+        };
+
+        // Salva esse objeto no localStorage, como texto (JSON).
+        localStorage.setItem('rascunho_evento', JSON.stringify(rascunho));
+
+        // Redireciona pro login, informando pra onde voltar depois.
+        window.location.href = 'login.html?retorno=criar-evento.html';
+    }
+});
+       
+       // Preview da imagem de capa
         function mostrarPreview(input) {
             const preview = document.getElementById('preview-capa');
             const placeholder = document.getElementById('upload-placeholder');
