@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorias — LittleVitor.com</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="mouse-glow"></div>
+
+    <header>
+        <nav>
+            <div class="logo">LittleVitor<span>.com</span></div>
+            <div class="nav-links">
+                <a href="index.html#programacao">Eventos</a>
+                <a href="index.html#comunidades">Comunidades</a>
+                <a href="index.html#cidades">Cidades</a>
+                <a href="categorias.html" style="color:var(--text-hi); font-weight:600;">Categorias</a>
+            </div>
+            <a href="login.html" class="btn-entrar">Entrar</a>
+        </nav>
+    </header>
+
+    <section class="cat-page">
+        <div class="wrap">
+            <div class="cat-breadcrumb"><a href="index.html">Início</a> / Categorias</div>
+
+            <div class="painel-head">
+                <div>
+                    <h1>Categorias</h1>
+                    <p>Refine pela categoria, orçamento ou popularidade e veja o que tem de mais recente em cada uma.
+                    </p>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-num">8</div>
+                    <div class="stat-label">Categorias ativas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">519</div>
+                    <div class="stat-label">Eventos no total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">Tecnologia</div>
+                    <div class="stat-label">Categoria em maior crescimento</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="wrap cat-layout">
+
+        <!-- ---------- SIDEBAR DE FILTROS ---------- -->
+        <aside class="cat-sidebar">
+            <h4>Buscar</h4>
+            <input type="text" id="cat-search" class="field-input" placeholder="Filtrar categorias...">
+
+            <h4>Categorias</h4>
+            <ul class="cat-filter-list" id="cat-filter-list">
+                <li><button class="cat-filter-item is-active" data-target="all">Todas <span
+                            class="n">519</span></button></li>
+                <li><button class="cat-filter-item" data-target="musica">Música <span class="n">128</span></button></li>
+                <li><button class="cat-filter-item" data-target="gastronomia">Gastronomia <span
+                            class="n">64</span></button></li>
+                <li><button class="cat-filter-item" data-target="arte">Arte &amp; Cultura <span
+                            class="n">97</span></button></li>
+                <li><button class="cat-filter-item" data-target="negocios">Negócios <span class="n">41</span></button>
+                </li>
+                <li><button class="cat-filter-item" data-target="esporte">Esporte <span class="n">53</span></button>
+                </li>
+                <li><button class="cat-filter-item" data-target="bem-estar">Bem-estar <span class="n">36</span></button>
+                </li>
+                <li><button class="cat-filter-item" data-target="tecnologia">Tecnologia <span
+                            class="n">72</span></button></li>
+                <li><button class="cat-filter-item" data-target="educacao">Educação <span class="n">28</span></button>
+                </li>
+            </ul>
+
+            <div class="cat-sidebar-divider"></div>
+
+            <h4>Refinar</h4>
+            <label class="cat-checkbox-line">
+                <input type="checkbox" id="filter-gratis"> Somente eventos grátis
+            </label>
+            <label class="cat-checkbox-line">
+                <input type="checkbox" id="filter-crescimento"> Só em alta (+15% na semana)
+            </label>
+        </aside>
+
+        <!-- ---------- LINHAS DE CATEGORIA ---------- -->
+        <div class="cat-rows" id="cat-rows">
+
+            <div class="cat-row" data-cat="musica" data-free="true" data-growth="12">
+                <div class="cat-row-visual t1">
+                    <div class="cat-row-icon">🎵</div>
+                </div>
+                <div class="cat-row-body">
+                    <div class="cat-row-head">
+                        <h3>Música</h3>
+                        <a href="index.html#programacao" class="cat-row-cta">→</a>
+                    </div>
+                    <p class="cat-row-desc">Shows, festas e noites eletrônicas espalhadas pela cidade — do bar de
+                        esquina ao
+                        armazém convertido em pista.</p>
+                    <div class="cat-row-meta">
+                        <span><strong>128</strong> eventos ativos</span>
+                        <span>a partir de <strong>Grátis</strong></span>
+                        <span>próximo em <strong>2 dias</strong></span>
+                    </div>
+                    <span class="interest-label">Interesse essa semana · +12%</span>
+                    <div class="interest-bar">
+                        <div class="interest-bar-fill" style="width:72%"></div>
+                    </div>
+
+                    <details>
+                        <summary class="cat-row-toggle">Ver próximos eventos <span class="chevron">▾</span></summary>
+                        <div class="cat-event-list">
+                            <div class="cat-event-item"><span class="ce-date">DEZ 14</span><span class="ce-name">Sarau
+                                    na Vila Madalena</span><span class="ce-place">Vila Madalena, SP</span></div>
+                            <div class="cat-event-item"><span class="ce-date">DEZ 19</span><span class="ce-name">Noite
+                                    Eletrônica no Cais</span><span class="ce-place">Armazém 4, Santos</span></div>
+                            <div class="cat-event-item"><span class="ce-date">DEZ 21</span><span class="ce-name">Rooftop
+                                    Session Vinil</span><span class="ce-place">Higienópolis, SP</span></div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="cat-row" data-cat="gastronomia" data-free="false" data-growth="6">
+                <div class="cat-row-visual t2">
+                    <div class="cat-row-icon">🍽️</div>
+                </div>
+                <div class="cat-row-body">
+                    <div class="cat-row-head">
+                        <h3>Gastronomia</h3>
+                        <a href="index.html#programacao" class="cat-row-cta">→</a>
+                    </div>
+                    <p class="cat-row-desc">Feiras, degustações e jantares com chefs independentes — curadoria de food
+                        trucks
+                        a menus de estação.</p>
+                    <div class="cat-row-meta">
+                        <span><strong>64</strong> eventos ativos</span>
+                        <span>a partir de <strong>R$ 20</strong></span>
+                        <span>próximo em <strong>4 dias</strong></span>
+                    </div>
+                    <span class="interest-label">Interesse essa semana · +6%</span>
+                    <div class="interest-bar">
+                        <div class="interest-bar-fill" style="width:48%"></div>
+                    </div>
+
+                    <details>
+                        <summary class="cat-row-toggle">Ver próximos eventos <span class="chevron">▾</span></summary>
+                        <div class="cat-event-list">
+                            <div class="cat-event-item"><span class="ce-date">DEZ 15</span><span class="ce-name">Feira
+                                    Gastronômica do Ibirapuera</span><span class="ce-place">Parque Ibirapuera, SP</span>
+                            </div>
+                            <div class="cat-event-item"><span class="ce-date">DEZ 22</span><span class="ce-name">Jantar
+                                    a Quatro Mãos</span><span class="ce-place">Jardins, SP</span></div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="cat-row" data-cat="arte" data-free="true" data-growth="9">
+                <div class="cat-row-visual t3">
+                    <div class="cat-row-icon">🎨</div>
+                </div>
+                <div class="cat-row-body">
+                    <div class="cat-row-head">
+                        <h3>Arte &amp; Cultura</h3>
+                        <a href="index.html#programacao" class="cat-row-cta">→</a>
+                    </div>
+                    <p class="cat-row-desc">Exposições, cinema de rua e noites culturais — programação que muda toda
+                        semana pelos principais espaços da cidade.</p>
+                    <div class="cat-row-meta">
+                        <span><strong>97</strong> eventos ativos</span>
+                        <span>a partir de <strong>R$ 35</strong></span>
+                        <span>próximo em <strong>3 dias</strong></span>
+                    </div>
+                    <span class="interest-label">Interesse essa semana · +9%</span>
+                    <div class="interest-bar">
+                        <div class="interest-bar-fill" style="width:61%"></div>
+                    </div>
+
+                    <details>
+                        <summary class="cat-row-toggle">Ver próximos eventos <span class="chevron">▾</span></summary>
+                        <div class="cat-event-list">
+                            <div class="cat-event-item"><span class="ce-date">DEZ 17</span><span class="ce-name">Noite
+                                    de Curtas no MASP</span><span class="ce-place">Av. Paulista, SP</span></div>
+                            <div class="cat-event-item"><span class="ce-date">DEZ 20</span><span
+                                    class="ce-name">Vernissage Coletiva Urbana</span><span class="ce-place">Vila
+                                    Madalena, SP</span></div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="cat-row" data-cat="negocios" data-free="false" data-growth="4">
+                <div class="cat-row-visual t4">
+                    <div class="cat-row-icon">💼</div>
+                </div>
+                <div class="cat-row-body">
+                    <div class="cat-row-head">
+                        <h3>Negócios</h3>
+                        <a href="index.html#programacao" class="cat-row-cta">→</a>
+                    </div>
+                    <p class="cat-row-desc">Workshops, palestras e encontros de networking para quem constrói algo novo
+                        ou
+                        quer trocar ideia com quem já constrói.</p>
+                    <div class="cat-row-meta">
+                        <span><strong>41</strong> eventos ativos</span>
+                        <span>a partir de <strong>R$ 89</strong></span>
+                        <span>próximo em <strong>1 dia</strong></span>
+                    </div>
+                    <span class="interest-label">Interesse essa semana · +4%</span>
+                    <div class="interest-bar">
+                        <div class="interest-bar-fill" style="width:38%"></div>
+                    </div>
+
+                    <details>
+                        <summary class="cat-row-toggle">Ver próximos eventos <span class="chevron">▾</span></summary>
+                        <div class="cat-event-list">
+                            <div class="cat-event-item"><span class="ce-date">DEZ 16</span><span
+                                    class="ce-name">Workshop de IA para Criadores</span><span
+                                    class="ce-place">Pinheiros, SP</span></div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="cat-row" data-cat="esporte" data-free="true" data-growth="8">
+                <div class="cat-row-visual t5">
+                    <div class="cat-row-icon">🏃</div>
+                </div>
+                <div class="cat-row-body">
+                    <div class="cat-row-head">
+                        <h3>Esporte</h3>
+                        <a href="index.html#programacao" class="cat-row-cta">→</a>
+                    </div>
+                    <p class="cat-row-desc">Corridas, torneios e encontros ao ar livre — desde treinos abertos até
+                        provas oficiais nos principais parques.</p>
+                    <div class="cat-row-meta">
+                        <span><strong>53</strong> eventos ativos</span>
+                        <span>a partir de <strong>Grátis</strong></span>
+                        <span>próximo em <strong>2 dias</strong></span>
+                    </div>
+                    <span class="interest-label">Interesse essa semana · +8%</span>
+                    <div class="interest-bar">
+                        <div class="interest-bar-fill" style="width:55%"></div>
+                    </div>
+
+                    <details>
+                        <summary class="cat-row-toggle">Ver próximos eventos <span class="chevron">▾</span></summary>
+                        <div class="cat-event-list">
+                            <div class="cat-event-item"><span class="ce-date">DEZ 18</span><span class="ce-name">Corrida
+                                    Noturna no Parque Villa-Lobos</span><span class="ce-place">Villa-Lobos, SP</span>
+                            </div>
+                            <div class="cat-event-item"><span class="ce-date">DEZ 23</span><span class="ce-name">Torneio
+                                    Amador de Vôlei de Praia</span><span class="ce-place">Santos, SP</span></div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="cat-row" data-cat="bem-estar" data-free="false" data-growth="5">
+                <div class="cat-row-visual t6">
+                    <div class="cat-row-icon">🧘</div>
+                </div>
+                <div class="cat-row-body">
+                    <div class="cat-row-head">
+                        <h3>Bem-estar</h3>
+                        <a href="index.html#programacao" class="cat-row-cta">→</a>
+                    </div>
+                    <p class="cat-row-desc">Yoga, meditação e retiros para desacelerar no meio da semana ou fechar o
+                        fim de semana com calma.</p>
+                    <div class="cat-row-meta">
+                        <span><strong>36</strong> eventos ativos</span>
+                        <span>a partir de <strong>R$ 15</strong></span>
+                        <span>próximo em <strong>5 dias</strong></span>
+                    </div>
+                    <span class="interest-label">Interesse essa semana · +5%</span>
+                    <div class="interest-bar">
+                        <div class="interest-bar-fill" style="width:33%"></div>
+                    </div>
+
+                    <details>
+                        <summary class="cat-row-toggle">Ver próximos eventos <span class="chevron">▾</span></summary>
+                        <div class="cat-event-list">
+                            <div class="cat-event-item"><span class="ce-date">DEZ 20</span><span class="ce-name">Roda de
+                                    Meditação no Parque Trianon</span><span class="ce-place">Jardins, SP</span></div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="cat-row" data-cat="tecnologia" data-free="true" data-growth="18">
+                <div class="cat-row-visual t7">
+                    <div class="cat-row-icon">💻</div>
+                </div>
+                <div class="cat-row-body">
+                    <div class="cat-row-head">
+                        <h3>Tecnologia</h3>
+                        <a href="index.html#programacao" class="cat-row-cta">→</a>
+                    </div>
+                    <p class="cat-row-desc">Meetups, hackathons e lançamentos de produto — a categoria que mais cresce
+                        no site nas últimas semanas.</p>
+                    <div class="cat-row-meta">
+                        <span><strong>72</strong> eventos ativos</span>
+                        <span>a partir de <strong>Grátis</strong></span>
+                        <span>próximo em <strong>2 dias</strong></span>
+                    </div>
+                    <span class="interest-label">Interesse essa semana · +18%</span>
+                    <div class="interest-bar">
+                        <div class="interest-bar-fill" style="width:88%"></div>
+                    </div>
+
+                    <details>
+                        <summary class="cat-row-toggle">Ver próximos eventos <span class="chevron">▾</span></summary>
+                        <div class="cat-event-list">
+                            <div class="cat-event-item"><span class="ce-date">DEZ 16</span><span class="ce-name">Meetup
+                                    de IA Generativa</span><span class="ce-place">Faria Lima, SP</span></div>
+                            <div class="cat-event-item"><span class="ce-date">DEZ 24</span><span
+                                    class="ce-name">Hackathon Build Club Brasil</span><span class="ce-place">Pinheiros,
+                                    SP</span></div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="cat-row" data-cat="educacao" data-free="true" data-growth="3">
+                <div class="cat-row-visual t8">
+                    <div class="cat-row-icon">📚</div>
+                </div>
+                <div class="cat-row-body">
+                    <div class="cat-row-head">
+                        <h3>Educação</h3>
+                        <a href="index.html#programacao" class="cat-row-cta">→</a>
+                    </div>
+                    <p class="cat-row-desc">Cursos, saraus literários e clubes do livro — para quem quer aprender algo
+                        novo ou trocar ideia sobre o que está lendo.</p>
+                    <div class="cat-row-meta">
+                        <span><strong>28</strong> eventos ativos</span>
+                        <span>a partir de <strong>Grátis</strong></span>
+                        <span>próximo em <strong>6 dias</strong></span>
+                    </div>
+                    <span class="interest-label">Interesse essa semana · +3%</span>
+                    <div class="interest-bar">
+                        <div class="interest-bar-fill" style="width:22%"></div>
+                    </div>
+
+                    <details>
+                        <summary class="cat-row-toggle">Ver próximos eventos <span class="chevron">▾</span></summary>
+                        <div class="cat-event-list">
+                            <div class="cat-event-item"><span class="ce-date">DEZ 26</span><span class="ce-name">Clube
+                                    do Livro: Ficção Brasileira</span><span class="ce-place">Pinheiros, SP</span></div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <p id="cat-empty" style="display:none; color: var(--text-mid); font-size: 0.9rem; padding: 24px 0;">
+                Nenhuma categoria encontrada com esse filtro.
+            </p>
+
+        </div>
+    </section>
+
+    <section class="wrap">
+        <div class="cat-cta-banner">
+            <div>
+                <h3>Não achou sua categoria?</h3>
+                <p>Organize seu próprio evento e publique em minutos.</p>
+            </div>
+            <div class="cat-cta-banner-actions">
+                <button class="btn-primary">Publicar evento</button>
+                <button class="btn-secondary">Ver planos</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="wrap footer-grid">
+            <div class="logo" style="font-size:1.05rem;">LittleVitor<span>.com</span></div>
+            <div class="footer-links">
+                <a href="index.html#programacao">Eventos</a>
+                <a href="categorias.html">Categorias</a>
+                <a href="#">Preços</a>
+                <a href="#">Ajuda</a>
+            </div>
+            <div class="footer-social">
+                <a href="https://www.Instagram.com/LittleVitor.com">Instagram</a>
+                <a href="#">X</a>
+                <a href="#">contato@littlevitor.com</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // bolinha de luz que segue o mouse (mesmo comportamento do index.html)
+        const glow = document.querySelector('.mouse-glow');
+        let mouseX = 0, mouseY = 0;
+        let glowX = 0, glowY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        function animate() {
+            glowX += (mouseX - glowX) * 0.08;
+            glowY += (mouseY - glowY) * 0.08;
+            glow.style.transform = `translate(${glowX - 210}px, ${glowY - 210}px)`;
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // ---------- filtros da sidebar ----------
+        const rows = Array.from(document.querySelectorAll('.cat-row'));
+        const filterItems = Array.from(document.querySelectorAll('.cat-filter-item'));
+        const searchInput = document.getElementById('cat-search');
+        const gratisCheck = document.getElementById('filter-gratis');
+        const crescimentoCheck = document.getElementById('filter-crescimento');
+        const emptyMsg = document.getElementById('cat-empty');
+
+        let activeCat = 'all';
+
+        function applyFilters() {
+            const term = searchInput.value.trim().toLowerCase();
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const cat = row.dataset.cat;
+                const isFree = row.dataset.free === 'true';
+                const growth = parseInt(row.dataset.growth, 10);
+                const name = row.querySelector('h3').textContent.toLowerCase();
+
+                let visible = true;
+                if (activeCat !== 'all' && cat !== activeCat) visible = false;
+                if (term && !name.includes(term)) visible = false;
+                if (gratisCheck.checked && !isFree) visible = false;
+                if (crescimentoCheck.checked && growth < 15) visible = false;
+
+                row.style.display = visible ? 'flex' : 'none';
+                if (visible) visibleCount++;
+            });
+
+            emptyMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        filterItems.forEach(item => {
+            item.addEventListener('click', () => {
+                filterItems.forEach(i => i.classList.remove('is-active'));
+                item.classList.add('is-active');
+                activeCat = item.dataset.target;
+                applyFilters();
+            });
+        });
+
+        searchInput.addEventListener('input', applyFilters);
+        gratisCheck.addEventListener('change', applyFilters);
+        crescimentoCheck.addEventListener('change', applyFilters);
+    </script>
+
+</body>
+
+</html>

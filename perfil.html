@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="mouse-glow" id="glow"></div>
+
+    <!-- ---------- HEADER ---------- -->
+    <header class="site-header">
+        <div class="header-inner wrap">
+            <div class="logo">even<span>to</span></div>
+            <nav class="main-nav">
+                <a href="#">Explorar</a>
+                <a href="#">Categorias</a>
+                <a href="#">Meus ingressos</a>
+                <a href="#" class="is-active">Perfil</a>
+            </nav>
+            <div class="perfil-avatar" style="width:38px;height:38px;font-size:0.9rem;border:none;cursor:pointer;">LM
+            </div>
+        </div>
+    </header>
+
+    <main class="perfil-page wrap">
+
+        <div class="perfil-breadcrumb"><a href="index.html">Início</a> / Meu perfil</div>
+
+        <!-- ---------- CAPA + IDENTIDADE ---------- -->
+        <div class="perfil-cover"></div>
+        <div class="perfil-card">
+            <div class="perfil-identidade">
+                <div class="perfil-identidade-left">
+                    <div class="perfil-avatar">
+                        LM
+                        <div class="perfil-avatar-edit" title="Alterar foto">✎</div>
+                    </div>
+                    <div class="perfil-nome-bloco">
+                        <h1>Luana Martins</h1>
+                        <span class="perfil-username">@luana.martins · Rio de Janeiro, BR</span>
+                    </div>
+                </div>
+                <div class="perfil-actions">
+                    <button class="btn btn-ghost">Compartilhar perfil</button>
+                    <button class="btn btn-primary">Editar perfil</button>
+                </div>
+            </div>
+
+            <div class="perfil-meta-row">
+                <span><i>✉</i>luana.martins@email.com</span>
+                <span><i>☎</i>(21) 99876-5432</span>
+                <span><i>◷</i>Membro desde mar/2024</span>
+            </div>
+        </div>
+
+        <!-- ---------- TABS ---------- -->
+        <div class="perfil-tabs">
+            <div class="perfil-tab is-active">Dados pessoais</div>
+            <div class="perfil-tab">Preferências</div>
+            <div class="perfil-tab">Segurança</div>
+            <div class="perfil-tab">Pagamentos</div>
+        </div>
+
+        <div class="perfil-layout">
+
+            <!-- ---------- COLUNA PRINCIPAL ---------- -->
+            <div>
+
+                <!-- Dados pessoais -->
+                <div class="perfil-section">
+                    <div class="perfil-section-head">
+                        <div>
+                            <h3>Dados pessoais</h3>
+                            <p class="perfil-section-sub" style="margin-bottom:0;">Essas informações aparecem no seu
+                                perfil público</p>
+                        </div>
+                        <span class="badge"><span class="dot">●</span>Perfil verificado</span>
+                    </div>
+
+                    <div class="field-grid-2">
+                        <div class="field-group">
+                            <label>Nome completo</label>
+                            <input type="text" class="field-input" value="Luana Martins">
+                        </div>
+                        <div class="field-group">
+                            <label>Nome de usuário</label>
+                            <input type="text" class="field-input" value="luana.martins">
+                        </div>
+                    </div>
+
+                    <div class="field-grid-2">
+                        <div class="field-group">
+                            <label>E-mail</label>
+                            <input type="email" class="field-input" value="luana.martins@email.com">
+                        </div>
+                        <div class="field-group">
+                            <label>Telefone</label>
+                            <input type="tel" class="field-input" value="(21) 99876-5432">
+                        </div>
+                    </div>
+
+                    <div class="field-grid-2">
+                        <div class="field-group">
+                            <label>Cidade</label>
+                            <input type="text" class="field-input" value="Duque de Caxias, RJ">
+                        </div>
+                        <div class="field-group">
+                            <label>Data de nascimento</label>
+                            <input type="text" class="field-input" value="12/04/1998">
+                        </div>
+                    </div>
+
+                    <div class="field-group" style="margin-bottom:0;">
+                        <label>Bio</label>
+                        <input type="text" class="field-input"
+                            value="Apaixonada por shows, festivais e cultura independente.">
+                    </div>
+                </div>
+
+                <!-- Interesses -->
+                <div class="perfil-section">
+                    <h3>Interesses</h3>
+                    <p class="perfil-section-sub">Usamos isso para recomendar eventos pra você</p>
+                    <div class="interesses-tags">
+                        <div class="interesse-tag is-active">Música <span class="n"></span></div>
+                        <div class="interesse-tag is-active">Festivais</div>
+                        <div class="interesse-tag">Teatro</div>
+                        <div class="interesse-tag is-active">Stand-up</div>
+                        <div class="interesse-tag">Arte & Exposições</div>
+                        <div class="interesse-tag">Gastronomia</div>
+                        <div class="interesse-tag">Esportes</div>
+                        <div class="interesse-tag">Tecnologia</div>
+                    </div>
+                </div>
+
+                <!-- Preferências de notificação -->
+                <div class="perfil-section">
+                    <h3>Notificações</h3>
+                    <p class="perfil-section-sub">Escolha como quer ser avisado sobre eventos e ingressos</p>
+
+                    <div class="pref-row">
+                        <div class="pref-row-text">
+                            <strong>Novos eventos recomendados</strong>
+                            <span>Com base nos seus interesses e cidade</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="switch-track"></span>
+                        </label>
+                    </div>
+                    <div class="pref-row">
+                        <div class="pref-row-text">
+                            <strong>Lembretes de ingressos</strong>
+                            <span>Avisos antes do início do evento</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="switch-track"></span>
+                        </label>
+                    </div>
+                    <div class="pref-row">
+                        <div class="pref-row-text">
+                            <strong>Promoções e novidades</strong>
+                            <span>Ofertas de organizadores que você segue</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="switch-track"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Zona de perigo -->
+                <div class="perfil-section perfil-danger">
+                    <h3>Zona de risco</h3>
+                    <p class="perfil-section-sub">Ações permanentes relacionadas à sua conta</p>
+                    <div class="perfil-danger-row">
+                        <div class="pref-row-text">
+                            <strong style="color:var(--text-hi);">Excluir minha conta</strong>
+                            <span>Essa ação é permanente e remove todos os seus dados</span>
+                        </div>
+                        <button class="btn-danger">Excluir conta</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ---------- SIDEBAR ---------- -->
+            <aside>
+                <div class="perfil-side-card">
+                    <h4>Plano</h4>
+                    <div class="badge-plano">✦ Explorer</div>
+                    <p style="color:var(--text-mid); font-size:0.85rem; margin-bottom:16px;">Acesso antecipado a
+                        ingressos e descontos exclusivos.</p>
+                    <button class="btn btn-outline" style="width:100%;">Fazer upgrade</button>
+                </div>
+
+                <div class="perfil-side-card">
+                    <h4>Atividade</h4>
+                    <div class="perfil-stats-list">
+                        <div class="perfil-stat-item"><span>Eventos que já foi</span><span class="n">14</span></div>
+                        <div class="perfil-stat-item"><span>Ingressos ativos</span><span class="n">3</span></div>
+                        <div class="perfil-stat-item"><span>Eventos favoritados</span><span class="n">27</span></div>
+                        <div class="perfil-stat-item"><span>Organizadores seguidos</span><span class="n">9</span></div>
+                    </div>
+                </div>
+
+                <div class="perfil-side-card">
+                    <h4>Foto de perfil</h4>
+                    <div class="upload-box">
+                        <input type="file" accept="image/*">
+                        <div class="upload-placeholder">
+                            <div class="upload-icon">⇧</div>
+                            <span>Enviar nova foto</span>
+                            <span class="upload-hint">PNG OU JPG · MÁX 4MB</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+
+    </main>
+
+    <script>
+        // brilho que segue o mouse, consistente com o resto do site
+        const glow = document.getElementById('glow');
+        document.addEventListener('mousemove', (e) => {
+            glow.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+        });
+
+        // troca simples de abas (visual)
+        document.querySelectorAll('.perfil-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.perfil-tab').forEach(t => t.classList.remove('is-active'));
+                tab.classList.add('is-active');
+            });
+        });
+
+        // seleção de tags de interesse
+        document.querySelectorAll('.interesse-tag').forEach(tag => {
+            tag.addEventListener('click', () => tag.classList.toggle('is-active'));
+        });
+    </script>
+
+</body>
+
+</html>

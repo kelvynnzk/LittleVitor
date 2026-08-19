@@ -13,15 +13,16 @@
 </head>
 
 <body>
-  <div class="mouse-glow"></div>
+
+
   <header>
     <nav>
       <div class="logo">LittleVitor<span>.com</span></div>
       <div class="nav-links">
         <a href="#programacao">Eventos</a>
-        <a href="#comunidades">Comunidades</a>
+        <a href="#depoimentos">Depoimentos</a>
         <a href="#cidades">Cidades</a>
-        <a href="#">Sobre</a>
+        <a href="categorias.html">Categorias</a>
       </div>
       <a href="login.html" class="btn-entrar">Entrar</a>
     </nav>
@@ -30,8 +31,12 @@
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <div class="eyebrow"><span class="dot"></span> SÁB, 13 DE DEZ · SÃO PAULO</div>
-        <h1>O que vai acontecer<br>essa semana<br><span class="rotating" id="rotating-word">perto de você.</span></h1>
+        <div class="mouse-glow"></div>
+        <div class="badge">
+          <span class="dot">●</span>
+          <span id="badge-text">Carregando...</span>
+        </div>
+        <h1>O que vai acontecer<br><span class="rotating" id="rotating-word">perto de você.</span></h1>
         <p class="hero-sub">Shows, festas, workshops e encontros — organizados por data, prontos pra você marcar
           presença.</p>
 
@@ -41,12 +46,12 @@
         </div>
 
         <div class="pills">
-          <a href="#" class="pill">Música <span class="count">128</span></a>
-          <a href="#" class="pill">Gastronomia <span class="count">64</span></a>
-          <a href="#" class="pill">Arte &amp; Cultura <span class="count">97</span></a>
-          <a href="#" class="pill">Negócios <span class="count">41</span></a>
-          <a href="#" class="pill">Esporte <span class="count">53</span></a>
-          <a href="#" class="pill">Bem-estar <span class="count">36</span></a>
+          <a href="categorias.html" class="pill">Música <span class="count">128</span></a>
+          <a href="categorias.html" class="pill">Gastronomia <span class="count">64</span></a>
+          <a href="categorias.html" class="pill">Arte &amp; Cultura <span class="count">97</span></a>
+          <a href="categorias.html" class="pill">Negócios <span class="count">41</span></a>
+          <a href="categorias.html" class="pill">Esporte <span class="count">53</span></a>
+          <a href="categorias.html" class="pill">Bem-estar <span class="count">36</span></a>
         </div>
       </div>
 
@@ -188,40 +193,63 @@
     </div>
   </section>
 
-  <section class="block" id="comunidades">
+  <section class="block" id="depoimentos">
     <div class="wrap">
       <div class="section-head">
         <div>
-          <h2>Comunidades para seguir</h2>
-          <p>Coletivos e organizadores recorrentes. Siga e receba aviso a cada novo evento.</p>
+          <h2>Quem usou, aprovou</h2>
+          <p>Avaliações de pessoas que já encontraram seus próximos eventos por aqui.</p>
         </div>
-        <a href="#" class="section-link">Ver todas →</a>
       </div>
 
-      <div class="comm-grid">
-        <div class="comm-card">
-          <div class="comm-avatar">AC</div>
-          <h4>Armazém do Cais</h4>
-          <p>Casa de eventos eletrônicos em Santos. Line-ups semanais e festas temáticas.</p>
-          <button class="btn-follow">+ Seguir</button>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">Achei uma festa incrível em Santos que nem sabia que existia. A busca por cidade é
+            rápida e direta ao ponto.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">AC</div>
+            <div>
+              <h4>Amanda Castro</h4>
+              <span>São Paulo, SP</span>
+            </div>
+          </div>
         </div>
-        <div class="comm-card">
-          <div class="comm-avatar">SP</div>
-          <h4>Sarau Coletivo</h4>
-          <p>Noites de poesia e música ao vivo pela cidade de São Paulo, toda quinta.</p>
-          <button class="btn-follow">+ Seguir</button>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">Uso toda semana pra ver o que tem perto de casa. Já fui em três saraus que só descobri
+            aqui.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">SP</div>
+            <div>
+              <h4>Sofia Pereira</h4>
+              <span>São Paulo, SP</span>
+            </div>
+          </div>
         </div>
-        <div class="comm-card">
-          <div class="comm-avatar">BC</div>
-          <h4>Build Club Brasil</h4>
-          <p>A comunidade de builders e IA mais ativa do país. Encontros mensais.</p>
-          <button class="btn-follow">+ Seguir</button>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">Marquei presença em um workshop de IA em cinco minutos, sem complicação nenhuma.
+            Recomendo demais.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">BC</div>
+            <div>
+              <h4>Bruno Carvalho</h4>
+              <span>Curitiba, PR</span>
+            </div>
+          </div>
         </div>
-        <div class="comm-card">
-          <div class="comm-avatar">FG</div>
-          <h4>Feira Gastronômica SP</h4>
-          <p>Curadoria de food trucks e chefs independentes em parques da cidade.</p>
-          <button class="btn-follow">+ Seguir</button>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">A curadoria é ótima, principalmente pros eventos de gastronomia. Virou meu app fixo de
+            fim de semana.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">FG</div>
+            <div>
+              <h4>Fernanda Gomes</h4>
+              <span>Rio de Janeiro, RJ</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -255,7 +283,7 @@
         <h2>Organiza eventos? Publique o seu.</h2>
         <p>Crie sua página, venda ingressos e alcance quem está procurando exatamente o que você organiza.</p>
         <div class="cta-buttons">
-          <button class="btn-primary">Publicar evento</button>
+          <button href="login.html" class="btn-primary">Publicar evento</button>
           <button class="btn-secondary">Ver planos</button>
         </div>
       </div>
@@ -272,7 +300,7 @@
         <a href="#">Ajuda</a>
       </div>
       <div class="footer-social">
-        <a href="https://www.Instagram.com/LittleVitor.com">Instagram</a>
+        <a href="https://www.Instagram.com/littlevittor.comm">Instagram</a>
         <a href="#">X</a>
         <a href="#">contato@littlevitor.com</a>
       </div>
@@ -328,6 +356,34 @@
         }
       });
     });
+    // ---  Formata a data atual em português  ---
+    function formatarData() {
+      const dias = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"];
+      const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+      const hoje = new Date();
+      const diaSemana = dias[hoje.getDay()];
+      const dia = String(hoje.getDate()).padStart(2, "0");
+      const mes = meses[hoje.getMonth()];
+      return `${diaSemana}, ${dia} DE ${mes}`;
+    }
+    // ---  Detecta a cidade do visitante automaticamente pelo IP --- 
+    async function detectarCidade() {
+      try {
+        const resposta = await fetch("https://ipapi.co/json/");
+        const dados = await resposta.json();
+        return (dados.city || "LOCAL DESCONHECIDO").toUpperCase();
+      } catch (erro) {
+        return "LOCAL DESCONHECIDO";
+      }
+    }
+
+    // ---  Monta o texto final e injeta no HTML ---
+    async function atualizarBadge() {
+      const data = formatarData();
+      const cidade = await detectarCidade();
+      document.getElementById("badge-text").textContent = `${data} · ${cidade}`;
+    }
+    atualizarBadge();
   </script>
 
 </body>
