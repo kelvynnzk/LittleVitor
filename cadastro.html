@@ -10,7 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-     <script src="toast.js"></script>
+    <script src="toast.js"></script>
 </head>
 
 <body>
@@ -96,72 +96,72 @@
     <script>
         //pega o formulario pelo id existente no html
         const formCadastro = document.getElementById('cadastro-form');
-        
+
         //escuta o evento de envio do formulario quando o botão criar conta gratis é clicado
         formCadastro.addEventListener('submit', async (evento) => {
-        
-        //impede o comportamento padrão do navegador, que seria recarregar a pagina inteira ao enviar o forumlário.
-        evento.preventDefault();
 
-        //pega os valores em cada campo dos ids
-        const nome = document.getElementById('nome').value;
-        const email = document.getElementById('email').value;
-        const senha = document.getElementById('senha').value;
-        
-        try{
-     //faz a req para o back end
-      const resposta = await fetch('http://127.0.0.1:5000/cadastro',{
-        method: 'POST',
-        headers:{
-            'Content-Type':'application/json'
-        },
-       //transforma o texto de js para json, que é o formato que o flask espera receber
-       body:JSON.stringify({nome,email,senha})
-       });
-        
-        // Transforma a resposta do Flask (que também vem em JSON)
-        // de volta num objeto JavaScript que conseguimos usar. 
-        const dados = await resposta.json();
+            //impede o comportamento padrão do navegador, que seria recarregar a pagina inteira ao enviar o forumlário.
+            evento.preventDefault();
 
-if (resposta.ok) {
-    mostrarToast(dados.mensagem, 'sucesso');
+            //pega os valores em cada campo dos ids
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
 
-    // Espera 1.5s pra pessoa ver o toast antes de sair da página
-    setTimeout(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const paginaRetorno = urlParams.get('retorno');
+            try {
+                //faz a req para o back end
+                const resposta = await fetch('https://littlevitor-1.onrender.com/cadastro', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    //transforma o texto de js para json, que é o formato que o flask espera receber
+                    body: JSON.stringify({ nome, email, senha })
+                });
 
-        if (paginaRetorno) {
-            window.location.href = `login.html?retorno=${paginaRetorno}`;
-        } else {
-            window.location.href = 'login.html';
-        }
-    }, 1500);
+                // Transforma a resposta do Flask (que também vem em JSON)
+                // de volta num objeto JavaScript que conseguimos usar. 
+                const dados = await resposta.json();
 
-} else {
-    mostrarToast(dados.mensagem, 'erro');
-    // Sem redirecionamento aqui — a pessoa continua na página
-    // pra poder corrigir os dados e tentar de novo.
-}
+                if (resposta.ok) {
+                    mostrarToast(dados.mensagem, 'sucesso');
 
-      
-     } catch (erro) {
+                    // Espera 1.5s pra pessoa ver o toast antes de sair da página
+                    setTimeout(() => {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const paginaRetorno = urlParams.get('retorno');
 
-//se der algum erro na conxão capturamos aqui em vez de travar a página
-      console.error('Erro ao cadastrar : ', erro);
-        mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
+                        if (paginaRetorno) {
+                            window.location.href = `login.html?retorno=${paginaRetorno}`;
+                        } else {
+                            window.location.href = 'login.html';
+                        }
+                    }, 1500);
+
+                } else {
+                    mostrarToast(dados.mensagem, 'erro');
+                    // Sem redirecionamento aqui — a pessoa continua na página
+                    // pra poder corrigir os dados e tentar de novo.
+                }
 
 
-     }
-    });
-        
-        
-        
-        
-        
-        
-        
-        
+            } catch (erro) {
+
+                //se der algum erro na conxão capturamos aqui em vez de travar a página
+                console.error('Erro ao cadastrar : ', erro);
+                mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
+
+
+            }
+        });
+
+
+
+
+
+
+
+
         const toggle = document.querySelector('.field-toggle');
         const senha = document.getElementById('senha');
         toggle.addEventListener('click', () => {
