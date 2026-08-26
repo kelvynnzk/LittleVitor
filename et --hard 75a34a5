@@ -1,0 +1,72 @@
+[33md817d1f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/novo-teste[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge branch 'main' of https://github.com/kelvynnzk/LittleVitor
+[33mb760911[m criação de eventos e aparição de cards no front end
+[33m2a838b2[m fix: corrige cursor do login para psycopg2
+[33m3c3e520[m add: criacao automatica da tabela usuarios no startup
+[33m3c6d535[m add: script para criar tabela usuarios
+[33m686e189[m refactor: clean up connection function and improve code structure
+[33mfa466b1[m fix: migra conexao do banco para postgresql
+[33m4e5cd72[m fix: reorder elements in header for better layout and user experience
+[33m909871c[m fix: update login form to use production URL and improve error handling
+[33m33f5f88[m fix: update backend URL for user registration in cadastro.html
+[33m26c4f26[m refactor: update database connection to use environment variables and add requirements file
+[33m75a34a5[m[33m ([m[1;31morigin/novo-LittleVitor[m[33m)[m Merge branch 'main' of https://github.com/kelvynnzk/LittleVitor
+[33mfc4c55b[m escluindo sla.html e algumas mudanças no botão de eventos
+[33mabcf665[m tentando corrigir
+[33m70647a1[m mesmo processo realizado dentro do cadatro, agora adicionando um toast quando login é realizado ou não
+[33mc2ea526[m Merge branch 'main' of https://github.com/kelvynnzk/LittleVitor
+[33m38ebb0b[m Foi adicionado uma visualização do nome do usuario logado apos a realização do login, alem disso, foram adicionados funções que mostram diretamente no frotn end quando um usuario não consegue se cadastar ao ibves de ficar aparecendo pelo navegador
+[33m34b647a[m Refazendo os links do index.html, criando nova pagina de eventos
+[33m96666af[m Atualiza link de entrada para a nova página de perfil e adiciona arquivo perfil.html
+[33m29612bc[m Atualiza seção de depoimentos e renomeia classes para melhor refletir o conteúdo
+[33m2bd5bd6[m Adiciona badge com data e cidade automaticamente
+[33m72d7d16[m Icone Atualizado
+[33m76b2b55[m Adicionando icone
+[33mb32d27d[m Ajuste no css
+[33md3261c2[m Troca de icones
+[33m1430814[m Ajuste: remove redundância
+[33m6527d0b[m Remove redundancia "essa semana" no hero da home.
+[33m13fedca[m Corrige link do botão "Publicar evento" e ajusta URL do Instagram no rodapé
+[33mba3de89[m Atualiza link da navegação para a página de categorias
+[33me053878[m Criação da pagina de categorias e mudanças no css para a pagina de categoria
+[33m40af7b3[m Atualiza estilos da página de evento, adiciona novos componentes e ajusta layout
+[33mb0a3810[m Merge branch 'main' of https://github.com/kelvynnzk/LittleVitor
+[33mf9c0c64[m Atualiza link de retorno na página de cadastro e adiciona estilos para a página de evento
+[33mfb28f4d[m Merge branch 'main' of https://github.com/kelvynnzk/LittleVitor
+[33mc3dd520[m api criada e sincronizada com a  página de cadastro
+[33mfb7b12b[m Atualizando o css, criando o css de todas as paginas e fazendo os botões funcionarem
+[33m403949f[m Merge branch 'main' of https://github.com/kelvynnzk/LittleVitor
+[33mb94472a[m Remove unused elements and update site header styles in painel.html and index.html
+[33m01fb253[m Adiciona backend de cadastro e login
+[33md2587cc[m Atualiza links do rodapé: corrige URL do Instagram e ajusta link de Eventos
+[33m69d0a05[m Refazendo o event-card: adicionando a opção de curtir os cards de evento
+[33m98eebd3[m Adicionado um efeito glow no mouse que faz um brilho"persegui" o mouse
+[33md5b84e9[m Merge pull request #3 from kelvynnzk/Novo-layout
+[33m969c732[m[33m ([m[1;31morigin/Novo-layout[m[33m)[m Refactor login.html: update footer note and reorganize script section
+[33m8cccbd7[m Refactor login.html: clean up footer note and reorganize script section
+[33m36d5499[m teste
+[33mdafd4fe[m Remove 'bolinha' element and its associated styles from index.html and styles.css
+[33md451278[m Merge pull request #2 from kelvynnzk/Novo-layout
+[33me25170b[m Remove unnecessary newline and trailing asterisk from index.html
+[33m7d096af[m Remove mouse tracking functionality for 'bolinha' from index and login pages
+[33m54ac177[m Adiciona elemento 'bolinha' que segue o mouse e estiliza no CSS
+[33m568987f[m Atualiza layout da página de login e esqueci senha, adicionando novos elementos e melhorando a estrutura do formulário de cadastro.
+[33m720b440[m novo layout do css
+[33m4218a72[m Novo layout
+[33m75bc86e[m novo layout
+[33md5445bc[m novo layout do site
+[33m3855a67[m nova estruturação do codigo
+[33m5341c0c[m nova estruturação do codigo
+[33m80ba4af[m estruturando os arquivos
+[33m212e9d5[m Base
+[33m7e7cb5f[m primeiros commits
+[33m0304059[m primeira base do html
+[33m78970d1[m saulo
+[33m1f19a00[m eu odeio a afya
+[33mdfc7930[m ola mundo 1232
+[33m3a79e02[m Ola mundo
+[33m0b2be5d[m Merge branch 'main' of https://github.com/kelvynnzk/LittleVitor
+[33m3975244[m Ola mundo
+[33me4d185c[m inicio
+[33m37e441a[m Add files via upload
+[33m6475ca0[m Create index.html
+[33ma1a5b95[m Initial commit
