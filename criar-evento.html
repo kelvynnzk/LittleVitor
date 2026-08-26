@@ -11,7 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    
+    <script src="toast.js"></script>
 </head>
 
 <body>
@@ -167,7 +167,7 @@ if (rascunhoSalvo) {
        // Pega o formulário de criação de evento
 const formEvento = document.getElementById('form-evento');
 
-formEvento.addEventListener('submit', (evento) => {
+formEvento.addEventListener('submit',async (evento) => {
     // Impede o envio padrão por enquanto — vamos decidir manualmente
     // o que fazer, dependendo se tem usuário logado ou não.
     evento.preventDefault();
@@ -175,17 +175,55 @@ formEvento.addEventListener('submit', (evento) => {
     // Verifica se existe um usuário logado
     const usuarioSalvo = localStorage.getItem('usuario');
 
-    if (usuarioSalvo) {
-        // Já está logado: por enquanto, só confirma no console.
-        // (Na Parte 2, vamos publicar de verdade aqui.)
-          alert('Evento publicado com sucesso!');
+   if (usuarioSalvo) {
+    // Converte o texto salvo no localStorage de volta para um
+    // objeto JavaScript, para conseguirmos acessar o campo "id".
+    const usuario = JSON.parse(usuarioSalvo);
 
-    // Limpa o rascunho, já que o evento foi "publicado"
-    localStorage.removeItem('rascunho_evento');
+    // Monta um objeto com todos os dados que a rota /criar-evento
+    // espera receber — os campos do formulário, mais o id do
+    // usuário logado (que não vem de nenhum input, e sim do
+    // localStorage).
+    const dadosEvento = {
+        titulo: document.getElementById('titulo').value,
+        categoria: document.getElementById('categoria').value,
+        descricao: document.getElementById('descricao').value,
+        data: document.getElementById('data').value,
+        horario: document.getElementById('horario').value,
+        local: document.getElementById('local').value,
+        cidade: document.getElementById('cidade').value,
+        usuario_id: usuario.id
+    };
 
-    // Redireciona pro painel, onde o evento apareceria listado
-    window.location.href = 'painel.html';
-    } else {
+    try {
+        // Faz a requisição de verdade para o backend.
+        const resposta = await fetch('http://127.0.0.1:5000/criar-evento', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dadosEvento)
+        });
+
+        const dados = await resposta.json();
+
+        if (resposta.ok) {
+            mostrarToast(dados.mensagem, 'sucesso');
+            localStorage.removeItem('rascunho_evento');
+
+            setTimeout(() => {
+                window.location.href = 'painel.html';
+            }, 1500);
+
+        } else {
+            mostrarToast(dados.mensagem, 'erro');
+        }
+
+    } catch (erro) {
+        console.error('Erro ao criar evento:', erro);
+        mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
+    }
+} else {
         // Não está logado: precisamos salvar os dados do formulário
         // antes de mandar a pessoa pro login.
 

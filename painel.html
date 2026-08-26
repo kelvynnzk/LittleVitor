@@ -10,7 +10,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="styles.css">
+        <script src="toast.js"></script>
 </head>
 
 <body>
@@ -56,7 +57,7 @@
                 </div>
 
                 <!-- LISTA DE EVENTOS -->
-                <div class="painel-lista">
+                <div class="painel-lista "  id="lista-eventos">
 
                     <article class="painel-card">
                         <div class="painel-card-info">
@@ -149,6 +150,81 @@ btnSair.addEventListener('click', () => {
     localStorage.removeItem('usuario');
 });
 
+
+// Função que busca os eventos do usuário logado e mostra na tela.
+async function carregarEventos() {
+
+    // Pega o usuário salvo no localStorage (mesma lógica de sempre)
+    const usuarioSalvo = localStorage.getItem('usuario');
+
+    // Se não tiver usuário logado, não tem como buscar eventos —
+    // essa função nem deveria ter sido chamada nesse caso, mas
+    // é uma proteção extra.
+    if (!usuarioSalvo) {
+        return;
+    }
+
+    const usuario = JSON.parse(usuarioSalvo);
+
+    try {
+        // Faz a requisição GET, passando o id do usuário como
+        // parâmetro na URL (não no body, como vimos na rota).
+        const resposta = await fetch(`http://127.0.0.1:5000/meus-eventos?usuario_id=${usuario.id}`);
+
+        const dados = await resposta.json();
+
+        // A rota devolve um objeto tipo { "eventos": [...] }
+        const eventos = dados.eventos;
+
+     // Pega o container onde os cards devem aparecer
+const listaEventos = document.getElementById('lista-eventos');
+
+// Limpa o conteúdo atual (removendo os cards fixos de exemplo)
+listaEventos.innerHTML = '';
+
+// Se não tiver nenhum evento, mostra uma mensagem amigável
+if (eventos.length === 0) {
+    listaEventos.innerHTML = '<p>Você ainda não criou nenhum evento.</p>';
+    return;
+}
+
+// Para cada evento recebido, monta o HTML do card e adiciona na tela
+eventos.forEach((evento) => {
+
+    // Cria o elemento <article> que vai representar o card
+    const card = document.createElement('article');
+    card.className = 'painel-card';
+
+    // Usa a categoria do evento para montar a classe da tag
+    // (ex: categoria "musica" vira a classe "tag-musica")
+    const tagClasse = `tag-${evento.categoria}`;
+
+    // Monta o HTML interno do card, usando um template string
+    // para inserir os dados do evento nos lugares certos.
+    card.innerHTML = `
+        <div class="painel-card-info">
+            <span class="tag ${tagClasse}">${evento.categoria}</span>
+            <h3>${evento.titulo}</h3>
+            <p class="painel-card-meta">${evento.data} · ${evento.horario} · ${evento.local}, ${evento.cidade}</p>
+        </div>
+        <div class="painel-card-actions">
+            <a href="evento.html" class="btn btn-outline">Ver anúncio</a>
+            <a href="criar-evento.html" class="btn btn-outline">Editar</a>
+            <button type="button" class="btn-icon-delete" aria-label="Excluir evento">&times;</button>
+        </div>
+    `;
+
+    // Adiciona esse card recém-criado dentro do container na página
+    listaEventos.appendChild(card);
+});
+
+    } catch (erro) {
+        console.error('Erro ao carregar eventos:', erro);
+    }
+}
+
+// Chama a função assim que a página carrega.
+carregarEventos();
 </script>
 
 
