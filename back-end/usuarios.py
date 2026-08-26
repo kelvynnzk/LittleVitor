@@ -1,4 +1,4 @@
-# Funções prontas para gerar e verificar hash de senha.
+# Funções prontas para gerar e verificar hash de senha
 # Fazem parte da biblioteca Werkzeug, que já instalamos antes.
 from werkzeug.security import generate_password_hash, check_password_hash
 
