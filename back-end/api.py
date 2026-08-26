@@ -13,11 +13,15 @@ from flask_cors import CORS
 # Importa as funções que já construímos e testamos.
 from usuarios import cadastro, login
 
+
 # Cria a aplicação Flask. "__name__" aqui tem o mesmo papel que
 # vimos antes — ajuda o Flask a saber onde ele está localizado
 # no projeto, pra encontrar arquivos relacionados se precisar.
 app = Flask(__name__)
 CORS(app)
+
+from criar_tabela import criar_tabela_usuarios
+criar_tabela_usuarios()
 # Ativa o CORS pra essa aplicação inteira, liberando requisições
 # vindas de outros endereços (como o frontend).
 
