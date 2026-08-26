@@ -86,66 +86,66 @@
     </div>
 
     <script>
-  
-  // Se existir um parâmetro "retorno" na URL, repassa ele também
-// pro link de cadastro, para não perder essa informação.
-const urlParamsAtual = new URLSearchParams(window.location.search);
-const retornoAtual = urlParamsAtual.get('retorno');
 
-if (retornoAtual) {
-    const linkCadastro = document.querySelector('a[href="cadastro.html"]');
-    linkCadastro.href = `cadastro.html?retorno=${retornoAtual}`;
-}
-  
- 
-  // Pega o formulário de login pelo ID que acabamos de adicionar
-const formLogin = document.getElementById('login-form');
+        // Se existir um parâmetro "retorno" na URL, repassa ele também
+        // pro link de cadastro, para não perder essa informação.
+        const urlParamsAtual = new URLSearchParams(window.location.search);
+        const retornoAtual = urlParamsAtual.get('retorno');
 
-formLogin.addEventListener('submit', async (evento) => {
-    evento.preventDefault();
+        if (retornoAtual) {
+            const linkCadastro = document.querySelector('a[href="cadastro.html"]');
+            linkCadastro.href = `cadastro.html?retorno=${retornoAtual}`;
+        }
 
-    const email = document.getElementById('email').value;
-    const senha = document.getElementById('senha').value;
 
-    try {
-        const resposta = await fetch('http://127.0.0.1:5000/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, senha })
+        // Pega o formulário de login pelo ID que acabamos de adicionar
+        const formLogin = document.getElementById('login-form');
+
+        formLogin.addEventListener('submit', async (evento) => {
+            evento.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            try {
+                const resposta = await fetch('https://littlevitor-1.onrender.com/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                const dados = await resposta.json();
+
+                if (resposta.ok) {
+                    localStorage.setItem('usuario', JSON.stringify(dados.usuario));
+                    mostrarToast(dados.mensagem, 'sucesso');
+
+                    setTimeout(() => {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const paginaRetorno = urlParams.get('retorno');
+
+                        if (paginaRetorno) {
+                            window.location.href = paginaRetorno;
+                        } else {
+                            window.location.href = 'painel.html';
+                        }
+                    }, 1500);
+
+                } else {
+                    mostrarToast(dados.mensagem, 'erro');
+                }
+
+            } catch (erro) {
+                console.error('Erro ao fazer login:', erro);
+                mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
+            }
         });
 
-        const dados = await resposta.json();
 
-       if (resposta.ok) {
-    localStorage.setItem('usuario', JSON.stringify(dados.usuario));
-    mostrarToast(dados.mensagem, 'sucesso');
 
-    setTimeout(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const paginaRetorno = urlParams.get('retorno');
 
-        if (paginaRetorno) {
-            window.location.href = paginaRetorno;
-        } else {
-            window.location.href = 'painel.html';
-        }
-    }, 1500);
-
-} else {
-    mostrarToast(dados.mensagem, 'erro');
-}
-
-   } catch (erro) {
-    console.error('Erro ao fazer login:', erro);
-    mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
-}
-});
-        
-        
-
-        
         const toggle = document.querySelector('.field-toggle');
         const senha = document.getElementById('senha');
         toggle.addEventListener('click', () => {

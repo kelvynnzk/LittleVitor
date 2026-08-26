@@ -17,16 +17,16 @@
 <body>
 
     <header class="site-header">
-    <div class="wrap header-inner">
-        <div href=index.html class="logo">LittleVitor<span>.com</span></div>
-        <nav class="main-nav">
-            <a href="painel.html" class="is-active">Meus eventos</a>
-            <a href="index.html#eventos">Ver agenda</a>
-        </nav>
-        <div id="usuario-logado" class="usuario-nome"></div>
-        <a href="index.html" class="btn btn-ghost" id="btn-sair">Sair</a>
-    </div>
-</header>
+        <div class="wrap header-inner">
+            <div href='#' class="logo">LittleVitor<span>.com</span></div>
+            <nav class="main-nav">
+                <a href="painel.html" class="is-active">Meus eventos</a>
+                <a href="index.html#eventos">Ver agenda</a>
+            </nav>
+            <span id="usuario-logado" style="color:var(--text-mid); font-size:0.9rem; margin-right:16px;"></span>
+            <a href="index.html" id="btn-sair" class="btn btn-ghost">Sair</a>
+        </div>
+    </header>
 
     <main>
         <section class="painel">
@@ -118,37 +118,37 @@
             <p class="footer-meta">&copy; 2026 Agenda. Todos os direitos reservados.</p>
         </div>
     </footer>
-<script>
-// Função que verifica o login e atualiza a tela
-function verificarLogin() {
-    const usuarioSalvo = localStorage.getItem('usuario');
-    const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
-    const divUsuario = document.getElementById('usuario-logado');
+    <script>
+        // Função que verifica o login e atualiza a tela
+        function verificarLogin() {
+            const usuarioSalvo = localStorage.getItem('usuario');
+            const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+            const divUsuario = document.getElementById('usuario-logado');
 
-    if (usuario) {
-        divUsuario.textContent = `Olá, ${usuario.nome}!`;
-    } else {
-        // Se não tem usuário logado, redireciona pro login
-        window.location.href = 'login.html';
-    }
-}
+            if (usuario) {
+                divUsuario.textContent = `Olá, ${usuario.nome}!`;
+            } else {
+                // Se não tem usuário logado, redireciona pro login
+                window.location.href = 'login.html';
+            }
+        }
 
-// Roda a verificação assim que a página carrega normalmente
-verificarLogin();
-
-// Roda a verificação também quando a página é exibida via cache
-// (por exemplo, ao clicar em "Voltar" no navegador)
-window.addEventListener('pageshow', (evento) => {
-    if (evento.persisted) {
+        // Roda a verificação assim que a página carrega normalmente
         verificarLogin();
-    }
-});
 
-// Configura o botão "Sair"
-const btnSair = document.getElementById('btn-sair');
-btnSair.addEventListener('click', () => {
-    localStorage.removeItem('usuario');
-});
+        // Roda a verificação também quando a página é exibida via cache
+        // (por exemplo, ao clicar em "Voltar" no navegador)
+        window.addEventListener('pageshow', (evento) => {
+            if (evento.persisted) {
+                verificarLogin();
+            }
+        });
+
+        // Configura o botão "Sair"
+        const btnSair = document.getElementById('btn-sair');
+        btnSair.addEventListener('click', () => {
+            localStorage.removeItem('usuario');
+        });
 
 
 // Função que busca os eventos do usuário logado e mostra na tela.

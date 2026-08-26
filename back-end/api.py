@@ -18,6 +18,9 @@ from eventos import criar_eventos,listar_eventos_usuario,listar_todos_eventos
 # no projeto, pra encontrar arquivos relacionados se precisar.
 app = Flask(__name__)
 CORS(app)
+
+from criar_tabela import criar_tabela_usuarios
+criar_tabela_usuarios()
 # Ativa o CORS pra essa aplicação inteira, liberando requisições
 # vindas de outros endereços (como o frontend).
 
