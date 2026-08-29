@@ -318,6 +318,29 @@
     margin-top: 10px;
   }
 
+  /* ---------- PROGRESS TRACK (vagas restantes) ---------- */
+  .progress-track{
+    width: 100%;
+    height: 6px;
+    background: var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 10px 0 6px;
+  }
+  .progress-fill{
+    height: 100%;
+    background: linear-gradient(90deg, var(--purple-500), var(--green-500));
+    border-radius: 999px;
+  }
+  .progress-label{
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-low);
+  }
+  .progress-label .left{ color: var(--green-400); }
+
   /* ---------- SECTION GENERIC ---------- */
   section.block{
     padding: 72px 0;
