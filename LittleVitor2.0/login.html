@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrar — LittleVitor</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/auth.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<div class="auth-shell">
+  <!-- ==================== LADO VISUAL ==================== -->
+  <aside class="auth-visual" aria-hidden="true">
+    <a href="index.html" class="auth-visual-logo"><span class="dot"></span> LittleVitor</a>
+    <div class="auth-visual-quote">
+      <h2>“Toda boa história começa com um ingresso na mão.”</h2>
+      <p>Entre para acompanhar seus eventos favoritos, gerenciar ingressos e criar experiências inesquecíveis.</p>
+    </div>
+    <div class="auth-visual-stats">
+      <div><strong>2.4k+</strong><span>Eventos ativos</span></div>
+      <div><strong>180k</strong><span>Ingressos vendidos</span></div>
+      <div><strong>4.9/5</strong><span>Avaliação média</span></div>
+    </div>
+  </aside>
+
+  <!-- ==================== FORMULÁRIO ==================== -->
+  <div class="auth-form-side">
+    <div class="auth-form-box">
+      <span class="eyebrow">Bem-vindo de volta</span>
+      <h1>Entrar na sua conta</h1>
+      <p>Ainda não tem uma conta? <a href="cadastro.html" style="color:var(--green-500); font-weight:600;">Cadastre-se grátis</a></p>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" class="input" placeholder="voce@email.com" autocomplete="email" required>
+          <span class="field-error" id="emailError"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg> Informe um e-mail válido.</span>
+        </div>
+
+        <div class="field">
+          <div class="auth-row-between" style="margin-bottom:var(--space-2);">
+            <label for="senha" style="margin:0;">Senha</label>
+            <a href="recuperar-senha.html" class="auth-link-sm">Esqueci minha senha</a>
+          </div>
+          <div class="input-wrap">
+            <input type="password" id="senha" class="input" placeholder="Sua senha" autocomplete="current-password" required>
+            <button type="button" class="input-icon-btn" id="toggleSenha" aria-label="Mostrar senha">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <span class="field-error" id="senhaError"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg> A senha deve ter ao menos 6 caracteres.</span>
+        </div>
+
+        <label class="checkbox" style="margin-bottom:var(--space-6);">
+          <input type="checkbox" id="lembrar">
+          <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span>
+          Manter conectado por 30 dias
+        </label>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="loginBtn">
+          <span id="loginBtnText">Entrar</span>
+        </button>
+      </form>
+
+      <div class="auth-divider">ou continue com</div>
+      <div class="auth-social">
+        <button class="btn btn-secondary" type="button" onclick="simularLoginSocial('Google')">Google</button>
+        <button class="btn btn-secondary" type="button" onclick="simularLoginSocial('Apple')">Apple</button>
+      </div>
+
+      <p class="auth-foot">Ao entrar, você concorda com os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a>.</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ============================================================
+   LITTLEVITOR — Script da página de Login
+   Simula autenticação (sem backend) usando localStorage.
+   ============================================================ */
+
+function mostrarToast(tipo, titulo, desc) {
+  const cont = document.getElementById('toastContainer');
+  const icons = {
+    success: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>',
+    error: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>',
+  };
+  const toast = document.createElement('div');
+  toast.className = `toast ${tipo}`;
+  toast.innerHTML = `${icons[tipo]}<div><div class="toast-title">${titulo}</div><div class="toast-desc">${desc}</div></div>`;
+  cont.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3800);
+}
+
+/* ---- Mostrar/ocultar senha ---- */
+document.getElementById('toggleSenha').addEventListener('click', function () {
+  const campo = document.getElementById('senha');
+  const mostrando = campo.type === 'text';
+  campo.type = mostrando ? 'password' : 'text';
+  this.setAttribute('aria-label', mostrando ? 'Mostrar senha' : 'Ocultar senha');
+});
+
+/* ---- Validação simples de e-mail ---- */
+function emailValido(valor) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+}
+
+/* ---- Envio do formulário (login simulado) ---- */
+document.getElementById('loginForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const email = document.getElementById('email');
+  const senha = document.getElementById('senha');
+  const emailErro = document.getElementById('emailError');
+  const senhaErro = document.getElementById('senhaError');
+
+  let valido = true;
+  if (!emailValido(email.value)) { email.classList.add('has-error'); emailErro.classList.add('show'); valido = false; }
+  else { email.classList.remove('has-error'); emailErro.classList.remove('show'); }
+
+  if (senha.value.length < 6) { senha.classList.add('has-error'); senhaErro.classList.add('show'); valido = false; }
+  else { senha.classList.remove('has-error'); senhaErro.classList.remove('show'); }
+
+  if (!valido) { mostrarToast('error', 'Verifique os campos', 'Alguns dados precisam de atenção.'); return; }
+
+  const btn = document.getElementById('loginBtn');
+  const btnText = document.getElementById('loginBtnText');
+  btn.disabled = true;
+  btnText.innerHTML = '<span class="spinner" style="display:inline-block;"></span> Entrando...';
+
+  /* Simula a chamada ao servidor */
+  setTimeout(() => {
+    const nome = email.value.split('@')[0].replace(/[._]/g, ' ');
+    localStorage.setItem('lv_user', JSON.stringify({ nome: nome.charAt(0).toUpperCase() + nome.slice(1), email: email.value }));
+    mostrarToast('success', 'Login realizado!', 'Redirecionando para a plataforma...');
+    setTimeout(() => { window.location.href = 'index.html'; }, 900);
+  }, 1100);
+});
+
+function simularLoginSocial(provedor) {
+  mostrarToast('success', `Conectado com ${provedor}`, 'Redirecionando...');
+  localStorage.setItem('lv_user', JSON.stringify({ nome: 'Usuário ' + provedor, email: 'usuario@' + provedor.toLowerCase() + '.com' }));
+  setTimeout(() => { window.location.href = 'index.html'; }, 900);
+}
+</script>
+</body>
+</html>

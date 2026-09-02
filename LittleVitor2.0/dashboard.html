@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — LittleVitor</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
+
+<div class="dash-shell">
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="dash-sidebar" id="dashSidebar">
+    <a href="index.html" class="dash-logo"><span class="dot"></span> LittleVitor</a>
+
+    <nav class="dash-nav" aria-label="Navegação do dashboard">
+      <span class="dash-nav-label">Geral</span>
+      <a href="dashboard.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg> Visão geral</a>
+      <a href="#eventos-ativos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Meus eventos</a>
+      <a href="#pedidos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10a2 2 0 0 0 0 4v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3a2 2 0 0 1 0-4V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"/></svg> Pedidos</a>
+
+      <span class="dash-nav-label">Ferramentas</span>
+      <a href="criar-evento.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Criar evento</a>
+      <a href="perfil.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Meu perfil</a>
+      <a href="perfil.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 0 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 0 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.6V3a2 2 0 0 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.6 1H21a2 2 0 0 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/></svg> Configurações</a>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <div class="avatar" id="dashAvatar">KV</div>
+      <div><strong id="dashNome">Organizador</strong><span id="dashEmail">Painel de controle</span></div>
+    </div>
+  </aside>
+
+  <!-- ==================== CONTEÚDO PRINCIPAL ==================== -->
+  <main id="main" class="dash-main">
+    <div class="dash-topbar">
+      <div style="display:flex; align-items:center; gap:var(--space-4);">
+        <button class="dash-burger" id="dashBurger" aria-label="Abrir menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+        <div>
+          <h1>Visão geral</h1>
+          <p style="font-size:0.85rem; margin-top:2px;">Acompanhe o desempenho dos seus eventos em tempo real.</p>
+        </div>
+      </div>
+      <div class="dash-topbar-right">
+        <div class="period-select" id="periodSelect">
+          <button class="active" data-period="7">7 dias</button>
+          <button data-period="30">30 dias</button>
+          <button data-period="90">90 dias</button>
+        </div>
+        <a href="criar-evento.html" class="btn btn-primary btn-sm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg> Novo evento
+        </a>
+      </div>
+    </div>
+
+    <!-- ==================== CARDS DE MÉTRICAS ==================== -->
+    <div class="metrics-grid" id="metricsGrid">
+      <div class="metric-card">
+        <div class="metric-card-top">
+          <div class="ic green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <span class="metric-trend up"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 15l-6-6-6 6"/></svg> 12,4%</span>
+        </div>
+        <div class="metric-value" id="mFaturamento">R$ 0</div>
+        <div class="metric-label">Faturamento total</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card-top">
+          <div class="ic purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></div>
+          <span class="metric-trend up"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 15l-6-6-6 6"/></svg> 8,1%</span>
+        </div>
+        <div class="metric-value" id="mVendidos">0</div>
+        <div class="metric-label">Ingressos vendidos</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card-top">
+          <div class="ic neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+          <span class="metric-trend down"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg> 3,2%</span>
+        </div>
+        <div class="metric-value" id="mDisponiveis">0</div>
+        <div class="metric-label">Ingressos disponíveis</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card-top">
+          <div class="ic warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+          <span class="metric-trend up"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 15l-6-6-6 6"/></svg> 2 novos</span>
+        </div>
+        <div class="metric-value" id="mEventos">0</div>
+        <div class="metric-label">Eventos ativos</div>
+      </div>
+    </div>
+
+    <!-- ==================== GRÁFICOS ==================== -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-card-head">
+          <h3>Vendas de ingressos</h3>
+          <div class="chart-legend"><span><i style="background:var(--purple-500);"></i> Ingressos vendidos</span></div>
+        </div>
+        <div class="line-chart-wrap"><svg id="lineChart" viewBox="0 0 600 220" preserveAspectRatio="none"></svg></div>
+        <div class="line-chart-axis-x" id="lineChartAxis"></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-head"><h3>Desempenho por categoria</h3></div>
+        <div class="donut-wrap">
+          <svg width="150" height="150" viewBox="0 0 150 150" id="donutChart" aria-hidden="true"></svg>
+          <ul class="donut-legend" id="donutLegend"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card" style="margin-bottom: var(--space-8);">
+      <div class="chart-card-head">
+        <h3>Faturamento por evento</h3>
+        <div class="chart-legend"><span><i style="background:var(--purple-400);"></i> Últimos 6 eventos</span></div>
+      </div>
+      <div class="bar-chart" id="barChart"></div>
+    </div>
+
+    <!-- ==================== LISTAS ==================== -->
+    <div class="dash-lists-grid">
+      <div class="list-card" id="pedidos">
+        <div class="list-card-head"><h3>Pedidos recentes</h3><a href="#" class="see-all" style="font-size:0.82rem;">Ver todos</a></div>
+        <div class="table-wrap" style="border:none;">
+          <table>
+            <thead><tr><th>Cliente</th><th>Evento</th><th>Ingressos</th><th>Valor</th><th>Status</th></tr></thead>
+            <tbody id="pedidosBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="list-card" id="eventos-ativos">
+        <div class="list-card-head"><h3>Status dos eventos</h3></div>
+        <div id="statusEventos"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ============================================================
+   LITTLEVITOR — Script do Dashboard
+   Gera métricas, gráfico de linha (SVG), gráfico de barras (CSS)
+   e gráfico de rosca (SVG) inteiramente com JS puro, sem libs.
+   ============================================================ */
+
+/* ---- Dados mockados de vendas (14 dias) ---- */
+const vendasPorDia = [
+  { dia: '18/08', valor: 32 }, { dia: '19/08', valor: 48 }, { dia: '20/08', valor: 40 },
+  { dia: '21/08', valor: 61 }, { dia: '22/08', valor: 55 }, { dia: '23/08', valor: 72 },
+  { dia: '24/08', valor: 68 }, { dia: '25/08', valor: 90 }, { dia: '26/08', valor: 84 },
+  { dia: '27/08', valor: 102 }, { dia: '28/08', valor: 95 }, { dia: '29/08', valor: 118 },
+  { dia: '30/08', valor: 110 }, { dia: '31/08', valor: 134 },
+];
+
+const categoriasDesempenho = [
+  { nome: 'Música', valor: 38, cor: '#7C5CFF' },
+  { nome: 'Tecnologia', valor: 26, cor: '#2FE6A6' },
+  { nome: 'Comédia', valor: 16, cor: '#9B80FF' },
+  { nome: 'Gastronomia', valor: 12, cor: '#5CF0BC' },
+  { nome: 'Outros', valor: 8, cor: '#3A3648' },
+];
+
+const faturamentoEventos = [
+  { nome: 'Noite Roxa', valor: 42000 }, { nome: 'LittleTech', valor: 68000 },
+  { nome: 'Jazz & Vinho', valor: 21000 }, { nome: 'Stand-up', valor: 15000 },
+  { nome: 'Maratona', valor: 33000 }, { nome: 'Arte Digital', valor: 9000 },
+];
+
+const pedidosRecentes = [
+  { cliente: 'Marina Costa', evento: 'Festival Noite Roxa', qtd: 2, valor: 'R$ 360', status: 'Pago' },
+  { cliente: 'Rafael Souza', evento: 'Summit LittleTech', qtd: 1, valor: 'R$ 320', status: 'Pago' },
+  { cliente: 'Juliana Alves', evento: 'Stand-up: Risada Coletiva', qtd: 4, valor: 'R$ 360', status: 'Pendente' },
+  { cliente: 'Pedro Lima', evento: 'Noite de Jazz & Vinho', qtd: 2, valor: 'R$ 300', status: 'Pago' },
+  { cliente: 'Beatriz Nunes', evento: 'Maratona da Cidade', qtd: 1, valor: 'R$ 120', status: 'Cancelado' },
+];
+
+const eventosAtivos = [
+  { nome: 'Festival Noite Roxa', imagem: 'https://picsum.photos/seed/ev1/100/100', vendidoPct: 78, status: 'Vendendo bem' },
+  { nome: 'Summit LittleTech', imagem: 'https://picsum.photos/seed/ev2/100/100', vendidoPct: 45, status: 'Em andamento' },
+  { nome: 'Stand-up: Risada Coletiva', imagem: 'https://picsum.photos/seed/ev4/100/100', vendidoPct: 92, status: 'Quase esgotado' },
+  { nome: 'Noite de Jazz & Vinho', imagem: 'https://picsum.photos/seed/ev7/100/100', vendidoPct: 60, status: 'Em andamento' },
+];
+
+/* ---- Métricas (contadores animados) ---- */
+function animarNumero(elId, valorFinal, prefixo = '', sufixo = '') {
+  const el = document.getElementById(elId);
+  let atual = 0;
+  const passos = 40;
+  const incremento = valorFinal / passos;
+  const intervalo = setInterval(() => {
+    atual += incremento;
+    if (atual >= valorFinal) { atual = valorFinal; clearInterval(intervalo); }
+    el.textContent = prefixo + Math.round(atual).toLocaleString('pt-BR') + sufixo;
+  }, 20);
+}
+
+function initMetricas() {
+  animarNumero('mFaturamento', 128400, 'R$ ');
+  animarNumero('mVendidos', 1840);
+  animarNumero('mDisponiveis', 620);
+  animarNumero('mEventos', 6);
+}
+
+/* ---- Gráfico de linha em SVG puro (com área preenchida) ---- */
+function initLineChart() {
+  const svg = document.getElementById('lineChart');
+  const w = 600, h = 220, padding = 10;
+  const max = Math.max(...vendasPorDia.map(d => d.valor));
+  const step = (w - padding * 2) / (vendasPorDia.length - 1);
+
+  const pontos = vendasPorDia.map((d, i) => {
+    const x = padding + i * step;
+    const y = h - padding - (d.valor / max) * (h - padding * 2);
+    return [x, y];
+  });
+
+  const linha = 'M' + pontos.map(p => p.join(',')).join(' L');
+  const area = linha + ` L${pontos[pontos.length - 1][0]},${h} L${pontos[0][0]},${h} Z`;
+
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#7C5CFF" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#7C5CFF" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="${area}" fill="url(#areaGrad)" stroke="none"></path>
+    <path d="${linha}" fill="none" stroke="#7C5CFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+      stroke-dasharray="1400" stroke-dashoffset="1400" id="linePath"></path>
+    ${pontos.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#0B0A10" stroke="#7C5CFF" stroke-width="2.4"></circle>`).join('')}
+  `;
+
+  /* Anima o traçado da linha ao carregar */
+  const path = document.getElementById('linePath');
+  requestAnimationFrame(() => { path.style.transition = 'stroke-dashoffset 1200ms cubic-bezier(.22,1,.36,1)'; path.style.strokeDashoffset = '0'; });
+
+  document.getElementById('lineChartAxis').innerHTML = vendasPorDia.filter((_, i) => i % 3 === 0).map(d => `<span>${d.dia}</span>`).join('');
+}
+
+/* ---- Gráfico de barras em CSS puro ---- */
+function initBarChart() {
+  const cont = document.getElementById('barChart');
+  const max = Math.max(...faturamentoEventos.map(e => e.valor));
+  cont.innerHTML = faturamentoEventos.map(e => `
+    <div class="bar-chart-col">
+      <div class="bar-chart-track"><div class="bar-chart-fill" data-h="${(e.valor / max) * 100}"></div></div>
+      <span>${e.nome}</span>
+    </div>`).join('');
+  requestAnimationFrame(() => {
+    cont.querySelectorAll('.bar-chart-fill').forEach(el => { el.style.height = el.dataset.h + '%'; });
+  });
+}
+
+/* ---- Gráfico de rosca (donut) em SVG puro ---- */
+function initDonutChart() {
+  const svg = document.getElementById('donutChart');
+  const total = categoriasDesempenho.reduce((s, c) => s + c.valor, 0);
+  const raio = 60, centro = 75, espessura = 18;
+  const circunferencia = 2 * Math.PI * raio;
+  let acumulado = 0;
+
+  svg.innerHTML = categoriasDesempenho.map(cat => {
+    const fracao = cat.valor / total;
+    const comprimento = fracao * circunferencia;
+    const offset = circunferencia - acumulado;
+    acumulado += comprimento;
+    return `<circle cx="${centro}" cy="${centro}" r="${raio}" fill="none" stroke="${cat.cor}" stroke-width="${espessura}"
+      stroke-dasharray="${comprimento} ${circunferencia - comprimento}" stroke-dashoffset="${offset}" stroke-linecap="butt"></circle>`;
+  }).join('');
+
+  document.getElementById('donutLegend').innerHTML = categoriasDesempenho.map(cat => `
+    <li><i style="background:${cat.cor};"></i> ${cat.nome} <strong>${Math.round((cat.valor/total)*100)}%</strong></li>`).join('');
+}
+
+/* ---- Tabela de pedidos ---- */
+function initPedidos() {
+  const badge = { Pago: 'badge-green', Pendente: 'badge-warning', Cancelado: 'badge-error' };
+  document.getElementById('pedidosBody').innerHTML = pedidosRecentes.map(p => `
+    <tr>
+      <td class="cell-strong">${p.cliente}</td>
+      <td>${p.evento}</td>
+      <td>${p.qtd}</td>
+      <td class="cell-strong">${p.valor}</td>
+      <td><span class="badge ${badge[p.status]}">${p.status}</span></td>
+    </tr>`).join('');
+}
+
+/* ---- Status dos eventos ---- */
+function initStatusEventos() {
+  document.getElementById('statusEventos').innerHTML = eventosAtivos.map(e => `
+    <div class="event-status-row">
+      <img src="${e.imagem}" alt="${e.nome}">
+      <div class="event-status-row-info"><strong>${e.nome}</strong><span>${e.status}</span></div>
+      <div class="event-status-bar"><div class="event-status-bar-fill" style="width:${e.vendidoPct}%;"></div></div>
+      <span style="font-size:0.78rem; color:var(--text-tertiary); flex-shrink:0;">${e.vendidoPct}%</span>
+    </div>`).join('');
+}
+
+/* ---- Filtro de período (mock — apenas re-anima os gráficos) ---- */
+document.getElementById('periodSelect').addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  document.querySelectorAll('#periodSelect button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  mostrarToast('info', 'Período atualizado', `Exibindo dados dos últimos ${btn.dataset.period} dias.`);
+  initLineChart();
+  initBarChart();
+});
+
+/* ---- Sidebar mobile (abre/fecha e fecha ao clicar fora) ---- */
+const dashBurger = document.getElementById('dashBurger');
+const dashSidebar = document.getElementById('dashSidebar');
+dashBurger.addEventListener('click', (e) => {
+  e.stopPropagation();
+  dashSidebar.classList.toggle('open');
+  document.body.classList.toggle('sidebar-open', dashSidebar.classList.contains('open'));
+});
+document.addEventListener('click', (e) => {
+  if (dashSidebar.classList.contains('open') && !dashSidebar.contains(e.target) && e.target !== dashBurger) {
+    dashSidebar.classList.remove('open');
+    document.body.classList.remove('sidebar-open');
+  }
+});
+
+/* ---- Toasts ---- */
+function mostrarToast(tipo, titulo, desc) {
+  const cont = document.getElementById('toastContainer');
+  const icons = {
+    success: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>',
+    info: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-5M12 8h.01"/></svg>',
+  };
+  const toast = document.createElement('div');
+  toast.className = `toast ${tipo}`;
+  toast.innerHTML = `${icons[tipo]}<div><div class="toast-title">${titulo}</div><div class="toast-desc">${desc}</div></div>`;
+  cont.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3600);
+}
+
+/* ---- Carrega dados do usuário logado, se houver ---- */
+function carregarUsuario() {
+  const user = JSON.parse(localStorage.getItem('lv_user') || 'null');
+  if (user) {
+    document.getElementById('dashNome').textContent = user.nome;
+    document.getElementById('dashEmail').textContent = user.email;
+    document.getElementById('dashAvatar').textContent = user.nome.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+  }
+}
+
+carregarUsuario();
+initMetricas();
+initLineChart();
+initBarChart();
+initDonutChart();
+initPedidos();
+initStatusEventos();
+</script>
+</body>
+</html>

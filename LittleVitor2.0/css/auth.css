@@ -1,0 +1,134 @@
+/* ==========================================================================
+   LITTLEVITOR — auth.css
+   Estilos das páginas de Login, Cadastro e Recuperação de senha.
+   ========================================================================== */
+
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* ---- Lado visual (esquerdo) ---- */
+.auth-visual {
+  position: relative;
+  background: linear-gradient(160deg, var(--purple-700) 0%, #1A1030 45%, var(--bg-primary) 100%);
+  padding: var(--space-10);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.auth-visual::before {
+  content: '';
+  position: absolute;
+  width: 480px; height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--green-glow) 0%, transparent 70%);
+  bottom: -160px; right: -160px;
+}
+.auth-visual-logo {
+  display: flex; align-items: center; gap: var(--space-2);
+  font-family: var(--font-display); font-weight: 700; font-size: 1.3rem;
+  position: relative; z-index: 1;
+}
+.auth-visual-logo .dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple-400), var(--green-500));
+}
+.auth-visual-quote {
+  position: relative; z-index: 1;
+  max-width: 420px;
+}
+.auth-visual-quote h2 { margin-bottom: var(--space-4); font-size: clamp(1.6rem, 2vw + 1rem, 2.2rem); }
+.auth-visual-quote p { color: rgba(243, 241, 250, 0.7); }
+
+.auth-visual-stats {
+  position: relative; z-index: 1;
+  display: flex; gap: var(--space-8);
+}
+.auth-visual-stats div strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+.auth-visual-stats div span { font-size: 0.8rem; color: rgba(243, 241, 250, 0.6); }
+
+/* ---- Lado do formulário (direito) ---- */
+.auth-form-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+}
+.auth-form-box {
+  width: 100%;
+  max-width: 400px;
+}
+.auth-form-box .eyebrow { margin-bottom: var(--space-4); }
+.auth-form-box h1 { font-size: 2rem; margin-bottom: var(--space-2); }
+.auth-form-box > p { margin-bottom: var(--space-8); }
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text-tertiary);
+  font-size: 0.8rem;
+  margin-block: var(--space-6);
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.auth-social {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+.auth-social .btn { width: 100%; }
+
+.auth-foot {
+  margin-top: var(--space-8);
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+.auth-foot a { color: var(--green-500); font-weight: 600; }
+
+.auth-row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+}
+.auth-link-sm { font-size: 0.82rem; color: var(--purple-400); font-weight: 600; }
+
+/* ---- Estado de sucesso (recuperação de senha) ---- */
+.auth-success {
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+.auth-success.show { display: flex; }
+.auth-success-icon {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--success-bg);
+  color: var(--green-500);
+  display: flex; align-items: center; justify-content: center;
+}
+.auth-success-icon svg { width: 26px; height: 26px; }
+.auth-form-default.hide { display: none; }
+
+@media (max-width: 900px) {
+  .auth-shell { grid-template-columns: 1fr; }
+  .auth-visual { display: none; }
+  .auth-form-side { padding: var(--space-5); min-height: 100vh; }
+}

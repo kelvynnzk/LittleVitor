@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LittleVitor — Encontre e crie experiências inesquecíveis</title>
+<meta name="description" content="LittleVitor é a plataforma para descobrir, comprar ingressos e criar eventos incríveis perto de você.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/event.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<!-- ==================== NAVBAR ==================== -->
+<header class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo"><span class="dot"></span> LittleVitor</a>
+
+    <nav class="navbar-links" aria-label="Navegação principal">
+      <a href="index.html" class="active">Explorar</a>
+      <a href="index.html#categorias">Categorias</a>
+      <a href="criar-evento.html">Criar evento</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+
+    <div class="navbar-actions">
+      <label class="navbar-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" id="navSearchInput" placeholder="Buscar eventos..." aria-label="Buscar eventos">
+      </label>
+
+      <!-- Estado: visitante (deslogado) -->
+      <div id="guestActions" class="navbar-actions">
+        <a href="login.html" class="btn btn-ghost btn-sm">Entrar</a>
+        <a href="cadastro.html" class="btn btn-primary btn-sm">Criar conta</a>
+      </div>
+
+      <!-- Estado: usuário logado -->
+      <div id="userActions" class="dropdown" style="display:none;">
+        <button class="avatar" id="userAvatarBtn" aria-haspopup="true" aria-expanded="false" aria-label="Menu do usuário">KV</button>
+        <div class="dropdown-menu" id="userDropdown">
+          <a href="perfil.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Meu perfil</a>
+          <a href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg> Dashboard</a>
+          <a href="criar-evento.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Criar evento</a>
+          <div class="dropdown-divider"></div>
+          <button id="logoutBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg> Sair</button>
+        </div>
+      </div>
+
+      <button class="navbar-burger" id="burgerBtn" aria-label="Abrir menu" aria-expanded="false">
+        <span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <nav class="navbar-mobile-panel" id="mobilePanel" aria-label="Navegação mobile">
+      <a href="index.html">Explorar</a>
+      <a href="index.html#categorias">Categorias</a>
+      <a href="criar-evento.html">Criar evento</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="perfil.html">Meu perfil</a>
+      <a href="login.html">Entrar</a>
+      <a href="cadastro.html">Criar conta</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">Mais de 2.400 eventos ativos agora</span>
+        <h1 class="hero-title">Viva experiências que <span class="line-2">valem a pena contar.</span></h1>
+        <p class="hero-lead">A LittleVitor conecta você aos melhores shows, festas, workshops e encontros da sua cidade — e te dá as ferramentas para criar o seu próprio evento em minutos.</p>
+
+        <form class="hero-search" id="heroSearchForm" role="search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-tertiary); margin-left:12px; flex-shrink:0;"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="text" id="heroSearchInput" placeholder="Shows, festivais, workshops..." aria-label="Pesquisar eventos">
+          <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+
+        <div class="hero-actions" style="margin-top:var(--space-6);">
+          <a href="criar-evento.html" class="btn btn-purple">Criar meu evento</a>
+          <a href="#destaques" class="btn btn-secondary">Ver eventos em destaque</a>
+        </div>
+
+        <div class="hero-stats">
+          <div><strong>2.4k+</strong><span>Eventos ativos</span></div>
+          <div><strong>180k</strong><span>Ingressos vendidos</span></div>
+          <div><strong>4.9/5</strong><span>Avaliação média</span></div>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-visual-card card-1">
+          <img src="https://picsum.photos/seed/heroA/400/260" alt="">
+          <div class="c-title">Festival Noite Roxa</div>
+          <div class="c-meta">Sáb, 20:00 · São Paulo</div>
+        </div>
+        <div class="hero-visual-card card-2">
+          <img src="https://picsum.photos/seed/heroB/400/260" alt="">
+          <div class="c-title">Summit de Tecnologia</div>
+          <div class="c-meta">Ter, 09:00 · Rio de Janeiro</div>
+        </div>
+        <div class="hero-visual-badge">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>
+          Ingresso confirmado
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CATEGORIAS ==================== -->
+  <section class="section" id="categorias" style="padding-top:0;">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="eyebrow">Navegue por interesse</span><h2>Categorias em alta</h2></div>
+      </div>
+      <div class="categories-grid" id="categoriesGrid"></div>
+    </div>
+  </section>
+
+  <!-- ==================== EVENTOS EM DESTAQUE ==================== -->
+  <section class="section" id="destaques" style="padding-top:0;">
+    <div class="container">
+      <div class="filter-bar">
+        <div class="chip-row" id="categoryChips"></div>
+        <div class="filter-bar-right">
+          <select class="select" id="sortSelect" style="width:auto;" aria-label="Ordenar eventos">
+            <option value="relevancia">Relevância</option>
+            <option value="data">Data mais próxima</option>
+            <option value="preco-asc">Menor preço</option>
+            <option value="preco-desc">Maior preço</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <div><span class="eyebrow">Selecionados para você</span><h2>Em destaque</h2></div>
+      </div>
+      <div class="events-grid" id="featuredGrid"></div>
+    </div>
+  </section>
+
+  <!-- ==================== BANNER PROMOCIONAL ==================== -->
+  <section class="container" style="margin-bottom: var(--space-20);">
+    <div class="promo-banner">
+      <div>
+        <h3>Organize seu evento com quem entende do assunto.</h3>
+        <p>Ferramentas de venda, dashboard em tempo real e divulgação para milhares de pessoas.</p>
+      </div>
+      <a href="criar-evento.html" class="btn btn-primary btn-lg">Começar agora</a>
+    </div>
+  </section>
+
+  <!-- ==================== EVENTOS PRÓXIMOS ==================== -->
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="eyebrow">Não perca a data</span><h2>Acontecendo em breve</h2></div>
+        <a href="#" class="see-all">Ver todos <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="events-grid" id="upcomingGrid"></div>
+    </div>
+  </section>
+
+  <!-- ==================== EVENTOS POPULARES ==================== -->
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="eyebrow">O que todo mundo está vendo</span><h2>Mais populares</h2></div>
+        <a href="#" class="see-all">Ver todos <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="events-grid" id="popularGrid"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==================== RODAPÉ ==================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="navbar-logo" style="margin-bottom:var(--space-4);"><span class="dot"></span> LittleVitor</a>
+        <p style="max-width:280px; font-size:0.88rem;">A plataforma completa para descobrir e criar eventos memoráveis, do primeiro ingresso ao último brinde.</p>
+        <div class="footer-social" style="margin-top:var(--space-5);">
+          <a href="#" aria-label="Instagram"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="Twitter"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Explorar</h4>
+        <ul><li><a href="index.html">Todos os eventos</a></li><li><a href="index.html#categorias">Categorias</a></li><li><a href="index.html#destaques">Em destaque</a></li></ul>
+      </div>
+      <div class="footer-links">
+        <h4>Organizadores</h4>
+        <ul><li><a href="criar-evento.html">Criar evento</a></li><li><a href="dashboard.html">Dashboard</a></li><li><a href="#">Central de ajuda</a></li></ul>
+      </div>
+      <div class="footer-links">
+        <h4>Conta</h4>
+        <ul><li><a href="login.html">Entrar</a></li><li><a href="cadastro.html">Criar conta</a></li><li><a href="perfil.html">Meu perfil</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LittleVitor. Todos os direitos reservados.</span>
+      <span>Feito com ♥ para quem ama viver experiências.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ============================================================
+   LITTLEVITOR — Script da Home
+   Contém: dados mockados, renderização de cards, favoritos,
+   busca, filtros, ordenação, navbar e toasts.
+   ============================================================ */
+
+/* ---- Ícones reutilizados nos cards (como strings SVG) ---- */
+const icCalendar = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
+const icClock = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>';
+const icPin = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+const icHeart = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
+
+/* ---- Base de dados mockada de eventos ---- */
+const eventosDB = [
+  { id: 1, titulo: "Festival Noite Roxa", categoria: "Música", data: "20 Set", hora: "20:00", local: "Allianz Parque, São Paulo", preco: 180, ingressos: 42, imagem: "https://picsum.photos/seed/ev1/600/450", destaque: true, popular: true },
+  { id: 2, titulo: "Summit LittleTech 2026", categoria: "Tecnologia", data: "03 Out", hora: "09:00", local: "Expo Center, Rio de Janeiro", preco: 320, ingressos: 118, imagem: "https://picsum.photos/seed/ev2/600/450", destaque: true, popular: false },
+  { id: 3, titulo: "Feira Gastronômica Urbana", categoria: "Gastronomia", data: "12 Set", hora: "12:00", local: "Parque Ibirapuera, São Paulo", preco: 0, ingressos: 500, imagem: "https://picsum.photos/seed/ev3/600/450", destaque: false, popular: true },
+  { id: 4, titulo: "Stand-up: Risada Coletiva", categoria: "Comédia", data: "27 Set", hora: "21:00", local: "Teatro Bradesco, São Paulo", preco: 90, ingressos: 24, imagem: "https://picsum.photos/seed/ev4/600/450", destaque: true, popular: true },
+  { id: 5, titulo: "Workshop de UX Writing", categoria: "Educação", data: "05 Out", hora: "14:00", local: "Online", preco: 60, ingressos: 87, imagem: "https://picsum.photos/seed/ev5/600/450", destaque: false, popular: false },
+  { id: 6, titulo: "Maratona da Cidade", categoria: "Esporte", data: "18 Out", hora: "06:30", local: "Orla de Copacabana, RJ", preco: 120, ingressos: 340, imagem: "https://picsum.photos/seed/ev6/600/450", destaque: false, popular: true },
+  { id: 7, titulo: "Noite de Jazz & Vinho", categoria: "Música", data: "14 Set", hora: "19:30", local: "Casa de Shows Bourbon, SP", preco: 150, ingressos: 15, imagem: "https://picsum.photos/seed/ev7/600/450", destaque: true, popular: false },
+  { id: 8, titulo: "Exposição Arte Digital", categoria: "Arte", data: "22 Set", hora: "10:00", local: "MASP, São Paulo", preco: 45, ingressos: 210, imagem: "https://picsum.photos/seed/ev8/600/450", destaque: false, popular: true },
+  { id: 9, titulo: "Conferência de Startups", categoria: "Tecnologia", data: "30 Set", hora: "08:30", local: "WTC, São Paulo", preco: 250, ingressos: 63, imagem: "https://picsum.photos/seed/ev9/600/450", destaque: false, popular: false },
+];
+
+const categorias = [
+  { nome: "Música", ic: "🎵" }, { nome: "Tecnologia", ic: "💻" }, { nome: "Gastronomia", ic: "🍽️" },
+  { nome: "Comédia", ic: "🎤" }, { nome: "Esporte", ic: "🏃" }, { nome: "Arte", ic: "🎨" },
+];
+
+/* ---- Favoritos persistidos no localStorage ---- */
+function getFavoritos() {
+  return JSON.parse(localStorage.getItem('lv_favoritos') || '[]');
+}
+function toggleFavorito(id, btnEl) {
+  let favs = getFavoritos();
+  const idx = favs.indexOf(id);
+  if (idx >= 0) {
+    favs.splice(idx, 1);
+    mostrarToast('info', 'Removido dos favoritos', 'O evento saiu da sua lista.');
+  } else {
+    favs.push(id);
+    mostrarToast('success', 'Adicionado aos favoritos', 'Você pode vê-lo no seu perfil.');
+  }
+  localStorage.setItem('lv_favoritos', JSON.stringify(favs));
+  if (btnEl) {
+    btnEl.classList.toggle('active', idx < 0);
+    btnEl.classList.remove('pulse'); void btnEl.offsetWidth; btnEl.classList.add('pulse');
+  }
+}
+
+/* ---- Renderização de um card de evento ---- */
+function criarCardEvento(ev) {
+  const favs = getFavoritos();
+  const isFav = favs.includes(ev.id);
+  const precoTxt = ev.preco === 0 ? 'Grátis' : 'R$ ' + ev.preco.toFixed(0);
+  const card = document.createElement('article');
+  card.className = 'event-card';
+  card.innerHTML = `
+    <div class="event-card-media">
+      <img src="${ev.imagem}" alt="Capa do evento ${ev.titulo}" loading="lazy">
+      <div class="event-card-badges">${ev.destaque ? '<span class="badge badge-purple">Destaque</span>' : ''}</div>
+      <button class="favorite-button ${isFav ? 'active' : ''}" aria-label="Favoritar evento" data-id="${ev.id}">${icHeart}</button>
+    </div>
+    <div class="event-card-body">
+      <span class="event-card-category">${ev.categoria}</span>
+      <h3 class="event-card-title">${ev.titulo}</h3>
+      <ul class="event-card-meta">
+        <li>${icCalendar} ${ev.data} · ${ev.hora}</li>
+        <li>${icPin} ${ev.local}</li>
+      </ul>
+      <div class="event-card-footer">
+        <div class="event-card-price">${precoTxt}${ev.preco > 0 ? '<span>por pessoa</span>' : '<span>entrada livre</span>'}</div>
+        <span class="event-card-seats">${ev.ingressos} disp.</span>
+      </div>
+    </div>`;
+  card.addEventListener('click', () => { window.location.href = `evento.html?id=${ev.id}`; });
+  card.querySelector('.favorite-button').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleFavorito(ev.id, e.currentTarget);
+  });
+  return card;
+}
+
+function renderGrid(containerId, lista) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  if (lista.length === 0) {
+    el.parentElement.querySelector('.empty-state')?.remove();
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.style.gridColumn = '1/-1';
+    empty.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><h3>Nenhum evento encontrado</h3><p>Tente buscar por outro termo ou remover os filtros aplicados.</p>`;
+    el.appendChild(empty);
+    return;
+  }
+  lista.forEach(ev => el.appendChild(criarCardEvento(ev)));
+}
+
+/* ---- Categorias (chips + grid) ---- */
+let categoriaAtiva = 'Todos';
+function renderCategorias() {
+  const grid = document.getElementById('categoriesGrid');
+  grid.innerHTML = categorias.map(c => `
+    <div class="category-card" data-cat="${c.nome}" role="button" tabindex="0">
+      <div class="ic" style="font-size:1.2rem;">${c.ic}</div>
+      <span>${c.nome}</span>
+    </div>`).join('');
+  grid.querySelectorAll('.category-card').forEach(el => {
+    el.addEventListener('click', () => filtrarPorCategoria(el.dataset.cat));
+    el.addEventListener('keypress', (e) => { if (e.key === 'Enter') filtrarPorCategoria(el.dataset.cat); });
+  });
+
+  const chips = document.getElementById('categoryChips');
+  chips.innerHTML = '<button class="chip active" data-cat="Todos">Todos</button>' +
+    categorias.map(c => `<button class="chip" data-cat="${c.nome}">${c.ic} ${c.nome}</button>`).join('');
+  chips.querySelectorAll('.chip').forEach(el => {
+    el.addEventListener('click', () => filtrarPorCategoria(el.dataset.cat));
+  });
+}
+
+function filtrarPorCategoria(cat) {
+  categoriaAtiva = cat;
+  document.querySelectorAll('#categoryChips .chip').forEach(c => c.classList.toggle('active', c.dataset.cat === cat));
+  document.getElementById('destaques').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  aplicarFiltros();
+}
+
+/* ---- Busca + ordenação ---- */
+function aplicarFiltros() {
+  const termo = (document.getElementById('heroSearchInput').value || document.getElementById('navSearchInput').value || '').toLowerCase().trim();
+  let lista = eventosDB.filter(ev => {
+    const passaCategoria = categoriaAtiva === 'Todos' || ev.categoria === categoriaAtiva;
+    const passaBusca = !termo || ev.titulo.toLowerCase().includes(termo) || ev.categoria.toLowerCase().includes(termo) || ev.local.toLowerCase().includes(termo);
+    return passaCategoria && passaBusca;
+  });
+
+  const ordenar = document.getElementById('sortSelect').value;
+  if (ordenar === 'preco-asc') lista.sort((a, b) => a.preco - b.preco);
+  if (ordenar === 'preco-desc') lista.sort((a, b) => b.preco - a.preco);
+  if (ordenar === 'data') lista.sort((a, b) => a.id - b.id);
+
+  /* Sem busca e sem categoria selecionada: mostra a curadoria de destaques.
+     Com algum filtro ativo: mostra todos os resultados que combinam com ele. */
+  const semFiltroAtivo = !termo && categoriaAtiva === 'Todos';
+  renderGrid('featuredGrid', semFiltroAtivo ? lista.filter(e => e.destaque) : lista);
+}
+
+function initHome() {
+  renderCategorias();
+  renderGrid('featuredGrid', eventosDB.filter(e => e.destaque));
+  renderGrid('upcomingGrid', eventosDB.slice(0, 4));
+  renderGrid('popularGrid', eventosDB.filter(e => e.popular));
+
+  document.getElementById('heroSearchForm').addEventListener('submit', (e) => { e.preventDefault(); aplicarFiltros(); });
+  document.getElementById('navSearchInput').addEventListener('input', () => aplicarFiltros());
+  document.getElementById('sortSelect').addEventListener('change', aplicarFiltros);
+}
+
+/* ---- Toasts ---- */
+function mostrarToast(tipo, titulo, desc) {
+  const cont = document.getElementById('toastContainer');
+  const icons = {
+    success: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>',
+    error: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>',
+    info: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-5M12 8h.01"/></svg>',
+  };
+  const toast = document.createElement('div');
+  toast.className = `toast ${tipo}`;
+  toast.innerHTML = `${icons[tipo]}<div><div class="toast-title">${titulo}</div><div class="toast-desc">${desc}</div></div><button class="toast-close" aria-label="Fechar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>`;
+  cont.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  const remover = () => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); };
+  toast.querySelector('.toast-close').addEventListener('click', remover);
+  setTimeout(remover, 4200);
+}
+
+/* ---- Navbar: menu mobile, dropdown, estado de login ---- */
+function initNavbar() {
+  const burger = document.getElementById('burgerBtn');
+  const panel = document.getElementById('mobilePanel');
+  burger.addEventListener('click', () => {
+    const isOpen = panel.classList.toggle('open');
+    burger.classList.toggle('open', isOpen);
+    burger.setAttribute('aria-expanded', isOpen);
+  });
+
+  const avatarBtn = document.getElementById('userAvatarBtn');
+  const dropdown = document.getElementById('userDropdown');
+  if (avatarBtn) {
+    avatarBtn.addEventListener('click', () => dropdown.classList.toggle('open'));
+    document.addEventListener('click', (e) => {
+      if (!avatarBtn.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('open');
+    });
+  }
+
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('lv_user');
+    mostrarToast('info', 'Sessão encerrada', 'Até a próxima!');
+    setTimeout(() => atualizarEstadoLogin(), 600);
+  });
+
+  atualizarEstadoLogin();
+}
+
+function atualizarEstadoLogin() {
+  const user = JSON.parse(localStorage.getItem('lv_user') || 'null');
+  const guest = document.getElementById('guestActions');
+  const logged = document.getElementById('userActions');
+  if (user) {
+    guest.style.display = 'none';
+    logged.style.display = 'flex';
+    const initials = user.nome.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+    document.getElementById('userAvatarBtn').textContent = initials;
+  } else {
+    guest.style.display = 'flex';
+    logged.style.display = 'none';
+  }
+}
+
+initNavbar();
+initHome();
+</script>
+</body>
+</html>

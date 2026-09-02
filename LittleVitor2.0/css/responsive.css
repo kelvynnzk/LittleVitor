@@ -1,0 +1,53 @@
+/* ==========================================================================
+   LITTLEVITOR — responsive.css
+   Regras de responsividade que se aplicam globalmente (navbar, grids, etc.)
+   Breakpoints considerados: 360 / 390 / 768 / 1024 / 1440 / 1920
+   ========================================================================== */
+
+/* ---- Ultrawide: limita crescimento excessivo do conteúdo ---- */
+@media (min-width: 1800px) {
+  :root { --container-max: 1440px; }
+}
+
+/* ---- Notebook pequeno / tablet grande ---- */
+@media (max-width: 1024px) {
+  .navbar-search { width: 200px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .events-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+}
+
+/* ---- Tablet ---- */
+@media (max-width: 900px) {
+  .navbar-links,
+  .navbar-search { display: none; }
+  .navbar-burger { display: flex; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+}
+
+/* ---- Mobile grande / tablet pequeno ---- */
+@media (max-width: 768px) {
+  .section { padding-block: var(--space-12); }
+  .container { padding-inline: var(--space-4); }
+  .events-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--space-4); }
+  .footer-grid { grid-template-columns: 1fr; gap: var(--space-8); }
+  .footer-bottom { flex-direction: column; gap: var(--space-4); align-items: flex-start; }
+  .modal { max-width: 100%; }
+  .table-wrap { border-radius: var(--radius-md); }
+}
+
+/* ---- Mobile padrão (390px) ---- */
+@media (max-width: 480px) {
+  h1 { font-size: 2.1rem; }
+  .events-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--space-3); }
+  .toast-container { left: var(--space-4); right: var(--space-4); bottom: var(--space-4); }
+  .toast { min-width: 0; max-width: none; width: 100%; }
+  .navbar-inner { height: 68px; }
+  .filter-bar { flex-direction: column; align-items: stretch; }
+  .filter-bar-right { justify-content: space-between; }
+}
+
+/* ---- Mobile compacto (360px) ---- */
+@media (max-width: 380px) {
+  .container { padding-inline: var(--space-3); }
+  .btn-lg { padding: var(--space-3) var(--space-6); font-size: 0.95rem; }
+}

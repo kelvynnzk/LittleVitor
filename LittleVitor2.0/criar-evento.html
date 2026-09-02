@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criar evento — LittleVitor</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/profile.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo"><span class="dot"></span> LittleVitor</a>
+    <nav class="navbar-links" aria-label="Navegação principal">
+      <a href="index.html">Explorar</a>
+      <a href="index.html#categorias">Categorias</a>
+      <a href="criar-evento.html" class="active">Criar evento</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+    <div class="navbar-actions">
+      <div id="guestActions" class="navbar-actions">
+        <a href="login.html" class="btn btn-ghost btn-sm">Entrar</a>
+        <a href="cadastro.html" class="btn btn-primary btn-sm">Criar conta</a>
+      </div>
+      <div id="userActions" class="dropdown" style="display:none;">
+        <button class="avatar" id="userAvatarBtn" aria-label="Menu do usuário">KV</button>
+        <div class="dropdown-menu" id="userDropdown">
+          <a href="perfil.html">Meu perfil</a>
+          <a href="dashboard.html">Dashboard</a>
+          <div class="dropdown-divider"></div>
+          <button id="logoutBtn">Sair</button>
+        </div>
+      </div>
+      <button class="navbar-burger" id="burgerBtn" aria-label="Abrir menu"><span></span></button>
+    </div>
+  </div>
+  <div class="container">
+    <nav class="navbar-mobile-panel" id="mobilePanel">
+      <a href="index.html">Explorar</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="perfil.html">Meu perfil</a>
+      <a href="login.html">Entrar</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="container section" style="padding-top: var(--space-10);">
+  <span class="eyebrow">Organizador</span>
+  <h1 style="margin-bottom: var(--space-8); font-size: 2.1rem;">Criar novo evento</h1>
+
+  <!-- ==================== STEPPER ==================== -->
+  <div class="stepper" id="stepper">
+    <div class="stepper-step active" data-step="1"><div class="stepper-circle">1</div><span class="stepper-label">Informações</span></div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step" data-step="2"><div class="stepper-circle">2</div><span class="stepper-label">Localização</span></div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step" data-step="3"><div class="stepper-circle">3</div><span class="stepper-label">Ingressos</span></div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step" data-step="4"><div class="stepper-circle">4</div><span class="stepper-label">Revisão</span></div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step" data-step="5"><div class="stepper-circle">5</div><span class="stepper-label">Publicado</span></div>
+  </div>
+
+  <form id="wizardForm" novalidate>
+    <div class="wizard-shell">
+      <div>
+
+        <!-- ==================== ETAPA 1 — INFORMAÇÕES ==================== -->
+        <section class="wizard-step active" data-step="1">
+          <div class="surface-card">
+            <h3 style="margin-bottom: var(--space-5);">Informações do evento</h3>
+
+            <label class="upload-box" id="uploadBox" tabindex="0">
+              <input type="file" id="capaInput" accept="image/*" class="sr-only">
+              <img id="capaPreview" alt="">
+              <div class="upload-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15V9a2 2 0 0 0-2-2h-3.17L14 5H10L8.17 7H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9"/><circle cx="12" cy="13" r="3"/><path d="M18 15v6M15 18h6"/></svg>
+                <strong>Clique para enviar</strong> a imagem de capa do evento
+              </div>
+            </label>
+
+            <div class="field">
+              <label for="nomeEvento">Nome do evento</label>
+              <input type="text" id="nomeEvento" class="input" placeholder="Ex: Festival Noite Roxa" required>
+            </div>
+
+            <div class="field">
+              <label for="descricaoEvento">Descrição</label>
+              <textarea id="descricaoEvento" class="textarea" placeholder="Conte para o público o que torna esse evento especial..." required></textarea>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="categoriaEvento">Categoria</label>
+                <select id="categoriaEvento" class="select">
+                  <option>Música</option><option>Tecnologia</option><option>Gastronomia</option>
+                  <option>Comédia</option><option>Esporte</option><option>Arte</option><option>Educação</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="capacidadeEvento">Capacidade estimada</label>
+                <input type="number" id="capacidadeEvento" class="input" placeholder="Ex: 500" min="1">
+              </div>
+              <div class="field">
+                <label for="dataEvento">Data</label>
+                <input type="date" id="dataEvento" class="input" required>
+              </div>
+              <div class="field">
+                <label for="horaEvento">Horário</label>
+                <input type="time" id="horaEvento" class="input" required>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== ETAPA 2 — LOCALIZAÇÃO ==================== -->
+        <section class="wizard-step" data-step="2">
+          <div class="surface-card">
+            <h3 style="margin-bottom: var(--space-5);">Onde vai acontecer?</h3>
+            <div class="field">
+              <label for="localNome">Nome do local</label>
+              <input type="text" id="localNome" class="input" placeholder="Ex: Allianz Parque" required>
+            </div>
+            <div class="field">
+              <label for="enderecoEvento">Endereço completo</label>
+              <input type="text" id="enderecoEvento" class="input" placeholder="Rua, número, bairro" required>
+            </div>
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="cidadeEvento">Cidade</label>
+                <input type="text" id="cidadeEvento" class="input" placeholder="Ex: São Paulo" required>
+              </div>
+              <div class="field">
+                <label for="estadoEvento">Estado</label>
+                <input type="text" id="estadoEvento" class="input" placeholder="Ex: SP" required>
+              </div>
+            </div>
+            <label class="checkbox">
+              <input type="checkbox" id="eventoOnline">
+              <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span>
+              Este é um evento 100% online
+            </label>
+          </div>
+        </section>
+
+        <!-- ==================== ETAPA 3 — INGRESSOS ==================== -->
+        <section class="wizard-step" data-step="3">
+          <div class="surface-card">
+            <h3 style="margin-bottom: var(--space-2);">Tipos de ingresso</h3>
+            <p style="margin-bottom: var(--space-5); font-size:0.88rem;">Adicione um ou mais lotes de ingresso para o seu evento.</p>
+            <div id="ticketRows"></div>
+            <button type="button" class="add-ticket-btn" id="addTicketBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Adicionar tipo de ingresso
+            </button>
+          </div>
+        </section>
+
+        <!-- ==================== ETAPA 4 — REVISÃO ==================== -->
+        <section class="wizard-step" data-step="4">
+          <h3 style="margin-bottom: var(--space-5);">Revise antes de publicar</h3>
+          <div class="review-block">
+            <div class="review-block-head"><strong>Informações</strong><button type="button" class="btn btn-ghost btn-sm" data-goto="1">Editar</button></div>
+            <div class="review-row"><span>Nome</span><span id="rvNome">—</span></div>
+            <div class="review-row"><span>Categoria</span><span id="rvCategoria">—</span></div>
+            <div class="review-row"><span>Data e horário</span><span id="rvData">—</span></div>
+          </div>
+          <div class="review-block">
+            <div class="review-block-head"><strong>Localização</strong><button type="button" class="btn btn-ghost btn-sm" data-goto="2">Editar</button></div>
+            <div class="review-row"><span>Local</span><span id="rvLocal">—</span></div>
+            <div class="review-row"><span>Endereço</span><span id="rvEndereco">—</span></div>
+          </div>
+          <div class="review-block">
+            <div class="review-block-head"><strong>Ingressos</strong><button type="button" class="btn btn-ghost btn-sm" data-goto="3">Editar</button></div>
+            <div id="rvIngressos"></div>
+          </div>
+        </section>
+
+        <!-- ==================== ETAPA 5 — PUBLICAÇÃO ==================== -->
+        <section class="wizard-step" data-step="5">
+          <div class="publish-success">
+            <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div>
+            <h2>Evento publicado com sucesso!</h2>
+            <p>Seu evento já está disponível para o público na LittleVitor. Acompanhe as vendas em tempo real pelo seu dashboard.</p>
+            <div class="actions">
+              <a href="dashboard.html" class="btn btn-primary btn-lg">Ir para o Dashboard</a>
+              <a href="index.html" class="btn btn-secondary btn-lg">Ver na plataforma</a>
+            </div>
+          </div>
+        </section>
+
+        <div class="wizard-nav" id="wizardNav">
+          <button type="button" class="btn btn-secondary" id="btnVoltar" disabled>Voltar</button>
+          <button type="button" class="btn btn-primary" id="btnAvancar">Continuar</button>
+        </div>
+      </div>
+
+      <!-- ==================== PRÉVIA AO VIVO ==================== -->
+      <aside class="preview-sticky">
+        <span class="preview-label">PRÉVIA DO SEU EVENTO</span>
+        <div class="preview-card">
+          <div class="preview-card-media"><img id="previewImg" src="https://picsum.photos/seed/newevent/600/375" alt=""></div>
+          <div class="preview-card-body">
+            <span class="badge badge-purple" id="previewCategoria" style="margin-bottom:var(--space-2);">Música</span>
+            <h4 id="previewNome">Nome do seu evento</h4>
+            <ul>
+              <li id="previewData">Data a definir</li>
+              <li id="previewLocal">Local a definir</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </form>
+</main>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ============================================================
+   LITTLEVITOR — Script de "Criar Evento"
+   Controla o wizard de 5 etapas, upload de imagem, tipos de
+   ingresso dinâmicos, prévia ao vivo e revisão final.
+   ============================================================ */
+
+const icCalendar = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
+const icPin = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+
+let etapaAtual = 1;
+const totalEtapas = 5;
+let contadorTickets = 0;
+
+function irParaEtapa(n) {
+  etapaAtual = n;
+  document.querySelectorAll('.wizard-step').forEach(s => s.classList.toggle('active', parseInt(s.dataset.step) === n));
+  document.querySelectorAll('.stepper-step').forEach(s => {
+    const step = parseInt(s.dataset.step);
+    s.classList.toggle('active', step === n);
+    s.classList.toggle('done', step < n);
+  });
+  document.querySelectorAll('.stepper-line').forEach((l, i) => l.classList.toggle('done', i + 1 < n));
+
+  document.getElementById('btnVoltar').disabled = n === 1;
+  const btnAvancar = document.getElementById('btnAvancar');
+  document.getElementById('wizardNav').style.display = n === 5 ? 'none' : 'flex';
+  btnAvancar.textContent = n === 4 ? 'Publicar evento' : 'Continuar';
+
+  if (n === 4) preencherRevisao();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function validarEtapa(n) {
+  if (n === 1) {
+    const nome = document.getElementById('nomeEvento');
+    const desc = document.getElementById('descricaoEvento');
+    const data = document.getElementById('dataEvento');
+    if (!nome.value.trim() || !desc.value.trim() || !data.value) {
+      mostrarToast('error', 'Preencha os campos obrigatórios', 'Nome, descrição e data são necessários para continuar.');
+      return false;
+    }
+  }
+  if (n === 2 && !document.getElementById('eventoOnline').checked) {
+    const local = document.getElementById('localNome');
+    const endereco = document.getElementById('enderecoEvento');
+    if (!local.value.trim() || !endereco.value.trim()) {
+      mostrarToast('error', 'Preencha a localização', 'Informe o local e o endereço do evento.');
+      return false;
+    }
+  }
+  if (n === 3) {
+    const linhas = document.querySelectorAll('.ticket-type-row');
+    if (linhas.length === 0) { mostrarToast('error', 'Adicione um ingresso', 'Cadastre ao menos um tipo de ingresso.'); return false; }
+  }
+  return true;
+}
+
+document.getElementById('btnAvancar').addEventListener('click', () => {
+  if (!validarEtapa(etapaAtual)) return;
+  if (etapaAtual === 4) {
+    document.getElementById('btnAvancar').innerHTML = '<span class="spinner" style="display:inline-block;"></span> Publicando...';
+    document.getElementById('btnAvancar').disabled = true;
+    setTimeout(() => { irParaEtapa(5); mostrarToast('success', 'Publicado!', 'Seu evento já está no ar.'); }, 1200);
+    return;
+  }
+  if (etapaAtual < totalEtapas) irParaEtapa(etapaAtual + 1);
+});
+document.getElementById('btnVoltar').addEventListener('click', () => { if (etapaAtual > 1) irParaEtapa(etapaAtual - 1); });
+document.querySelectorAll('[data-goto]').forEach(btn => btn.addEventListener('click', () => irParaEtapa(parseInt(btn.dataset.goto))));
+
+/* ---- Upload de imagem (simulado com FileReader, sem envio real) ---- */
+const uploadBox = document.getElementById('uploadBox');
+const capaInput = document.getElementById('capaInput');
+/* O <input> já está aninhado dentro do <label>, então o clique já é repassado
+   nativamente pelo navegador — aqui tratamos apenas o acionamento via teclado (Enter). */
+uploadBox.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); capaInput.click(); } });
+capaInput.addEventListener('change', () => {
+  const arquivo = capaInput.files[0];
+  if (!arquivo) return;
+  const leitor = new FileReader();
+  leitor.onload = (e) => {
+    document.getElementById('capaPreview').src = e.target.result;
+    uploadBox.classList.add('has-image');
+    document.getElementById('previewImg').src = e.target.result;
+  };
+  leitor.readAsDataURL(arquivo);
+});
+
+/* ---- Tipos de ingresso dinâmicos ---- */
+function criarLinhaTicket(nome = '', preco = '', qtd = '') {
+  contadorTickets++;
+  const div = document.createElement('div');
+  div.className = 'ticket-type-row';
+  div.dataset.ticketId = contadorTickets;
+  div.innerHTML = `
+    <div class="field"><label>Nome do lote</label><input type="text" class="input tk-nome" placeholder="Ex: Pista, VIP..." value="${nome}"></div>
+    <div class="field"><label>Preço (R$)</label><input type="number" class="input tk-preco" min="0" placeholder="0" value="${preco}"></div>
+    <div class="field"><label>Quantidade</label><input type="number" class="input tk-qtd" min="1" placeholder="0" value="${qtd}"></div>
+    <button type="button" class="remove-ticket-btn" aria-label="Remover ingresso"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z"/></svg></button>`;
+  div.querySelector('.remove-ticket-btn').addEventListener('click', () => div.remove());
+  document.getElementById('ticketRows').appendChild(div);
+}
+document.getElementById('addTicketBtn').addEventListener('click', () => criarLinhaTicket());
+criarLinhaTicket('Ingresso único', '', '');
+
+/* ---- Prévia ao vivo ---- */
+function atualizarPreview() {
+  document.getElementById('previewNome').textContent = document.getElementById('nomeEvento').value || 'Nome do seu evento';
+  document.getElementById('previewCategoria').textContent = document.getElementById('categoriaEvento').value;
+  const data = document.getElementById('dataEvento').value;
+  const hora = document.getElementById('horaEvento').value;
+  document.getElementById('previewData').innerHTML = icCalendar + ' ' + (data ? new Date(data + 'T00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) : 'Data a definir') + (hora ? ' · ' + hora : '');
+  const local = document.getElementById('eventoOnline').checked ? 'Evento online' : (document.getElementById('cidadeEvento').value || document.getElementById('localNome').value || 'Local a definir');
+  document.getElementById('previewLocal').innerHTML = icPin + ' ' + local;
+}
+['nomeEvento', 'categoriaEvento', 'dataEvento', 'horaEvento', 'localNome', 'cidadeEvento', 'eventoOnline'].forEach(id => {
+  document.getElementById(id).addEventListener('input', atualizarPreview);
+  document.getElementById(id).addEventListener('change', atualizarPreview);
+});
+atualizarPreview();
+
+/* ---- Revisão final ---- */
+function preencherRevisao() {
+  document.getElementById('rvNome').textContent = document.getElementById('nomeEvento').value || '—';
+  document.getElementById('rvCategoria').textContent = document.getElementById('categoriaEvento').value;
+  const data = document.getElementById('dataEvento').value;
+  const hora = document.getElementById('horaEvento').value;
+  document.getElementById('rvData').textContent = (data ? new Date(data + 'T00:00').toLocaleDateString('pt-BR') : '—') + (hora ? ' às ' + hora : '');
+  document.getElementById('rvLocal').textContent = document.getElementById('eventoOnline').checked ? 'Evento online' : (document.getElementById('localNome').value || '—');
+  document.getElementById('rvEndereco').textContent = document.getElementById('eventoOnline').checked ? '—' : (document.getElementById('enderecoEvento').value || '—');
+
+  const rvIngressos = document.getElementById('rvIngressos');
+  rvIngressos.innerHTML = '';
+  document.querySelectorAll('.ticket-type-row').forEach(row => {
+    const nome = row.querySelector('.tk-nome').value || 'Ingresso';
+    const preco = row.querySelector('.tk-preco').value || '0';
+    const qtd = row.querySelector('.tk-qtd').value || '0';
+    const linha = document.createElement('div');
+    linha.className = 'review-row';
+    linha.innerHTML = `<span>${nome} (${qtd} un.)</span><span>R$ ${parseFloat(preco).toFixed(0)}</span>`;
+    rvIngressos.appendChild(linha);
+  });
+}
+
+/* ---- Toasts ---- */
+function mostrarToast(tipo, titulo, desc) {
+  const cont = document.getElementById('toastContainer');
+  const icons = {
+    success: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>',
+    error: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>',
+  };
+  const toast = document.createElement('div');
+  toast.className = `toast ${tipo}`;
+  toast.innerHTML = `${icons[tipo]}<div><div class="toast-title">${titulo}</div><div class="toast-desc">${desc}</div></div>`;
+  cont.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 4000);
+}
+
+/* ---- Navbar ---- */
+function initNavbar() {
+  const burger = document.getElementById('burgerBtn');
+  const panel = document.getElementById('mobilePanel');
+  burger.addEventListener('click', () => { const o = panel.classList.toggle('open'); burger.classList.toggle('open', o); });
+  const avatarBtn = document.getElementById('userAvatarBtn');
+  const dropdown = document.getElementById('userDropdown');
+  if (avatarBtn) {
+    avatarBtn.addEventListener('click', () => dropdown.classList.toggle('open'));
+    document.addEventListener('click', (e) => { if (!avatarBtn.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('open'); });
+  }
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) logoutBtn.addEventListener('click', () => { localStorage.removeItem('lv_user'); atualizarEstadoLogin(); });
+  atualizarEstadoLogin();
+}
+function atualizarEstadoLogin() {
+  const user = JSON.parse(localStorage.getItem('lv_user') || 'null');
+  document.getElementById('guestActions').style.display = user ? 'none' : 'flex';
+  document.getElementById('userActions').style.display = user ? 'flex' : 'none';
+  if (user) document.getElementById('userAvatarBtn').textContent = user.nome.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
+}
+initNavbar();
+</script>
+</body>
+</html>

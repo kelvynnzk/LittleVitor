@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu perfil — LittleVitor</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/profile.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo"><span class="dot"></span> LittleVitor</a>
+    <nav class="navbar-links" aria-label="Navegação principal">
+      <a href="index.html">Explorar</a>
+      <a href="index.html#categorias">Categorias</a>
+      <a href="criar-evento.html">Criar evento</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+    <div class="navbar-actions">
+      <div id="guestActions" class="navbar-actions">
+        <a href="login.html" class="btn btn-ghost btn-sm">Entrar</a>
+        <a href="cadastro.html" class="btn btn-primary btn-sm">Criar conta</a>
+      </div>
+      <div id="userActions" class="dropdown" style="display:none;">
+        <button class="avatar" id="userAvatarBtn" aria-label="Menu do usuário">KV</button>
+        <div class="dropdown-menu" id="userDropdown">
+          <a href="perfil.html">Meu perfil</a>
+          <a href="dashboard.html">Dashboard</a>
+          <div class="dropdown-divider"></div>
+          <button id="logoutBtn">Sair</button>
+        </div>
+      </div>
+      <button class="navbar-burger" id="burgerBtn" aria-label="Abrir menu"><span></span></button>
+    </div>
+  </div>
+  <div class="container">
+    <nav class="navbar-mobile-panel" id="mobilePanel">
+      <a href="index.html">Explorar</a>
+      <a href="criar-evento.html">Criar evento</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="login.html">Entrar</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="container section" style="padding-top: var(--space-8);">
+
+  <div class="profile-header">
+    <div class="avatar" id="profileAvatar" style="width:88px;height:88px;font-size:1.8rem;">KV</div>
+    <div class="profile-header-info">
+      <h1 id="profileNome">Visitante</h1>
+      <span id="profileEmail">Faça login para ver seu perfil completo</span>
+    </div>
+    <div class="profile-header-stats">
+      <div><strong id="statFavoritos">0</strong><span>Favoritos</span></div>
+      <div><strong id="statCriados">0</strong><span>Criados</span></div>
+      <div><strong id="statIngressos">3</strong><span>Ingressos</span></div>
+    </div>
+  </div>
+
+  <div class="profile-layout">
+    <nav class="profile-side-nav" aria-label="Navegação do perfil">
+      <button class="active" data-tab="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Informações</button>
+      <button data-tab="favoritos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg> Favoritos</button>
+      <button data-tab="criados"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Eventos criados</button>
+      <button data-tab="ingressos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10a2 2 0 0 0 0 4v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3a2 2 0 0 1 0-4V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"/></svg> Meus ingressos</button>
+      <button data-tab="config"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 0 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 0 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.6V3a2 2 0 0 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.6 1H21a2 2 0 0 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/></svg> Configurações</button>
+      <button class="logout-btn" id="logoutSideBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg> Sair da conta</button>
+    </nav>
+
+    <div>
+      <!-- ==================== ABA: INFORMAÇÕES ==================== -->
+      <div class="tab-panel active" id="tab-info">
+        <div class="surface-card">
+          <h3 style="margin-bottom: var(--space-6);">Informações pessoais</h3>
+          <form id="infoForm">
+            <div class="form-grid-2">
+              <div class="field"><label for="infoNome">Nome completo</label><input type="text" id="infoNome" class="input"></div>
+              <div class="field"><label for="infoEmail">E-mail</label><input type="email" id="infoEmail" class="input"></div>
+              <div class="field"><label for="infoTelefone">Telefone</label><input type="text" id="infoTelefone" class="input" placeholder="(00) 00000-0000"></div>
+              <div class="field"><label for="infoCidade">Cidade</label><input type="text" id="infoCidade" class="input" placeholder="Sua cidade"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar alterações</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- ==================== ABA: FAVORITOS ==================== -->
+      <div class="tab-panel" id="tab-favoritos">
+        <div class="events-grid" id="favoritosGrid"></div>
+      </div>
+
+      <!-- ==================== ABA: EVENTOS CRIADOS ==================== -->
+      <div class="tab-panel" id="tab-criados">
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
+          <h3>Você ainda não criou nenhum evento</h3>
+          <p>Publique seu primeiro evento e comece a vender ingressos hoje mesmo.</p>
+          <a href="criar-evento.html" class="btn btn-primary">Criar meu primeiro evento</a>
+        </div>
+      </div>
+
+      <!-- ==================== ABA: MEUS INGRESSOS ==================== -->
+      <div class="tab-panel" id="tab-ingressos">
+        <div id="ticketsList"></div>
+      </div>
+
+      <!-- ==================== ABA: CONFIGURAÇÕES ==================== -->
+      <div class="tab-panel" id="tab-config">
+        <div class="surface-card">
+          <h3 style="margin-bottom: var(--space-5);">Preferências de notificação</h3>
+          <div class="settings-row">
+            <div class="settings-row-label"><strong>Notificações por e-mail</strong><span>Receba novidades sobre seus eventos favoritos</span></div>
+            <label class="switch"><input type="checkbox" checked><span class="track"></span><span class="thumb"></span></label>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label"><strong>Lembretes de eventos</strong><span>Avisos 24h antes de um evento comprado</span></div>
+            <label class="switch"><input type="checkbox" checked><span class="track"></span><span class="thumb"></span></label>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-label"><strong>Ofertas e promoções</strong><span>Descontos exclusivos de organizadores parceiros</span></div>
+            <label class="switch"><input type="checkbox"><span class="track"></span><span class="thumb"></span></label>
+          </div>
+        </div>
+
+        <div class="surface-card" style="margin-top:var(--space-5); border-color: var(--error);">
+          <h3 style="margin-bottom: var(--space-2); color: var(--error);">Zona de risco</h3>
+          <p style="margin-bottom: var(--space-4); font-size:0.88rem;">Excluir sua conta é uma ação permanente e não pode ser desfeita.</p>
+          <button class="btn btn-danger" id="excluirContaBtn">Excluir minha conta</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ============================================================
+   LITTLEVITOR — Script da página de Perfil
+   Controla as abas do perfil, exibe favoritos persistidos e
+   dados simulados de ingressos comprados.
+   ============================================================ */
+
+const icCalendar = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
+const icPin = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+const icHeart = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
+
+const eventosDB = [
+  { id: 1, titulo: "Festival Noite Roxa", categoria: "Música", data: "20 Set", hora: "20:00", local: "Allianz Parque, São Paulo", preco: 180, ingressos: 42, imagem: "https://picsum.photos/seed/ev1/600/450" },
+  { id: 2, titulo: "Summit LittleTech 2026", categoria: "Tecnologia", data: "03 Out", hora: "09:00", local: "Expo Center, Rio de Janeiro", preco: 320, ingressos: 118, imagem: "https://picsum.photos/seed/ev2/600/450" },
+  { id: 3, titulo: "Feira Gastronômica Urbana", categoria: "Gastronomia", data: "12 Set", hora: "12:00", local: "Parque Ibirapuera, São Paulo", preco: 0, ingressos: 500, imagem: "https://picsum.photos/seed/ev3/600/450" },
+  { id: 4, titulo: "Stand-up: Risada Coletiva", categoria: "Comédia", data: "27 Set", hora: "21:00", local: "Teatro Bradesco, São Paulo", preco: 90, ingressos: 24, imagem: "https://picsum.photos/seed/ev4/600/450" },
+  { id: 5, titulo: "Workshop de UX Writing", categoria: "Educação", data: "05 Out", hora: "14:00", local: "Online", preco: 60, ingressos: 87, imagem: "https://picsum.photos/seed/ev5/600/450" },
+  { id: 6, titulo: "Maratona da Cidade", categoria: "Esporte", data: "18 Out", hora: "06:30", local: "Orla de Copacabana, RJ", preco: 120, ingressos: 340, imagem: "https://picsum.photos/seed/ev6/600/450" },
+  { id: 7, titulo: "Noite de Jazz & Vinho", categoria: "Música", data: "14 Set", hora: "19:30", local: "Casa de Shows Bourbon, SP", preco: 150, ingressos: 15, imagem: "https://picsum.photos/seed/ev7/600/450" },
+  { id: 8, titulo: "Exposição Arte Digital", categoria: "Arte", data: "22 Set", hora: "10:00", local: "MASP, São Paulo", preco: 45, ingressos: 210, imagem: "https://picsum.photos/seed/ev8/600/450" },
+  { id: 9, titulo: "Conferência de Startups", categoria: "Tecnologia", data: "30 Set", hora: "08:30", local: "WTC, São Paulo", preco: 250, ingressos: 63, imagem: "https://picsum.photos/seed/ev9/600/450" },
+];
+
+/* ---- Carrega dados do usuário logado ---- */
+function carregarUsuario() {
+  const user = JSON.parse(localStorage.getItem('lv_user') || 'null');
+  if (user) {
+    document.getElementById('profileNome').textContent = user.nome;
+    document.getElementById('profileEmail').textContent = user.email;
+    document.getElementById('infoNome').value = user.nome;
+    document.getElementById('infoEmail').value = user.email;
+    const iniciais = user.nome.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+    document.getElementById('profileAvatar').textContent = iniciais;
+  }
+}
+
+/* ---- Sistema de abas ---- */
+function initTabs() {
+  const botoes = document.querySelectorAll('.profile-side-nav button[data-tab]');
+  botoes.forEach(btn => {
+    btn.addEventListener('click', () => {
+      botoes.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+}
+
+/* ---- Favoritos ---- */
+function renderFavoritos() {
+  const favs = JSON.parse(localStorage.getItem('lv_favoritos') || '[]');
+  document.getElementById('statFavoritos').textContent = favs.length;
+  const grid = document.getElementById('favoritosGrid');
+  grid.innerHTML = '';
+  const lista = eventosDB.filter(e => favs.includes(e.id));
+  if (lista.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+      <h3>Nenhum favorito ainda</h3><p>Toque no coração de um evento para salvá-lo aqui.</p>
+      <a href="index.html" class="btn btn-primary">Explorar eventos</a></div>`;
+    return;
+  }
+  lista.forEach(ev => {
+    const card = document.createElement('article');
+    card.className = 'event-card';
+    const precoTxt = ev.preco === 0 ? 'Grátis' : 'R$ ' + ev.preco.toFixed(0);
+    card.innerHTML = `
+      <div class="event-card-media"><img src="${ev.imagem}" alt="${ev.titulo}" loading="lazy">
+        <button class="favorite-button active" data-id="${ev.id}" aria-label="Remover favorito">${icHeart}</button></div>
+      <div class="event-card-body">
+        <span class="event-card-category">${ev.categoria}</span>
+        <h3 class="event-card-title">${ev.titulo}</h3>
+        <ul class="event-card-meta"><li>${icCalendar} ${ev.data} · ${ev.hora}</li><li>${icPin} ${ev.local}</li></ul>
+        <div class="event-card-footer"><div class="event-card-price">${precoTxt}</div><span class="event-card-seats">${ev.ingressos} disp.</span></div>
+      </div>`;
+    card.addEventListener('click', (e) => { if (!e.target.closest('.favorite-button')) window.location.href = `evento.html?id=${ev.id}`; });
+    card.querySelector('.favorite-button').addEventListener('click', (e) => {
+      e.stopPropagation();
+      let f = JSON.parse(localStorage.getItem('lv_favoritos') || '[]');
+      f = f.filter(id => id !== ev.id);
+      localStorage.setItem('lv_favoritos', JSON.stringify(f));
+      mostrarToast('info', 'Removido dos favoritos', '');
+      renderFavoritos();
+    });
+    grid.appendChild(card);
+  });
+}
+
+/* ---- Ingressos comprados (mock fixo) ---- */
+function renderIngressos() {
+  const meusIngressos = [
+    { evento: eventosDB[0], codigo: 'LV-8F21-QX', qtd: 2 },
+    { evento: eventosDB[3], codigo: 'LV-2A90-TR', qtd: 1 },
+  ];
+  const cont = document.getElementById('ticketsList');
+  document.getElementById('statIngressos').textContent = meusIngressos.reduce((s, t) => s + t.qtd, 0);
+  cont.innerHTML = meusIngressos.map(t => `
+    <div class="ticket-item">
+      <img src="${t.evento.imagem}" alt="${t.evento.titulo}">
+      <div class="ticket-item-info">
+        <strong>${t.evento.titulo}</strong>
+        <span>${t.evento.data} · ${t.evento.hora} — ${t.qtd} ingresso(s)</span>
+        <div class="ticket-item-code">Código: ${t.codigo}</div>
+      </div>
+      <span class="badge badge-green">Confirmado</span>
+    </div>`).join('');
+}
+
+/* ---- Formulário de informações ---- */
+document.getElementById('infoForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const user = JSON.parse(localStorage.getItem('lv_user') || '{}');
+  user.nome = document.getElementById('infoNome').value || user.nome;
+  user.email = document.getElementById('infoEmail').value || user.email;
+  localStorage.setItem('lv_user', JSON.stringify(user));
+  carregarUsuario();
+  mostrarToast('success', 'Perfil atualizado', 'Suas informações foram salvas.');
+});
+
+document.getElementById('excluirContaBtn').addEventListener('click', () => {
+  mostrarToast('info', 'Ação simulada', 'Em um produto real, isso abriria uma confirmação de exclusão.');
+});
+
+/* ---- Toasts ---- */
+function mostrarToast(tipo, titulo, desc) {
+  const cont = document.getElementById('toastContainer');
+  const icons = {
+    success: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>',
+    info: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-5M12 8h.01"/></svg>',
+  };
+  const toast = document.createElement('div');
+  toast.className = `toast ${tipo}`;
+  toast.innerHTML = `${icons[tipo]}<div><div class="toast-title">${titulo}</div>${desc ? `<div class="toast-desc">${desc}</div>` : ''}</div>`;
+  cont.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 4000);
+}
+
+/* ---- Navbar ---- */
+function initNavbar() {
+  const burger = document.getElementById('burgerBtn');
+  const panel = document.getElementById('mobilePanel');
+  burger.addEventListener('click', () => { const o = panel.classList.toggle('open'); burger.classList.toggle('open', o); });
+  const avatarBtn = document.getElementById('userAvatarBtn');
+  const dropdown = document.getElementById('userDropdown');
+  avatarBtn.addEventListener('click', () => dropdown.classList.toggle('open'));
+  document.addEventListener('click', (e) => { if (!avatarBtn.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('open'); });
+  const sair = () => { localStorage.removeItem('lv_user'); mostrarToast('info', 'Sessão encerrada', ''); setTimeout(() => window.location.href = 'index.html', 700); };
+  document.getElementById('logoutBtn').addEventListener('click', sair);
+  document.getElementById('logoutSideBtn').addEventListener('click', sair);
+  atualizarEstadoLogin();
+}
+function atualizarEstadoLogin() {
+  const user = JSON.parse(localStorage.getItem('lv_user') || 'null');
+  document.getElementById('guestActions').style.display = user ? 'none' : 'flex';
+  document.getElementById('userActions').style.display = user ? 'flex' : 'none';
+  if (user) document.getElementById('userAvatarBtn').textContent = user.nome.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
+}
+
+carregarUsuario();
+initTabs();
+renderFavoritos();
+renderIngressos();
+document.getElementById('statCriados').textContent = '0';
+initNavbar();
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recuperar senha — LittleVitor</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/auth.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<div class="auth-shell">
+  <aside class="auth-visual" aria-hidden="true">
+    <a href="index.html" class="auth-visual-logo"><span class="dot"></span> LittleVitor</a>
+    <div class="auth-visual-quote">
+      <h2>“Acontece com todo mundo. Vamos te ajudar a voltar.”</h2>
+      <p>Em poucos passos você recupera o acesso à sua conta e volta a curtir os melhores eventos.</p>
+    </div>
+  </aside>
+
+  <div class="auth-form-side">
+    <div class="auth-form-box">
+
+      <!-- ==================== FORMULÁRIO PADRÃO ==================== -->
+      <div id="formPadrao" class="auth-form-default">
+        <span class="eyebrow">Recuperação de acesso</span>
+        <h1>Esqueceu sua senha?</h1>
+        <p>Informe o e-mail cadastrado e enviaremos um link para você criar uma nova senha.</p>
+
+        <form id="recuperarForm" novalidate>
+          <div class="field">
+            <label for="email">E-mail cadastrado</label>
+            <input type="email" id="email" class="input" placeholder="voce@email.com" autocomplete="email" required>
+            <span class="field-error" id="emailError">Informe um e-mail válido.</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="recuperarBtn">
+            <span id="recuperarBtnText">Enviar link de recuperação</span>
+          </button>
+        </form>
+
+        <p class="auth-foot"><a href="login.html" style="color:var(--text-secondary); display:inline-flex; align-items:center; gap:6px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar para o login</a></p>
+      </div>
+
+      <!-- ==================== ESTADO DE SUCESSO ==================== -->
+      <div id="estadoSucesso" class="auth-success">
+        <div class="auth-success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div>
+        <h1>Verifique seu e-mail</h1>
+        <p>Enviamos um link de recuperação para <strong id="emailEnviado" style="color:var(--text-primary);"></strong>. Ele expira em 30 minutos.</p>
+        <button class="btn btn-secondary btn-block" id="reenviarBtn">Reenviar e-mail</button>
+        <a href="login.html" class="btn btn-ghost btn-block">Voltar para o login</a>
+      </div>
+
+      <!-- ==================== ESTADO DE ERRO ==================== -->
+      <div id="estadoErro" class="auth-success">
+        <div class="auth-success-icon" style="background:var(--error-bg); color:var(--error);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg></div>
+        <h1>Não encontramos essa conta</h1>
+        <p>Não localizamos nenhum cadastro com o e-mail informado. Verifique se digitou corretamente.</p>
+        <button class="btn btn-primary btn-block" id="tentarNovamenteBtn">Tentar novamente</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ============================================================
+   LITTLEVITOR — Script de Recuperação de senha
+   Simula o fluxo de envio de link, com estados de sucesso/erro.
+   ============================================================ */
+
+function mostrarToast(tipo, titulo, desc) {
+  const cont = document.getElementById('toastContainer');
+  const icons = {
+    success: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>',
+    error: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>',
+  };
+  const toast = document.createElement('div');
+  toast.className = `toast ${tipo}`;
+  toast.innerHTML = `${icons[tipo]}<div><div class="toast-title">${titulo}</div><div class="toast-desc">${desc}</div></div>`;
+  cont.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3800);
+}
+
+function emailValido(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+const formPadrao = document.getElementById('formPadrao');
+const estadoSucesso = document.getElementById('estadoSucesso');
+const estadoErro = document.getElementById('estadoErro');
+
+document.getElementById('recuperarForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const email = document.getElementById('email');
+  const erro = document.getElementById('emailError');
+
+  if (!emailValido(email.value)) {
+    email.classList.add('has-error');
+    erro.classList.add('show');
+    return;
+  }
+  email.classList.remove('has-error');
+  erro.classList.remove('show');
+
+  const btn = document.getElementById('recuperarBtn');
+  document.getElementById('recuperarBtnText').innerHTML = '<span class="spinner" style="display:inline-block;"></span> Enviando...';
+  btn.disabled = true;
+
+  /* Simula a verificação no "servidor": e-mails contendo "erro" simulam falha, para fins de demonstração do estado de erro */
+  setTimeout(() => {
+    if (email.value.toLowerCase().includes('erro')) {
+      formPadrao.classList.add('hide');
+      estadoErro.classList.add('show');
+    } else {
+      document.getElementById('emailEnviado').textContent = email.value;
+      formPadrao.classList.add('hide');
+      estadoSucesso.classList.add('show');
+      mostrarToast('success', 'E-mail enviado', 'Confira sua caixa de entrada.');
+    }
+  }, 1000);
+});
+
+document.getElementById('tentarNovamenteBtn').addEventListener('click', () => {
+  estadoErro.classList.remove('show');
+  formPadrao.classList.remove('hide');
+  document.getElementById('recuperarBtnText').textContent = 'Enviar link de recuperação';
+  document.getElementById('recuperarBtn').disabled = false;
+});
+
+document.getElementById('reenviarBtn').addEventListener('click', () => {
+  mostrarToast('success', 'E-mail reenviado', 'Verifique novamente sua caixa de entrada.');
+});
+</script>
+</body>
+</html>
