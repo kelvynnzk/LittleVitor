@@ -206,7 +206,6 @@
 .organizer-card .avatar { width: 52px; height: 52px; font-size: 1.1rem; }
 .organizer-card strong { display: block; }
 .organizer-card span { font-size: 0.82rem; color: var(--text-tertiary); }
-.organizer-card .btn { margin-left: auto; }
 
 .map-frame {
   border-radius: var(--radius-md);
@@ -312,8 +311,6 @@
 }
 @media (max-width: 768px) {
   .event-quickfacts { grid-template-columns: 1fr; }
-  .organizer-card { flex-wrap: wrap; }
-  .organizer-card .btn { margin-left: 0; width: 100%; }
   .categories-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 480px) {
