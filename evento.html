@@ -11,7 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-     <script src="auth-ui.js"></script>
+    <script src="auth-ui.js"></script>
 </head>
 
 <body>
@@ -24,7 +24,7 @@
                 <a href="categorias.html">Categorias</a>
                 <a href="sobre.html">Sobre</a>
             </nav>
-           <a href="login.html" id="link-entrar">Entrar</a>
+            <a href="login.html" id="link-entrar">Entrar</a>
         </div>
     </header>
 
@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="event-grid" id="eventos-grid">
-                    <!-- cards gerados via JS a partir de EVENTOS -->
+                    <!-- cards gerados via JS a partir da rota /eventos -->
                 </div>
 
                 <p id="eventos-vazio" class="hidden" style="color:var(--text-mid); margin-top:24px;">
@@ -114,13 +114,8 @@
                     <div class="evento-descricao">
                         <h2>Sobre o evento</h2>
                         <div id="det-descricao">
-                            <!-- parágrafos gerados via JS -->
+                            <!-- parágrafo gerado via JS -->
                         </div>
-
-                        <h3>O que levar</h3>
-                        <ul class="evento-lista" id="det-lista">
-                            <!-- itens gerados via JS -->
-                        </ul>
                     </div>
 
                     <div class="evento-mapa-box">
@@ -151,106 +146,50 @@
 
     <script>
         // ------------------------------------------------------------------
-        // DADOS DOS EVENTOS
-        // Isso aqui é só um mock pra você ter a página funcionando enquanto
-        // o back-end não fica pronto. Quando a API estiver de pé, troque o
-        // array EVENTOS por uma chamada real, por exemplo:
-        //
-        //   let EVENTOS = [];
-        //   async function carregarEventos() {
-        //     const resp = await fetch('/api/eventos');
-        //     EVENTOS = await resp.json();
-        //   }
-        //   await carregarEventos();
-        //
-        // O formato de cada objeto abaixo é o "contrato" que a sua API
-        // (e a aba "criar evento") precisam respeitar pra tudo continuar
-        // funcionando sem mudar o resto do código.
+        // ARMAZENAMENTO DOS EVENTOS EM MEMÓRIA
+        // Antes isso era um array fixo (mock). Agora começa vazio e é
+        // preenchido de verdade pela função carregarEventos(), que busca
+        // na rota /eventos do backend.
         // ------------------------------------------------------------------
-        const EVENTOS = [
-            {
-                id: 1,
-                titulo: "Noite Eletrônica no Cais",
-                categoria: "Música",
-                tagClass: "tag-musica",
-                thumbClass: "t1",
-                dataBadge: { dia: "19", mes: "DEZ" },
-                quando: "Sex, 19 de dezembro · 20:00",
-                onde: "Armazém 4 — Cais Mauá",
-                organizador: "Coletivo Maré",
-                sub: "Uma noite de sets ao vivo com line-up nacional, à beira do rio, num dos armazéns mais icônicos da cidade.",
-                descricao: [
-                    "O Coletivo Maré retorna ao Armazém 4 com uma line-up que atravessa house, techno e breaks, em um espaço industrial reformado às margens do Cais Mauá. Bares locais, food trucks e uma pista de dança a céu aberto completam a experiência.",
-                    "Chegue cedo: o line-up de abertura começa pontualmente às 20h, e os portões fecham para novas entradas à 1h."
-                ],
-                oQueLevar: [
-                    "Documento com foto",
-                    "Ingresso digital (print ou celular)",
-                    "Roupa confortável — parte da pista é ao ar livre"
-                ],
-                endereco: "Armazém 4, Cais Mauá<br>Porto Alegre — RS",
-                ingressos: [
-                    { nome: "Pista", preco: 60 },
-                    { nome: "Área VIP", preco: 120 }
-                ]
-            },
-            {
-                id: 2,
-                titulo: "Feira Gastronômica da Vila",
-                categoria: "Gastronomia",
-                tagClass: "tag-gastronomia",
-                thumbClass: "t2",
-                dataBadge: { dia: "27", mes: "DEZ" },
-                quando: "Sáb, 27 de dezembro · 12:00",
-                onde: "Praça da Vila Flores",
-                organizador: "Associação de Chefs da Vila",
-                sub: "Um dia inteiro de comida de rua, produtores locais e música ao vivo na praça mais charmosa da cidade.",
-                descricao: [
-                    "Mais de 30 expositores entre food trucks, cervejarias artesanais e produtores locais se reúnem na Vila Flores para um dia de gastronomia e cultura.",
-                    "Programação musical ao longo do dia, com atrações confirmadas a partir das 15h."
-                ],
-                oQueLevar: [
-                    "Ingresso digital (print ou celular)",
-                    "Protetor solar",
-                    "Disposição pra provar de tudo"
-                ],
-                endereco: "Praça da Vila Flores<br>Porto Alegre — RS",
-                ingressos: [
-                    { nome: "Entrada", preco: 25 }
-                ]
-            },
-            {
-                id: 3,
-                titulo: "Summit de Empreendedorismo Digital",
-                categoria: "Negócios",
-                tagClass: "tag-negocios",
-                thumbClass: "t4",
-                dataBadge: { dia: "05", mes: "JAN" },
-                quando: "Ter, 05 de janeiro · 09:00",
-                onde: "Centro de Eventos Zeppelin",
-                organizador: "Câmara de Comércio Digital",
-                sub: "Um dia de palestras e networking com fundadores e investidores sobre o futuro dos negócios digitais.",
-                descricao: [
-                    "Palestrantes de peso vindos de startups e fundos de investimento discutem tendências, captação e crescimento no cenário digital brasileiro.",
-                    "Credenciamento a partir das 8h, com coffee break incluso e sessões de networking entre os blocos de palestras."
-                ],
-                oQueLevar: [
-                    "Documento com foto",
-                    "Ingresso digital (print ou celular)",
-                    "Cartão de visitas, se tiver"
-                ],
-                endereco: "Centro de Eventos Zeppelin<br>Porto Alegre — RS",
-                ingressos: [
-                    { nome: "Ingresso padrão", preco: 180 },
-                    { nome: "Ingresso + workshop", preco: 260 }
-                ]
-            }
-        ];
+        let EVENTOS = [];
 
+        // Formata um valor numérico como preço em reais (ex: 60 -> "R$ 60,00")
         function formatarPreco(valor) {
             return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
+        // ------------------------------------------------------------------
+        // BUSCA OS EVENTOS DE VERDADE NO BACKEND
+        // Essa função substitui o array fixo que existia antes. Ela faz
+        // uma requisição GET pra rota pública /eventos (a mesma que já
+        // usamos no index.html), que devolve TODOS os eventos cadastrados,
+        // de todos os usuários, sem precisar de login.
+        // ------------------------------------------------------------------
+        async function carregarEventos() {
+            try {
+                const resposta = await fetch('http://127.0.0.1:5000/eventos');
+                const dados = await resposta.json();
+
+                // Guarda a lista recebida na variável EVENTOS, que o
+                // resto do código (renderLista, renderDetalhe) já sabe
+                // usar — exatamente como usava o array fixo antes.
+                EVENTOS = dados.eventos;
+
+            } catch (erro) {
+                // Se der erro de conexão (backend fora do ar, por exemplo),
+                // deixamos EVENTOS como uma lista vazia. A tela vai mostrar
+                // a mensagem de "nenhum evento encontrado" nesse caso.
+                console.error('Erro ao carregar eventos:', erro);
+                EVENTOS = [];
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // RENDERIZA A LISTA DE CARDS (vista "lista", evento.html sem ?id)
+        // Adaptado para usar os nomes de campo que vêm do banco de dados
+        // (titulo, categoria, data, horario, local, cidade), em vez dos
+        // nomes que existiam no mock (tagClass, thumbClass, dataBadge...).
+        // ------------------------------------------------------------------
         function renderLista() {
             const grid = document.getElementById('eventos-grid');
             const vazio = document.getElementById('eventos-vazio');
@@ -264,22 +203,23 @@
             vazio.classList.add('hidden');
 
             EVENTOS.forEach(ev => {
-                const precoMin = Math.min(...ev.ingressos.map(i => i.preco));
+
+                // O banco não tem uma coluna "tagClass" pronta (ex: "tag-musica"),
+                // então montamos ela dinamicamente a partir da categoria salva,
+                // igual já fizemos no index.html e no painel.html.
+                const tagClasse = `tag-${ev.categoria}`;
 
                 const card = document.createElement('article');
                 card.className = 'event-card';
                 card.innerHTML = `
-                    <div class="event-thumb ${ev.thumbClass}">
-                        <div class="event-date-badge">
-                            <span class="day">${ev.dataBadge.dia}</span>${ev.dataBadge.mes}
-                        </div>
+                    <div class="event-thumb t1">
+                        <div class="event-date-badge">${ev.data}</div>
                     </div>
                     <div class="event-body">
                         <div class="event-cat">${ev.categoria}</div>
                         <h3>${ev.titulo}</h3>
-                        <div class="meta">${ev.onde}</div>
+                        <div class="meta">${ev.horario} · ${ev.local}, ${ev.cidade}</div>
                         <div class="event-foot">
-                            <span class="price">A partir de ${formatarPreco(precoMin)}</span>
                             <a href="evento.html?id=${ev.id}" class="btn btn-primary">Ver evento</a>
                         </div>
                     </div>
@@ -288,54 +228,93 @@
             });
         }
 
+        // ------------------------------------------------------------------
+        // RENDERIZA A TELA DE DETALHE DE UM EVENTO ESPECÍFICO
+        // Também adaptado para os campos reais do banco. Como a tabela
+        // "eventos" ainda não tem colunas para "organizador", "endereço
+        // separado" ou "o que levar", usamos valores padrão/genéricos
+        // nesses campos por enquanto.
+        // ------------------------------------------------------------------
         function renderDetalhe(ev) {
-            document.title = ev.titulo + ' — Agenda';
+            document.title = ev.titulo + ' — LittleVitor.com';
 
             const tagEl = document.getElementById('det-tag');
             tagEl.textContent = ev.categoria;
-            tagEl.className = 'tag ' + ev.tagClass;
+            tagEl.className = 'tag tag-' + ev.categoria;
 
             document.getElementById('det-titulo').textContent = ev.titulo;
-            document.getElementById('det-sub').textContent = ev.sub;
-            document.getElementById('det-quando').textContent = ev.quando;
-            document.getElementById('det-onde').textContent = ev.onde;
-            document.getElementById('det-organizador').textContent = ev.organizador;
 
-            document.getElementById('ingressos-lista').innerHTML = ev.ingressos.map((ing, i) => `
+            // "sub" (resumo curto) não existe no banco — usamos a própria
+            // descrição completa aqui também, já que é o dado mais próximo
+            // que temos disponível.
+            document.getElementById('det-sub').textContent = ev.descricao || '';
+
+            // "quando" é montado juntando a data e o horário, que no
+            // banco ficam em colunas separadas.
+            document.getElementById('det-quando').textContent = `${ev.data} · ${ev.horario}`;
+
+            // "onde" é montado juntando local e cidade.
+            document.getElementById('det-onde').textContent = `${ev.local}, ${ev.cidade}`;
+
+            // Ainda não temos coluna de "organizador" no banco — mostramos
+            // um texto genérico por enquanto.
+            document.getElementById('det-organizador').textContent = 'Organizador não informado';
+
+            // Ainda não temos tipos de ingresso cadastrados no banco
+            // (isso é uma funcionalidade futura). Por enquanto, mostramos
+            // uma única opção genérica de "Entrada", sem preço definido.
+            document.getElementById('ingressos-lista').innerHTML = `
                 <div class="ingresso-opcao">
                     <label>
-                        <input type="radio" name="tipo_ingresso" value="${ing.nome.toLowerCase()}" ${i === 0 ? 'checked' : ''}>
-                        <span class="opcao-nome">${ing.nome}</span>
-                        <span class="opcao-preco">${formatarPreco(ing.preco)}</span>
+                        <input type="radio" name="tipo_ingresso" value="entrada" checked>
+                        <span class="opcao-nome">Entrada</span>
+                        <span class="opcao-preco">A confirmar</span>
                     </label>
                 </div>
-            `).join('');
+            `;
 
-            document.getElementById('det-descricao').innerHTML =
-                ev.descricao.map(p => `<p>${p}</p>`).join('');
+            // A descrição no banco é um texto único (não uma lista de
+            // parágrafos, como era no mock), então mostramos ela direto.
+            document.getElementById('det-descricao').innerHTML = `<p>${ev.descricao || 'Sem descrição.'}</p>`;
 
-            document.getElementById('det-lista').innerHTML =
-                ev.oQueLevar.map(item => `<li>${item}</li>`).join('');
-
-            document.getElementById('det-endereco').innerHTML = ev.endereco;
+            // Endereço: juntamos local e cidade, já que não temos campos
+            // separados de rua/bairro/etc no banco.
+            document.getElementById('det-endereco').innerHTML = `${ev.local}<br>${ev.cidade}`;
         }
 
+        // Alterna entre as três "vistas" da página (lista, detalhe, não encontrado)
         function mostrarView(nome) {
             document.getElementById('vista-lista').classList.toggle('hidden', nome !== 'lista');
             document.getElementById('vista-detalhe').classList.toggle('hidden', nome !== 'detalhe');
             document.getElementById('evento-nao-encontrado').classList.toggle('hidden', nome !== 'nao-encontrado');
         }
 
-        function init() {
+        // ------------------------------------------------------------------
+        // FUNÇÃO PRINCIPAL DE INICIALIZAÇÃO
+        // Agora precisa ESPERAR os eventos serem carregados do backend
+        // (por isso o "async" e o "await") antes de decidir o que mostrar
+        // na tela — diferente de antes, quando o array já vinha pronto
+        // no próprio arquivo.
+        // ------------------------------------------------------------------
+        async function init() {
+            // Espera a busca no backend terminar antes de continuar.
+            await carregarEventos();
+
             const params = new URLSearchParams(window.location.search);
             const id = params.get('id');
 
             if (!id) {
+                // Sem "?id" na URL: mostra a lista de todos os eventos.
                 mostrarView('lista');
                 renderLista();
                 return;
             }
 
+            // Com "?id" na URL: procura esse evento específico dentro
+            // da lista que veio do backend.
+            // Usamos String(...) dos dois lados porque o "id" da URL
+            // sempre vem como texto, enquanto o "id" vindo do banco
+            // pode vir como número.
             const evento = EVENTOS.find(e => String(e.id) === String(id));
 
             if (!evento) {
@@ -347,13 +326,15 @@
             renderDetalhe(evento);
         }
 
+        // Roda a inicialização assim que o HTML terminar de carregar.
         document.addEventListener('DOMContentLoaded', init);
 
-        // Placeholder de envio do formulário de compra, até o back-end real existir.
+        // Placeholder de envio do formulário de compra, até termos uma
+        // rota de verdade no backend para processar compras de ingresso.
         document.addEventListener('submit', function (e) {
             if (e.target.matches('.compra-form')) {
                 e.preventDefault();
-                alert('Compra simulada! Quando o back-end estiver pronto, isso vai enviar o pedido pra sua API.');
+                alert('Compra simulada! Quando o back-end de ingressos estiver pronto, isso vai enviar o pedido pra sua API.');
             }
         });
     </script>

@@ -23,7 +23,10 @@
                 <a href="painel.html">Meus eventos</a>
                 <a href="index.html#eventos">Ver agenda</a>
             </nav>
-            <a href="#" class="btn btn-ghost">Sair</a>
+            <!-- Botão "Sair": agora tem id (para o JS conseguir selecionar),
+                 aponta para index.html (página principal), e limpa o
+                 localStorage antes de sair, através do JS logo abaixo. -->
+            <a href="index.html" id="btn-sair" class="btn btn-ghost">Sair</a>
         </div>
     </header>
 
@@ -145,108 +148,122 @@
     </footer>
 
     <script>
- 
- // Ao carregar a página, verifica se existe um rascunho salvo
-// (isso acontece quando a pessoa foi mandada pro login/cadastro
-// no meio do preenchimento do formulário).
-const rascunhoSalvo = localStorage.getItem('rascunho_evento');
 
-if (rascunhoSalvo) {
-    const rascunho = JSON.parse(rascunhoSalvo);
-
-    // Preenche cada campo do formulário com o valor salvo.
-    document.getElementById('titulo').value = rascunho.titulo || '';
-    document.getElementById('categoria').value = rascunho.categoria || '';
-    document.getElementById('descricao').value = rascunho.descricao || '';
-    document.getElementById('data').value = rascunho.data || '';
-    document.getElementById('horario').value = rascunho.horario || '';
-    document.getElementById('local').value = rascunho.local || '';
-    document.getElementById('cidade').value = rascunho.cidade || '';
-}
-
-       // Pega o formulário de criação de evento
-const formEvento = document.getElementById('form-evento');
-
-formEvento.addEventListener('submit',async (evento) => {
-    // Impede o envio padrão por enquanto — vamos decidir manualmente
-    // o que fazer, dependendo se tem usuário logado ou não.
-    evento.preventDefault();
-
-    // Verifica se existe um usuário logado
-    const usuarioSalvo = localStorage.getItem('usuario');
-
-   if (usuarioSalvo) {
-    // Converte o texto salvo no localStorage de volta para um
-    // objeto JavaScript, para conseguirmos acessar o campo "id".
-    const usuario = JSON.parse(usuarioSalvo);
-
-    // Monta um objeto com todos os dados que a rota /criar-evento
-    // espera receber — os campos do formulário, mais o id do
-    // usuário logado (que não vem de nenhum input, e sim do
-    // localStorage).
-    const dadosEvento = {
-        titulo: document.getElementById('titulo').value,
-        categoria: document.getElementById('categoria').value,
-        descricao: document.getElementById('descricao').value,
-        data: document.getElementById('data').value,
-        horario: document.getElementById('horario').value,
-        local: document.getElementById('local').value,
-        cidade: document.getElementById('cidade').value,
-        usuario_id: usuario.id
-    };
-
-    try {
-        // Faz a requisição de verdade para o backend.
-        const resposta = await fetch('http://127.0.0.1:5000/criar-evento', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dadosEvento)
+        // ------------------------------------------------------------------
+        // BOTÃO "SAIR"
+        // Limpa os dados do usuário logado (removendo a chave "usuario"
+        // do localStorage) antes do link levar pra página principal.
+        // Repare que NÃO removemos "rascunho_evento" aqui — se a pessoa
+        // tiver um rascunho em andamento, ele continua salvo mesmo
+        // depois de sair, caso ela volte e faça login de novo depois.
+        // ------------------------------------------------------------------
+        const btnSair = document.getElementById('btn-sair');
+        btnSair.addEventListener('click', () => {
+            localStorage.removeItem('usuario');
         });
 
-        const dados = await resposta.json();
 
-        if (resposta.ok) {
-            mostrarToast(dados.mensagem, 'sucesso');
-            localStorage.removeItem('rascunho_evento');
+        // Ao carregar a página, verifica se existe um rascunho salvo
+        // (isso acontece quando a pessoa foi mandada pro login/cadastro
+        // no meio do preenchimento do formulário).
+        const rascunhoSalvo = localStorage.getItem('rascunho_evento');
 
-            setTimeout(() => {
-                window.location.href = 'painel.html';
-            }, 1500);
+        if (rascunhoSalvo) {
+            const rascunho = JSON.parse(rascunhoSalvo);
 
-        } else {
-            mostrarToast(dados.mensagem, 'erro');
+            // Preenche cada campo do formulário com o valor salvo.
+            document.getElementById('titulo').value = rascunho.titulo || '';
+            document.getElementById('categoria').value = rascunho.categoria || '';
+            document.getElementById('descricao').value = rascunho.descricao || '';
+            document.getElementById('data').value = rascunho.data || '';
+            document.getElementById('horario').value = rascunho.horario || '';
+            document.getElementById('local').value = rascunho.local || '';
+            document.getElementById('cidade').value = rascunho.cidade || '';
         }
 
-    } catch (erro) {
-        console.error('Erro ao criar evento:', erro);
-        mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
-    }
-} else {
-        // Não está logado: precisamos salvar os dados do formulário
-        // antes de mandar a pessoa pro login.
+        // Pega o formulário de criação de evento
+        const formEvento = document.getElementById('form-evento');
 
-        // Monta um objeto com os dados dos campos principais.
-        const rascunho = {
-            titulo: document.getElementById('titulo').value,
-            categoria: document.getElementById('categoria').value,
-            descricao: document.getElementById('descricao').value,
-            data: document.getElementById('data').value,
-            horario: document.getElementById('horario').value,
-            local: document.getElementById('local').value,
-            cidade: document.getElementById('cidade').value
-        };
+        formEvento.addEventListener('submit', async (evento) => {
+            // Impede o envio padrão por enquanto — vamos decidir manualmente
+            // o que fazer, dependendo se tem usuário logado ou não.
+            evento.preventDefault();
 
-        // Salva esse objeto no localStorage, como texto (JSON).
-        localStorage.setItem('rascunho_evento', JSON.stringify(rascunho));
+            // Verifica se existe um usuário logado
+            const usuarioSalvo = localStorage.getItem('usuario');
 
-        // Redireciona pro login, informando pra onde voltar depois.
-        window.location.href = 'login.html?retorno=criar-evento.html';
-    }
-});
-       
-       // Preview da imagem de capa
+            if (usuarioSalvo) {
+                // Converte o texto salvo no localStorage de volta para um
+                // objeto JavaScript, para conseguirmos acessar o campo "id".
+                const usuario = JSON.parse(usuarioSalvo);
+
+                // Monta um objeto com todos os dados que a rota /criar-evento
+                // espera receber — os campos do formulário, mais o id do
+                // usuário logado (que não vem de nenhum input, e sim do
+                // localStorage).
+                const dadosEvento = {
+                    titulo: document.getElementById('titulo').value,
+                    categoria: document.getElementById('categoria').value,
+                    descricao: document.getElementById('descricao').value,
+                    data: document.getElementById('data').value,
+                    horario: document.getElementById('horario').value,
+                    local: document.getElementById('local').value,
+                    cidade: document.getElementById('cidade').value,
+                    usuario_id: usuario.id
+                };
+
+                try {
+                    // Faz a requisição de verdade para o backend.
+                    const resposta = await fetch('http://127.0.0.1:5000/criar-evento', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(dadosEvento)
+                    });
+
+                    const dados = await resposta.json();
+
+                    if (resposta.ok) {
+                        mostrarToast(dados.mensagem, 'sucesso');
+                        localStorage.removeItem('rascunho_evento');
+
+                        setTimeout(() => {
+                            window.location.href = 'painel.html';
+                        }, 1500);
+
+                    } else {
+                        mostrarToast(dados.mensagem, 'erro');
+                    }
+
+                } catch (erro) {
+                    console.error('Erro ao criar evento:', erro);
+                    mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
+                }
+            } else {
+                // Não está logado: precisamos salvar os dados do formulário
+                // antes de mandar a pessoa pro login.
+
+                // Monta um objeto com os dados dos campos principais.
+                const rascunho = {
+                    titulo: document.getElementById('titulo').value,
+                    categoria: document.getElementById('categoria').value,
+                    descricao: document.getElementById('descricao').value,
+                    data: document.getElementById('data').value,
+                    horario: document.getElementById('horario').value,
+                    local: document.getElementById('local').value,
+                    cidade: document.getElementById('cidade').value
+                };
+
+                // Salva esse objeto no localStorage, como texto (JSON).
+                localStorage.setItem('rascunho_evento', JSON.stringify(rascunho));
+
+                // Redireciona pro login, informando pra onde voltar depois.
+                window.location.href = 'login.html?retorno=criar-evento.html';
+            }
+        });
+
+        // Preview da imagem de capa
         function mostrarPreview(input) {
             const preview = document.getElementById('preview-capa');
             const placeholder = document.getElementById('upload-placeholder');

@@ -89,6 +89,8 @@
 
         // Se existir um parâmetro "retorno" na URL, repassa ele também
         // pro link de cadastro, para não perder essa informação.
+        // (Isso é usado no fluxo de "criar evento sem estar logado":
+        // login.html?retorno=criar-evento.html)
         const urlParamsAtual = new URLSearchParams(window.location.search);
         const retornoAtual = urlParamsAtual.get('retorno');
 
@@ -98,16 +100,20 @@
         }
 
 
-        // Pega o formulário de login pelo ID que acabamos de adicionar
+        // Pega o formulário de login pelo ID que existe no HTML
         const formLogin = document.getElementById('login-form');
 
+        // Escuta o envio do formulário (clique no botão "Entrar")
         formLogin.addEventListener('submit', async (evento) => {
+            // Impede o comportamento padrão do navegador (recarregar a página)
             evento.preventDefault();
 
+            // Pega os valores digitados nos campos
             const email = document.getElementById('email').value;
             const senha = document.getElementById('senha').value;
 
             try {
+                // Faz a requisição para a rota de login do backend
                 const resposta = await fetch('http://127.0.0.1:5000/login', {
                     method: 'POST',
                     headers: {
@@ -116,36 +122,50 @@
                     body: JSON.stringify({ email, senha })
                 });
 
+                // Transforma a resposta do Flask de volta num objeto JavaScript
                 const dados = await resposta.json();
 
                 if (resposta.ok) {
+                    // Login deu certo: guarda os dados do usuário no navegador,
+                    // para que outras páginas (index, painel, etc.) consigam
+                    // saber quem está logado.
                     localStorage.setItem('usuario', JSON.stringify(dados.usuario));
                     mostrarToast(dados.mensagem, 'sucesso');
 
+                    // Espera 1.5s pra pessoa ver o toast antes de sair da página
                     setTimeout(() => {
+                        // Verifica se existe um parâmetro "retorno" na URL
+                        // (ex: veio do fluxo de criar evento sem estar logado)
                         const urlParams = new URLSearchParams(window.location.search);
                         const paginaRetorno = urlParams.get('retorno');
 
                         if (paginaRetorno) {
+                            // Se veio de um fluxo específico (como criar evento),
+                            // volta exatamente pra onde a pessoa estava.
                             window.location.href = paginaRetorno;
                         } else {
-                            window.location.href = 'painel.html';
+                            // Login "normal" (sem vir de nenhum fluxo específico):
+                            // agora manda para a página principal do site (index.html),
+                            // em vez do painel — já que o index é a porta de entrada
+                            // do LittleVitor.com.
+                            window.location.href = 'index.html';
                         }
                     }, 1500);
 
                 } else {
+                    // Login falhou (email ou senha incorretos)
                     mostrarToast(dados.mensagem, 'erro');
                 }
 
             } catch (erro) {
+                // Erro de conexão (backend fora do ar, por exemplo)
                 console.error('Erro ao fazer login:', erro);
                 mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
             }
         });
 
 
-
-
+        // Alterna a visibilidade da senha (mostrar/ocultar)
         const toggle = document.querySelector('.field-toggle');
         const senha = document.getElementById('senha');
         toggle.addEventListener('click', () => {
@@ -154,6 +174,7 @@
             toggle.textContent = isPassword ? 'ocultar' : 'mostrar';
         });
 
+        // Efeito de texto rotativo na lateral da tela de login
         const words = ["perto de você.", "hoje à noite.", "esse fim de semana.", "na sua cidade."];
         let i = 0;
         const el = document.getElementById('rotating-word');
