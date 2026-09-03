@@ -10,6 +10,7 @@
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+   <script src="auth-ui.js"></script>
 </head>
 
 <body>
@@ -24,7 +25,7 @@
         <a href="#cidades">Cidades</a>
         <a href="categorias.html">Categorias</a>
       </div>
-      <a href="login.html" class="btn-entrar">Entrar</a>
+     <a href="login.html" class="btn-entrar" id="link-entrar">Entrar</a>
     </nav>
   </header>
 
@@ -79,7 +80,7 @@
         <a href="evento.html" class="section-link">Ver tudo →</a>
       </div>
 
-      <div class="event-grid">
+     <div class="event-grid" id="lista-eventos-publicos">
 
         <div class="event-card">
           <div class="event-thumb t1">
@@ -384,6 +385,68 @@
       document.getElementById("badge-text").textContent = `${data} · ${cidade}`;
     }
     atualizarBadge();
+  
+  
+  
+  // Função que busca todos os eventos públicos e gera os cards na tela.
+async function carregarEventosPublicos() {
+
+    try {
+        // Requisição GET simples — sem precisar de usuário logado,
+        // porque essa rota é pública.
+        const resposta = await fetch('http://127.0.0.1:5000/eventos');
+
+        const dados = await resposta.json();
+
+        const eventos = dados.eventos;
+
+        // Pega o container onde os cards devem aparecer
+        const listaEventos = document.getElementById('lista-eventos-publicos');
+
+        // Limpa os cards fixos de exemplo
+        listaEventos.innerHTML = '';
+
+        // Se não tiver nenhum evento no sistema ainda
+        if (eventos.length === 0) {
+            listaEventos.innerHTML = '<p>Nenhum evento cadastrado ainda.</p>';
+            return;
+        }
+
+        // Para cada evento, monta o card e adiciona na tela
+        eventos.forEach((evento) => {
+
+            const card = document.createElement('div');
+            card.className = 'event-card';
+
+            // Monta o HTML interno do card, com os dados que temos.
+            // Removemos os campos que não existem no banco ainda
+            // (preço, confirmados, imagem de fundo específica).
+            card.innerHTML = `
+                <div class="event-thumb t1">
+                    <div class="event-date-badge">${evento.data}</div>
+                </div>
+                <div class="event-body">
+                    <div class="event-cat">${evento.categoria}</div>
+                    <h3>${evento.titulo}</h3>
+                    <div class="meta">${evento.horario} · ${evento.local}, ${evento.cidade}</div>
+                </div>
+            `;
+
+            listaEventos.appendChild(card);
+        });
+
+    } catch (erro) {
+        console.error('Erro ao carregar eventos:', erro);
+    }
+}
+
+// Chama a função assim que a página carrega.
+carregarEventosPublicos();
+  
+
+
+
+
   </script>
 
 </body>
