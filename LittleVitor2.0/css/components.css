@@ -230,6 +230,15 @@
   font-weight: 600;
 }
 .badge-purple { background: rgba(124, 92, 255, 0.16); color: var(--purple-400); }
+.badge-category-musica { background: rgba(124, 92, 255, 0.16); color: #a78bfa; }
+.badge-category-gastronomia { background: rgba(255, 159, 67, 0.16); color: #ffb454; }
+.badge-category-arte { background: rgba(255, 92, 138, 0.16); color: #ff82a8; }
+.badge-category-negocios { background: rgba(77, 163, 255, 0.16); color: #72b8ff; }
+.badge-category-esporte { background: rgba(47, 230, 166, 0.16); color: #5cf0bc; }
+.badge-category-bem-estar { background: rgba(70, 217, 208, 0.16); color: #70e7df; }
+.badge-category-tecnologia { background: rgba(77, 163, 255, 0.16); color: #72b8ff; }
+.badge-category-comedia { background: rgba(255, 159, 67, 0.16); color: #ffb454; }
+.badge-category-educacao { background: rgba(70, 217, 208, 0.16); color: #70e7df; }
 .badge-green { background: var(--success-bg); color: var(--green-500); }
 .badge-warning { background: var(--warning-bg); color: var(--warning); }
 .badge-error { background: var(--error-bg); color: var(--error); }
@@ -503,6 +512,15 @@
   font-weight: 600;
   color: var(--purple-400);
 }
+.event-card-category.badge-category-musica { color: #a78bfa; }
+.event-card-category.badge-category-gastronomia { color: #ffb454; }
+.event-card-category.badge-category-arte { color: #ff82a8; }
+.event-card-category.badge-category-negocios { color: #72b8ff; }
+.event-card-category.badge-category-esporte { color: #5cf0bc; }
+.event-card-category.badge-category-bem-estar { color: #70e7df; }
+.event-card-category.badge-category-tecnologia { color: #72b8ff; }
+.event-card-category.badge-category-comedia { color: #ffb454; }
+.event-card-category.badge-category-educacao { color: #70e7df; }
 .event-card-title {
   font-family: var(--font-display);
   font-size: 1.08rem;

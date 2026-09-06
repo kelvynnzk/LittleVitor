@@ -43,7 +43,7 @@
                     <!-- cards gerados via JS a partir de EVENTOS -->
                 </div>
 
-                <p id="eventos-vazio" class="hidden" style="color:var(--text-mid); margin-top:24px;">
+                <p id="eventos-vazio" class="hidden eventos-vazio">
                     Nenhum evento encontrado no momento.
                 </p>
             </div>
@@ -135,8 +135,8 @@
         <!-- ============ VISTA: EVENTO NÃO ENCONTRADO ============ -->
         <div id="evento-nao-encontrado" class="wrap evento-nao-encontrado hidden">
             <h2>Evento não encontrado</h2>
-            <p style="margin-top:10px;">O evento que você tentou acessar não existe ou foi removido.</p>
-            <p style="margin-top:18px;"><a href="evento.html">&larr; Voltar pra agenda</a></p>
+            <p class="evento-missing-description">O evento que você tentou acessar não existe ou foi removido.</p>
+            <p class="evento-missing-link"><a href="evento.html">&larr; Voltar pra agenda</a></p>
         </div>
 
     </main>
@@ -274,7 +274,7 @@
                         </div>
                     </div>
                     <div class="event-body">
-                        <div class="event-cat">${ev.categoria}</div>
+                        <div class="event-cat ${ev.tagClass}">${ev.categoria}</div>
                         <h3>${ev.titulo}</h3>
                         <div class="meta">${ev.onde}</div>
                         <div class="event-foot">

@@ -4,145 +4,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar evento — Agenda</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <title>Criar evento — LittleVitor</title>
+    <link rel="stylesheet" href="LittleVitor2.0/css/style.css">
+    <link rel="stylesheet" href="LittleVitor2.0/css/components.css">
+    <link rel="stylesheet" href="LittleVitor2.0/css/profile.css">
+    <link rel="stylesheet" href="LittleVitor2.0/css/responsive.css">
+    <style>
+        .toast {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 9999;
+            max-width: 320px;
+            padding: 14px 20px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-md);
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .toast.mostrar {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .toast.erro {
+            border-color: var(--error);
+        }
+        .publicacao-loading {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: grid;
+            place-items: center;
+            background: rgba(8, 7, 12, 0.46);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .publicacao-loading-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        .publish-success p {
+            width: min(100%, 420px);
+            margin: 0 auto var(--space-8);
+            text-align: center;
+            line-height: 1.5;
+        }
+        .fx-spin {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.14);
+            border-top-color: #fafafa;
+            animation: spin 0.9s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .toast-notificacao {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            min-width: 290px;
+        }
+        .toast-notificacao .toast-alerta {
+            display: grid;
+            place-items: center;
+            width: 18px;
+            height: 18px;
+            flex: 0 0 18px;
+            border: 2px solid var(--error);
+            border-radius: 50%;
+            color: var(--error);
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .toast-notificacao strong {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 0.88rem;
+        }
+        .toast-notificacao small {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.78rem;
+            line-height: 1.35;
+        }
+        @media (max-width: 480px) {
+            .toast {
+                right: 16px;
+                bottom: 16px;
+                left: 16px;
+                max-width: none;
+            }
+        }
+    </style>
     <script src="toast.js"></script>
 </head>
 
 <body>
-
-    <header class="site-header">
-        <div class="wrap header-inner">
-            <a href="index.html" class="logo">LittleVitor<span class="logo-dot">.com</span></a>
-            <nav class="main-nav">
-                <a href="painel.html">Meus eventos</a>
-                <a href="index.html#eventos">Ver agenda</a>
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <a href="index.html" class="navbar-logo"><span class="dot"></span> LittleVitor</a>
+            <nav class="navbar-links" aria-label="Navegação principal">
+                <a href="index.html">Explorar</a>
+                <a href="index.html#categorias">Categorias</a>
+                <a href="criar-evento.html" class="active">Criar evento</a>
+                <a href="painel.html">Dashboard</a>
             </nav>
-            <a href="#" class="btn btn-ghost">Sair</a>
+            <a href="login.html" class="btn btn-primary btn-sm">Entrar</a>
         </div>
     </header>
 
-    <main>
-        <div class="wrap">
-            <a href="painel.html" class="back-link">&larr; Voltar pro painel</a>
+    <main class="container section" style="padding-top: var(--space-10);">
+        <span class="eyebrow">Organizador</span>
+        <h1 style="margin-bottom: var(--space-8); font-size: 2.1rem;">Criar novo evento</h1>
+
+        <div class="stepper" aria-label="Etapas da criação do evento">
+            <div class="stepper-step active"><div class="stepper-circle">1</div><span class="stepper-label">Informações</span></div>
+            <div class="stepper-line"></div>
+            <div class="stepper-step"><div class="stepper-circle">2</div><span class="stepper-label">Localização</span></div>
+            <div class="stepper-line"></div>
+            <div class="stepper-step"><div class="stepper-circle">3</div><span class="stepper-label">Ingressos</span></div>
+            <div class="stepper-line"></div>
+            <div class="stepper-step"><div class="stepper-circle">4</div><span class="stepper-label">Revisão</span></div>
+            <div class="stepper-line"></div>
+            <div class="stepper-step"><div class="stepper-circle">5</div><span class="stepper-label">Publicado</span></div>
         </div>
 
-        <section class="form-page">
-            <div class="wrap form-page-inner">
+        <div class="wizard-shell">
+            <form class="surface-card" action="#" method="post" enctype="multipart/form-data" id="form-evento">
+                <div id="etapa-informacoes">
+                <h3 style="margin-bottom: var(--space-5);">Informações do evento</h3>
 
-                <div class="section-head">
-                    <h1>Criar evento</h1>
-                    <p>Preencha os detalhes abaixo. Você pode editar tudo isso depois de publicar.</p>
+                <label class="upload-box" for="capa">
+                    <input type="file" id="capa" name="capa" accept="image/*" class="sr-only" onchange="mostrarPreview(this)">
+                    <img id="preview-capa" alt="" hidden>
+                    <div class="upload-placeholder" id="upload-placeholder">
+                        <span style="font-size: 2rem; color: var(--text-tertiary);">&#8853;</span>
+                        <span><strong>Clique para enviar</strong> a imagem de capa do evento</span>
+                    </div>
+                </label>
+
+                <div class="field">
+                    <label for="titulo">Nome do evento</label>
+                    <input class="input" type="text" id="titulo" name="titulo" placeholder="Ex: Festival Noite Roxa" required>
                 </div>
 
-                <!-- em modo edição, o Python troca action/valores dos campos e o texto do botão -->
-                <form class="evento-form" action="#" method="post" enctype="multipart/form-data " id="form-evento">
+                <div class="field">
+                    <label for="descricao">Descrição</label>
+                    <textarea class="textarea" id="descricao" name="descricao" placeholder="Conte para o público o que torna esse evento especial..." required></textarea>
+                </div>
 
-                    <!-- CAPA -->
-                    <div class="form-group">
-                        <label class="form-label">Imagem de capa</label>
-                        <label class="upload-box" for="capa">
-                            <input type="file" id="capa" name="capa" accept="image/*" onchange="mostrarPreview(this)">
-                            <img id="preview-capa" class="upload-preview" alt="" hidden>
-                            <div class="upload-placeholder" id="upload-placeholder">
-                                <span class="upload-icon">+</span>
-                                <span>Clique para enviar uma imagem</span>
-                                <span class="upload-hint">JPG ou PNG · recomendado 1200×630px</span>
-                            </div>
-                        </label>
+                <div class="form-grid-2">
+                    <div class="field">
+                        <label for="categoria">Categoria</label>
+                        <select class="select" id="categoria" name="categoria" required>
+                            <option value="">Selecione</option>
+                            <option value="musica">Música</option>
+                            <option value="gastronomia">Gastronomia</option>
+                            <option value="arte">Arte &amp; Cultura</option>
+                            <option value="negocios">Negócios</option>
+                            <option value="esporte">Esporte</option>
+                            <option value="bem-estar">Bem-estar</option>
+                        </select>
                     </div>
-
-                    <!-- INFORMAÇÕES BÁSICAS -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="titulo">Nome do evento</label>
-                            <input type="text" id="titulo" name="titulo" placeholder="Ex: Noite Eletrônica no Cais"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="categoria">Categoria</label>
-                            <select id="categoria" name="categoria" required>
-                                <option value="">Selecione</option>
-                                <option value="musica">Música</option>
-                                <option value="gastronomia">Gastronomia</option>
-                                <option value="arte">Arte &amp; Cultura</option>
-                                <option value="negocios">Negócios</option>
-                                <option value="esporte">Esporte</option>
-                                <option value="bem-estar">Bem-estar</option>
-                            </select>
-                        </div>
+                    <div class="field">
+                        <label for="capacidade">Capacidade estimada</label>
+                        <input class="input" type="number" id="capacidade" name="capacidade" placeholder="Ex: 500" min="1">
                     </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="descricao">Descrição</label>
-                        <textarea id="descricao" name="descricao" rows="5"
-                            placeholder="Conte pra quem for ver o evento o que esperar, line-up, atrações, etc."></textarea>
+                    <div class="field">
+                        <label for="data">Data</label>
+                        <input class="input" type="text" id="data" name="data" placeholder="11/11/1111" inputmode="numeric" maxlength="10" pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}" required>
                     </div>
-
-                    <!-- DATA E LOCAL -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="data">Data</label>
-                            <input type="date" id="data" name="data" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="horario">Horário</label>
-                            <input type="time" id="horario" name="horario" required>
-                        </div>
+                    <div class="field">
+                        <label for="horario">Horário</label>
+                        <input class="input" type="text" id="horario" name="horario" placeholder="20:30" inputmode="numeric" maxlength="5" pattern="[0-9]{2}:[0-9]{2}" required>
                     </div>
+                </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="local">Local</label>
-                            <input type="text" id="local" name="local" placeholder="Ex: Armazém 4 — Cais Mauá">
+                <div class="wizard-nav">
+                    <button type="button" class="btn btn-secondary" id="btn-voltar" disabled>Voltar</button>
+                    <button type="button" class="btn btn-primary" id="btn-continuar">Continuar</button>
+                </div>
+
+                </div>
+
+                <div id="etapa-localizacao" hidden>
+                    <h3 style="margin-bottom: var(--space-5);">Onde vai acontecer?</h3>
+                    <div class="field">
+                        <label for="local">Nome do local</label>
+                        <input class="input" type="text" id="local" name="local" placeholder="Ex: Allianz Parque">
+                    </div>
+                    <div class="field">
+                        <label for="endereco">Endereço completo</label>
+                        <input class="input" type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro">
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="field">
+                            <label for="cidade">Cidade</label>
+                            <input class="input" type="text" id="cidade" name="cidade" placeholder="Ex: São Paulo">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="cidade">Cidade</label>
-                            <input type="text" id="cidade" name="cidade" placeholder="Ex: Porto Alegre — RS">
+                        <div class="field">
+                            <label for="estado">Estado</label>
+                            <input class="input" type="text" id="estado" name="estado" placeholder="Ex: SP" maxlength="2">
                         </div>
                     </div>
+                    <label class="checkbox">
+                        <input type="checkbox" id="evento-online">
+                        <span class="box"></span>
+                        Este é um evento 100% online
+                    </label>
+                    <div class="wizard-nav">
+                        <button type="button" class="btn btn-secondary" id="btn-voltar-local">Voltar</button>
+                        <button type="button" class="btn btn-primary" id="btn-continuar-local">Continuar</button>
+                    </div>
+                </div>
 
-                    <!-- TIPOS DE INGRESSO -->
-                    <div class="form-group">
-                        <label class="form-label">Tipos de ingresso</label>
-
-                        <div id="lista-ingressos" class="lista-ingressos">
-                            <div class="ingresso-row">
-                                <input type="text" name="ingresso_nome[]" placeholder="Nome (ex: Pista)" required>
-                                <input type="number" name="ingresso_preco[]" placeholder="Preço" min="0" step="0.01"
-                                    required>
-                                <input type="number" name="ingresso_qtd[]" placeholder="Quantidade" min="1" required>
-                                <button type="button" class="btn-remover" onclick="removerIngresso(this)"
-                                    aria-label="Remover tipo de ingresso">&times;</button>
-                            </div>
+                <div id="etapa-ingressos" hidden>
+                    <h3 style="margin-bottom: var(--space-2);">Tipos de ingresso</h3>
+                    <p style="margin-bottom: var(--space-5); font-size: 0.88rem;">Adicione um ou mais lotes de ingresso para o seu evento.</p>
+                    <div id="lista-ingressos">
+                        <div class="ticket-type-row ingresso-row">
+                            <div class="field"><label>Nome do lote</label><input class="input" type="text" name="ingresso_nome[]" placeholder="Ingresso único" required></div>
+                            <div class="field"><label>Preço (R$)</label><input class="input" type="number" name="ingresso_preco[]" placeholder="0" min="0" step="0.01" required></div>
+                            <div class="field"><label>Quantidade</label><input class="input" type="number" name="ingresso_qtd[]" placeholder="0" min="1" required></div>
+                            <button type="button" class="remove-ticket-btn btn-remover" onclick="removerIngresso(this)" aria-label="Remover tipo de ingresso">&times;</button>
                         </div>
-
-                        <button type="button" class="btn btn-outline btn-add" onclick="adicionarIngresso()">+ Adicionar
-                            tipo de ingresso</button>
                     </div>
-
-                    <!-- AÇÕES -->
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Publicar evento</button>
-                        <button type="button" class="btn btn-ghost">Salvar rascunho</button>
+                    <button type="button" class="add-ticket-btn" onclick="adicionarIngresso()">+ Adicionar tipo de ingresso</button>
+                    <div class="wizard-nav">
+                        <button type="button" class="btn btn-secondary" id="btn-voltar-ingresso">Voltar</button>
+                        <button type="button" class="btn btn-primary" id="btn-continuar-ingresso">Continuar</button>
                     </div>
+                </div>
 
-                </form>
-            </div>
-        </section>
-    </main>
+                <div id="etapa-revisao" hidden>
+                    <h3 style="margin-bottom: var(--space-5);">Revise antes de publicar</h3>
+                    <div class="review-block">
+                        <div class="review-block-head"><strong>Informações</strong><button type="button" class="btn btn-ghost btn-sm" id="editar-informacoes">Editar</button></div>
+                        <div class="review-row"><span>Nome</span><span id="revisao-nome">-</span></div>
+                        <div class="review-row"><span>Categoria</span><span id="revisao-categoria">-</span></div>
+                        <div class="review-row"><span>Data e horário</span><span id="revisao-data">-</span></div>
+                    </div>
+                    <div class="review-block">
+                        <div class="review-block-head"><strong>Localização</strong><button type="button" class="btn btn-ghost btn-sm" id="editar-localizacao">Editar</button></div>
+                        <div class="review-row"><span>Local</span><span id="revisao-local">-</span></div>
+                        <div class="review-row"><span>Endereço</span><span id="revisao-endereco">-</span></div>
+                    </div>
+                    <div class="review-block">
+                        <div class="review-block-head"><strong>Ingressos</strong><button type="button" class="btn btn-ghost btn-sm" id="editar-ingressos">Editar</button></div>
+                        <div id="revisao-ingressos"></div>
+                    </div>
+                    <div class="wizard-nav">
+                        <button type="button" class="btn btn-secondary" id="btn-voltar-revisao">Voltar</button>
+                        <button type="button" class="btn btn-primary" id="btn-publicar">Publicar evento</button>
+                    </div>
+                </div>
 
-    <footer class="site-footer">
-        <div class="wrap footer-inner">
-            <p>LittleVitor<span class="logo-dot">.com</span> — feito para conectar pessoas a experiências reais.</p>
-            <p class="footer-meta">&copy; 2026 LittleVitor. Todos os direitos reservados.</p>
+                <div id="etapa-publicado" hidden>
+                    <div class="publish-success">
+                        <div class="icon-circle">&#10003;</div>
+                        <h2>Evento publicado com sucesso!</h2>
+                        <p>Seu evento já está disponível para o público na LittleVitor. Acompanhe as vendas em tempo real pelo seu dashboard.</p>
+                        <div class="actions">
+                            <a href="painel.html" class="btn btn-primary btn-lg">Ir para o Dashboard</a>
+                            <a href="index.html" class="btn btn-secondary btn-lg">Ver na plataforma</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <aside class="preview-sticky">
+                <span class="preview-label">PRÉVIA DO SEU EVENTO</span>
+                <div class="preview-card">
+                    <div class="preview-card-media"><img id="preview-evento-imagem" src="https://picsum.photos/seed/newevent/600/375" alt="Prévia da capa do evento"></div>
+                    <div class="preview-card-body">
+                        <span class="badge badge-purple" id="preview-evento-categoria">Música</span>
+                        <h4 id="preview-evento-nome" style="margin-top: var(--space-2);">Nome do seu evento</h4>
+                        <ul><li id="preview-evento-data">▣ Data a definir</li><li id="preview-evento-local">⌖ Local a definir</li></ul>
+                    </div>
+                </div>
+            </aside>
         </div>
-    </footer>
+    </main>
 
     <script>
  
@@ -158,7 +310,7 @@ if (rascunhoSalvo) {
     document.getElementById('titulo').value = rascunho.titulo || '';
     document.getElementById('categoria').value = rascunho.categoria || '';
     document.getElementById('descricao').value = rascunho.descricao || '';
-    document.getElementById('data').value = rascunho.data || '';
+    document.getElementById('data').value = formatarDataParaExibicao(rascunho.data || '');
     document.getElementById('horario').value = rascunho.horario || '';
     document.getElementById('local').value = rascunho.local || '';
     document.getElementById('cidade').value = rascunho.cidade || '';
@@ -187,8 +339,8 @@ formEvento.addEventListener('submit',async (evento) => {
     const dadosEvento = {
         titulo: document.getElementById('titulo').value,
         categoria: document.getElementById('categoria').value,
-        descricao: document.getElementById('descricao').value,
-        data: document.getElementById('data').value,
+        descricao: document.getElementById('descricao').value, 
+        data: converterDataParaISO(document.getElementById('data').value),
         horario: document.getElementById('horario').value,
         local: document.getElementById('local').value,
         cidade: document.getElementById('cidade').value,
@@ -256,6 +408,7 @@ formEvento.addEventListener('submit',async (evento) => {
                     preview.src = e.target.result;
                     preview.hidden = false;
                     placeholder.hidden = true;
+                    document.getElementById('preview-evento-imagem').src = e.target.result;
                 };
                 reader.readAsDataURL(input.files[0]);
             }
@@ -265,12 +418,12 @@ formEvento.addEventListener('submit',async (evento) => {
         function adicionarIngresso() {
             const lista = document.getElementById('lista-ingressos');
             const linha = document.createElement('div');
-            linha.className = 'ingresso-row';
+            linha.className = 'ticket-type-row ingresso-row';
             linha.innerHTML = `
-        <input type="text" name="ingresso_nome[]" placeholder="Nome (ex: VIP)" required>
-        <input type="number" name="ingresso_preco[]" placeholder="Preço" min="0" step="0.01" required>
-        <input type="number" name="ingresso_qtd[]" placeholder="Quantidade" min="1" required>
-        <button type="button" class="btn-remover" onclick="removerIngresso(this)" aria-label="Remover tipo de ingresso">&times;</button>
+        <div class="field"><label>Nome do lote</label><input class="input" type="text" name="ingresso_nome[]" placeholder="Ingresso único" required></div>
+        <div class="field"><label>Preço (R$)</label><input class="input" type="number" name="ingresso_preco[]" placeholder="0" min="0" step="0.01" required></div>
+        <div class="field"><label>Quantidade</label><input class="input" type="number" name="ingresso_qtd[]" placeholder="0" min="1" required></div>
+        <button type="button" class="remove-ticket-btn btn-remover" onclick="removerIngresso(this)" aria-label="Remover tipo de ingresso">&times;</button>
       `;
             lista.appendChild(linha);
         }
@@ -282,6 +435,218 @@ formEvento.addEventListener('submit',async (evento) => {
                 botao.closest('.ingresso-row').remove();
             }
         }
+
+        function atualizarPreviewEvento() {
+            const nome = document.getElementById('titulo').value.trim();
+            const categoria = document.getElementById('categoria');
+            const previewCategoria = document.getElementById('preview-evento-categoria');
+            const data = document.getElementById('data').value;
+            const horario = document.getElementById('horario').value;
+            const online = document.getElementById('evento-online').checked;
+            const local = online ? 'Evento online' : (document.getElementById('cidade').value.trim() || document.getElementById('local').value.trim());
+            const coresCategorias = {
+                musica: ['#7c5cff', 'rgba(124, 92, 255, 0.16)'],
+                gastronomia: ['#ff9f43', 'rgba(255, 159, 67, 0.16)'],
+                arte: ['#ff5c8a', 'rgba(255, 92, 138, 0.16)'],
+                negocios: ['#4da3ff', 'rgba(77, 163, 255, 0.16)'],
+                esporte: ['#2fe6a6', 'rgba(47, 230, 166, 0.16)'],
+                'bem-estar': ['#46d9d0', 'rgba(70, 217, 208, 0.16)']
+            };
+            const corCategoria = coresCategorias[categoria.value] || coresCategorias.musica;
+
+            document.getElementById('preview-evento-nome').textContent = nome || 'Nome do seu evento';
+            previewCategoria.textContent = categoria.value
+                ? categoria.options[categoria.selectedIndex].text 
+                : 'Música';
+            previewCategoria.style.color = corCategoria[0];
+            previewCategoria.style.backgroundColor = corCategoria[1];
+            const dataISO = converterDataParaISO(data);
+            document.getElementById('preview-evento-data').textContent = dataISO
+                ? '▣ ' + formatarDataNaPreview(data) + (horario ? ' · ' + horario : '')
+                : '▣ Data a definir';
+            document.getElementById('preview-evento-local').textContent = local
+                ? '⌖ ' + local
+                : '⌖ Local a definir';
+        }
+
+        ['titulo', 'categoria', 'data', 'horario', 'local', 'cidade', 'evento-online'].forEach((id) => {
+            document.getElementById(id).addEventListener('input', atualizarPreviewEvento);
+            document.getElementById(id).addEventListener('change', atualizarPreviewEvento);
+        });
+
+        function formatarDataParaExibicao(data) {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(data)) {
+                const partes = data.split('-');
+                return `${partes[2]}/${partes[1]}/${partes[0]}`;
+            }
+            return data;
+        }
+
+        function formatarDataNaPreview(data) {
+            const partes = data.split('/');
+            const meses = ['jan.', 'fev.', 'mar.', 'abr.', 'mai.', 'jun.', 'jul.', 'ago.', 'set.', 'out.', 'nov.', 'dez.'];
+            return `${partes[0]} de ${meses[Number(partes[1]) - 1]}`;
+        }
+
+        function converterDataParaISO(data) {
+            const partes = data.split('/');
+            if (partes.length !== 3 || partes[0].length !== 2 || partes[1].length !== 2 || partes[2].length !== 4) {
+                return '';
+            }
+            const dia = Number(partes[0]);
+            const mes = Number(partes[1]);
+            const ano = Number(partes[2]);
+            const dataValida = new Date(ano, mes - 1, dia);
+            if (dataValida.getFullYear() !== ano || dataValida.getMonth() !== mes - 1 || dataValida.getDate() !== dia) {
+                return '';
+            }
+            return `${ano}-${partes[1]}-${partes[0]}`;
+        }
+
+        document.getElementById('data').addEventListener('input', (evento) => {
+            const apenasNumeros = evento.target.value.replace(/\D/g, '').slice(0, 8);
+            evento.target.value = apenasNumeros
+                .replace(/(\d{2})(\d)/, '$1/$2')
+                .replace(/(\d{2}\/\d{2})(\d)/, '$1/$2');
+        });
+
+        document.getElementById('horario').addEventListener('input', (evento) => {
+            const apenasNumeros = evento.target.value.replace(/\D/g, '').slice(0, 4);
+            evento.target.value = apenasNumeros.replace(/(\d{2})(\d)/, '$1:$2');
+        });
+
+        function alternarEtapa(numero) {
+            const etapaInformacoes = document.getElementById('etapa-informacoes');
+            const etapaLocalizacao = document.getElementById('etapa-localizacao');
+            const etapaIngressos = document.getElementById('etapa-ingressos');
+            const etapaRevisao = document.getElementById('etapa-revisao');
+            const etapaPublicado = document.getElementById('etapa-publicado');
+            const etapas = document.querySelectorAll('.stepper-step');
+            const linhas = document.querySelectorAll('.stepper-line');
+
+            etapaInformacoes.hidden = numero !== 1;
+            etapaLocalizacao.hidden = numero !== 2;
+            etapaIngressos.hidden = numero !== 3;
+            etapaRevisao.hidden = numero !== 4;
+            etapaPublicado.hidden = numero !== 5;
+            etapas.forEach((etapa, indice) => {
+                etapa.classList.toggle('active', indice === numero - 1);
+                etapa.classList.toggle('done', indice < numero - 1);
+            });
+            linhas.forEach((linha, indice) => linha.classList.toggle('done', indice < numero - 1));
+            if (numero === 4) preencherRevisao();
+            document.getElementById('btn-continuar-ingresso').closest('.wizard-nav').hidden = numero !== 3;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.getElementById('btn-continuar').addEventListener('click', () => {
+            const nome = document.getElementById('titulo').value.trim();
+            const descricao = document.getElementById('descricao').value.trim();
+            const categoria = document.getElementById('categoria').value;
+            const data = document.getElementById('data').value;
+            const horario = document.getElementById('horario').value;
+
+            if (!nome || !descricao || !categoria || !converterDataParaISO(data) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(horario)) {
+                mostrarToastValidacao();
+                return;
+            }
+
+            alternarEtapa(2);
+        });
+        document.getElementById('btn-voltar-local').addEventListener('click', () => alternarEtapa(1));
+        document.getElementById('btn-continuar-local').addEventListener('click', () => {
+            const local = document.getElementById('local').value.trim();
+            const cidade = document.getElementById('cidade').value.trim();
+            const online = document.getElementById('evento-online').checked;
+            const endereco = document.getElementById('endereco').value.trim();
+            const estado = document.getElementById('estado').value.trim();
+            if (!online && (!local || !endereco || !cidade || !estado)) {
+                mostrarToastValidacao('Preencha a localização', 'Informe o local, endereço, cidade e estado do evento.');
+                return;
+            }
+            alternarEtapa(3);
+        });
+        document.getElementById('evento-online').addEventListener('change', atualizarCamposLocalizacao);
+        document.getElementById('btn-voltar-ingresso').addEventListener('click', () => alternarEtapa(2));
+        document.getElementById('btn-continuar-ingresso').addEventListener('click', () => {
+            const ingressos = [...document.querySelectorAll('#lista-ingressos .ingresso-row')];
+            const preenchidos = ingressos.length > 0 && ingressos.every((linha) => [...linha.querySelectorAll('input')].every((input) => input.value.trim()));
+            if (!preenchidos) {
+                mostrarToast('Preencha os dados dos ingressos.', 'erro');
+                return;
+            }
+            alternarEtapa(4);
+        });
+        document.getElementById('btn-voltar-revisao').addEventListener('click', () => alternarEtapa(3));
+        document.getElementById('editar-informacoes').addEventListener('click', () => alternarEtapa(1));
+        document.getElementById('editar-localizacao').addEventListener('click', () => alternarEtapa(2));
+        document.getElementById('editar-ingressos').addEventListener('click', () => alternarEtapa(3));
+        document.getElementById('btn-publicar').addEventListener('click', () => {
+            const botaoPublicar = document.getElementById('btn-publicar');
+            if (botaoPublicar.disabled) return;
+            botaoPublicar.disabled = true;
+
+            const carregamento = document.createElement('div');
+            carregamento.className = 'publicacao-loading';
+            carregamento.setAttribute('aria-label', 'Publicando evento');
+            carregamento.innerHTML = '<div class="publicacao-loading-content"><span class="fx-spin" aria-hidden="true"></span><span>Publicando evento</span></div>';
+            document.body.appendChild(carregamento);
+
+            setTimeout(() => {
+                carregamento.remove();
+                alternarEtapa(5);
+                mostrarToast('Publicado!', 'sucesso');
+            }, 3000);
+        });
+
+        function preencherRevisao() {
+            const categoria = document.getElementById('categoria');
+            const data = document.getElementById('data').value;
+            const horario = document.getElementById('horario').value;
+            const online = document.getElementById('evento-online').checked;
+            document.getElementById('revisao-nome').textContent = document.getElementById('titulo').value || '-';
+            document.getElementById('revisao-categoria').textContent = categoria.options[categoria.selectedIndex]?.text || '-';
+            document.getElementById('revisao-data').textContent = `${formatarDataNaPreview(data)}${horario ? ' às ' + horario : ''}`;
+            document.getElementById('revisao-local').textContent = online ? 'Evento online' : (document.getElementById('local').value || '-');
+            document.getElementById('revisao-endereco').textContent = online ? '-' : (document.getElementById('endereco').value || '-');
+
+            const revisaoIngressos = document.getElementById('revisao-ingressos');
+            revisaoIngressos.innerHTML = '';
+            document.querySelectorAll('#lista-ingressos .ingresso-row').forEach((linha) => {
+                const campos = linha.querySelectorAll('input');
+                const item = document.createElement('div');
+                item.className = 'review-row';
+                item.innerHTML = `<span>${campos[0].value || 'Ingresso'} (${campos[2].value || 0} un.)</span><span>R$ ${campos[1].value || '0'}</span>`;
+                revisaoIngressos.appendChild(item);
+            });
+        }
+
+        function atualizarCamposLocalizacao() {
+            const online = document.getElementById('evento-online').checked;
+            ['local', 'endereco', 'cidade', 'estado'].forEach((id) => {
+                const campo = document.getElementById(id);
+                campo.disabled = online;
+                campo.required = !online;
+                if (online) campo.value = '';
+            });
+            atualizarPreviewEvento();
+        }
+
+        atualizarCamposLocalizacao();
+
+        function mostrarToastValidacao(titulo = 'Preencha os campos obrigatórios', descricao = 'Nome, descrição e data são necessários para continuar.') {
+            const toast = document.createElement('div');
+            toast.className = 'toast toast-notificacao erro';
+            toast.innerHTML = `<span class="toast-alerta">!</span><div><strong>${titulo}</strong><small>${descricao}</small></div>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.classList.add('mostrar'), 10);
+            setTimeout(() => {
+                toast.classList.remove('mostrar');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        atualizarPreviewEvento();
     </script>
 
 </body>

@@ -13,12 +13,12 @@
     <script src="toast.js"></script>
 </head>
 
-<body>
+<body class="login-page">
 
     <div class="auth-page">
 
         <div class="auth-visual">
-            <div class="logo">LittleVitor<span>.com</span></div>
+            <div class="logo">LittleVitor</div>
 
             <div class="auth-visual-quote">
                 <div class="eyebrow"><span class="dot"></span> SÁB, 13 DE DEZ · SÃO PAULO</div>
@@ -43,15 +43,11 @@
 
                 <a href="index.html" class="back-link">← Voltar ao início</a>
 
-                <h1>Bem-vindo de volta</h1>
+                <div class="eyebrow"><span class="dot"></span> Bem-vindo de volta</div>
+                <h1>Entrar na sua conta</h1>
                 <p class="auth-sub">Ainda não tem conta? <a href="cadastro.html">Cadastre-se grátis</a></p>
 
                 <form id="login-form">
-                    <button type="button" class="btn-social"><span class="icon">G</span> Continuar com Google</button>
-                    <button type="button" class="btn-social"><span class="icon">◆</span> Continuar com Apple</button>
-
-                    <div class="auth-divider">ou entre com e-mail</div>
-
                     <div class="field-group">
                         <label for="email">E-mail</label>
                         <input class="field-input" type="email" id="email" placeholder="LittleVitor@exemplo.com">
@@ -74,10 +70,17 @@
                     </div>
 
                     <button type="submit" class="btn-auth-primary">Entrar</button>
+
+                    <div class="auth-divider">ou continue com</div>
+
+                    <div class="login-social-row">
+                        <button type="button" class="btn-social"><span class="icon">G</span> Google</button>
+                        <button type="button" class="btn-social"><span class="icon">◆</span> Apple</button>
+                    </div>
                 </form>
 
-                <p class="auth-footer-note">Ao entrar, você concorda com os <a href="#">Termos de uso</a> e a
-                    <a href="#">Política de privacidade</a>.
+                <p class="auth-footer-note">Ao entrar, você concorda com os <a href="/termos/termos.html">Termos de uso</a> e a
+                    <a href="/termos/privacidade.html">Política de privacidade</a>.
                 </p>
             </div>
 

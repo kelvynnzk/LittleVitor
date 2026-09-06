@@ -4,436 +4,133 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LittleVitor.com — O que vai acontecer perto de você</title>
+  <title>LittleVitor — Descubra o que acontece perto de você</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 
-<body>
-
-
-  <header>
-    <nav>
-      <div class="logo">LittleVitor<span>.com</span></div>
-      <div class="nav-links">
-        <a href="#programacao">Eventos</a>
-        <a href="#depoimentos">Depoimentos</a>
-        <a href="#cidades">Cidades</a>
+<body class="home-v2">
+  <header class="home-header">
+    <nav class="home-nav">
+      <a href="index.html" class="home-logo"><span></span>LittleVitor</a>
+      <div class="home-links">
+        <a class="is-active" href="#explorar">Explorar</a>
         <a href="categorias.html">Categorias</a>
+        <a href="criar-evento.html">Criar evento</a>
+        <a href="painel.html">Dashboard</a>
       </div>
-      <a href="login.html" class="btn-entrar">Entrar</a>
+      <div class="home-actions">
+        <label class="nav-search"><span>⌕</span><input type="search" placeholder="Buscar eventos..." aria-label="Buscar eventos"></label>
+        <a href="login.html" class="home-login">Entrar</a>
+        <a href="cadastro.html" class="home-signup">Criar conta</a>
+      </div>
     </nav>
   </header>
 
-  <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <div class="mouse-glow"></div>
-        <div class="badge">
-          <span class="dot">●</span>
-          <span id="badge-text">Carregando...</span>
+  <main id="explorar">
+    <section class="home-hero">
+      <div class="home-wrap hero-content">
+        <div class="hero-copy">
+          <div class="home-eyebrow"><i></i> Mais de 2.400 eventos ativos agora</div>
+          <h1>Viva experiências que<br><em>valem a pena contar.</em></h1>
+          <p>A LittleVitor conecta você aos melhores shows, festas, workshops e encontros da sua cidade, e te dá as ferramentas para criar o seu próprio evento em minutos.</p>
+          <form class="hero-search" id="hero-search">
+            <span>⌕</span>
+            <input id="hero-search-input" type="search" placeholder="Shows, festivais, workshops..." aria-label="Buscar na programação">
+            <button type="submit">Buscar</button>
+          </form>
+          <div class="hero-actions">
+            <a href="criar-evento.html" class="home-primary">Criar meu evento</a>
+            <a href="#destaques" class="home-secondary">Ver eventos em destaque</a>
+          </div>
+          <div class="hero-stats"><div><strong>2.4k+</strong><span>Eventos ativos</span></div><div><strong>180k</strong><span>Ingressos vendidos</span></div><div><strong>4.9/5</strong><span>Avaliação média</span></div></div>
         </div>
-        <h1>O que vai acontecer<br><span class="rotating" id="rotating-word">perto de você.</span></h1>
-        <p class="hero-sub">Shows, festas, workshops e encontros — organizados por data, prontos pra você marcar
-          presença.</p>
-
-        <div class="search-bar">
-          <input type="text" placeholder="Buscar por cidade, artista ou tipo de evento">
-          <button class="btn-buscar">Buscar</button>
+        <div class="hero-collage" aria-label="Eventos em destaque">
+          <article class="float-card float-card-one"><img src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=700&q=85" alt="Pessoa em um festival na floresta"><strong>Festival Noite Roxa</strong><small>Sáb, 20:00 · São Paulo</small></article>
+          <article class="float-card float-card-two"><img src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=700&q=85" alt="Floresta para um encontro ao ar livre"><strong>Summit de Tecnologia</strong><small>Ter, 09:00 · Rio de Janeiro</small></article>
+          <div class="confirmed-badge">✓ &nbsp; Ingresso confirmado</div>
         </div>
+      </div>
+    </section>
 
-        <div class="pills">
-          <a href="categorias.html" class="pill">Música <span class="count">128</span></a>
-          <a href="categorias.html" class="pill">Gastronomia <span class="count">64</span></a>
-          <a href="categorias.html" class="pill">Arte &amp; Cultura <span class="count">97</span></a>
-          <a href="categorias.html" class="pill">Negócios <span class="count">41</span></a>
-          <a href="categorias.html" class="pill">Esporte <span class="count">53</span></a>
-          <a href="categorias.html" class="pill">Bem-estar <span class="count">36</span></a>
+    <section class="home-wrap category-section">
+      <div class="home-eyebrow"><i></i> Navegue por interesse</div>
+      <h2 class="home-section-title">Categorias em alta</h2>
+      <div class="category-strip">
+        <a href="#destaques" class="category-tile active"><b>♫</b><span>Música</span></a>
+        <a href="#destaques" class="category-tile"><b>▣</b><span>Tecnologia</span></a>
+        <a href="#destaques" class="category-tile"><b>◉</b><span>Gastronomia</span></a>
+        <a href="#destaques" class="category-tile"><b>⚑</b><span>Comédia</span></a>
+        <a href="#destaques" class="category-tile"><b>✦</b><span>Esporte</span></a>
+        <a href="#destaques" class="category-tile"><b>◌</b><span>Arte</span></a>
+      </div>
+    </section>
+
+    <section class="home-wrap discovery-section" id="destaques">
+      <div class="filter-row">
+        <div class="filter-pills" role="tablist" aria-label="Filtrar eventos">
+          <button class="filter-pill active" data-filter="todos">Todos</button>
+          <button class="filter-pill" data-filter="musica">♫ Música</button>
+          <button class="filter-pill" data-filter="tecnologia">▣ Tecnologia</button>
+          <button class="filter-pill" data-filter="gastronomia">◉ Gastronomia</button>
+          <button class="filter-pill" data-filter="comedia">⚑ Comédia</button>
+          <button class="filter-pill" data-filter="esporte">✦ Esporte</button>
+          <button class="filter-pill" data-filter="arte">◌ Arte</button>
+        </div>
+        <select class="sort-select" aria-label="Ordenar eventos"><option>Relevância</option><option>Mais recentes</option><option>Menor preço</option></select>
+      </div>
+
+      <div class="event-section" id="event-section-destaque">
+        <div class="home-section-heading"><div><div class="home-eyebrow"><i></i> Selecionados para você</div><h2 class="home-section-title">Em destaque</h2></div></div>
+        <div class="image-event-grid">
+          <article class="image-event" data-category="musica" data-title="festival noite roxa"><div class="image-event-media"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85" alt="Folhas douradas em um caminho"><span>Destaque</span><button aria-label="Salvar Festival Noite Roxa">♡</button></div><div class="image-event-body"><small>Música</small><h3>Festival Noite Roxa</h3><p>▣ &nbsp;20 Set · 20:00</p><p>⌖ &nbsp;Allianz Parque, São Paulo</p><footer><strong>R$ 180 <small>por pessoa</small></strong><span>42 disp.</span></footer></div></article>
+          <article class="image-event" data-category="tecnologia" data-title="summit littletech 2026"><div class="image-event-media"><img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=900&q=85" alt="Cão preto em uma madeira"><span>Destaque</span><button aria-label="Salvar Summit LittleTech 2026">♡</button></div><div class="image-event-body"><small>Tecnologia</small><h3>Summit LittleTech 2026</h3><p>▣ &nbsp;03 Out · 09:00</p><p>⌖ &nbsp;Expo Center, Rio de Janeiro</p><footer><strong>R$ 320 <small>por pessoa</small></strong><span>118 disp.</span></footer></div></article>
+          <article class="image-event" data-category="comedia" data-title="stand-up risada coletiva"><div class="image-event-media"><img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=900&q=85" alt="Cachoeira em uma floresta"><span>Destaque</span><button aria-label="Salvar Stand-up Risada Coletiva">♡</button></div><div class="image-event-body"><small>Comédia</small><h3>Stand-up: Risada Coletiva</h3><p>▣ &nbsp;27 Set · 21:00</p><p>⌖ &nbsp;Teatro Bradesco, São Paulo</p><footer><strong>R$ 90 <small>por pessoa</small></strong><span>24 disp.</span></footer></div></article>
+          <article class="image-event" data-category="musica" data-title="noite de jazz vinho"><div class="image-event-media"><img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85" alt="Lago entre montanhas"><span>Destaque</span><button aria-label="Salvar Noite de Jazz e Vinho">♡</button></div><div class="image-event-body"><small>Música</small><h3>Noite de Jazz &amp; Vinho</h3><p>▣ &nbsp;14 Set · 19:30</p><p>⌖ &nbsp;Casa de Shows Bourbon, SP</p><footer><strong>R$ 150 <small>por pessoa</small></strong><span>15 disp.</span></footer></div></article>
         </div>
       </div>
 
-      <div class="featured-card">
-        <span class="featured-badge">● EM DESTAQUE</span>
-        <div class="featured-art"></div>
-        <div class="featured-title">Noite Eletrônica no Cais</div>
-        <div class="featured-meta">20:00 · Armazém 4, Santos</div>
-        <div class="progress-track">
-          <div class="progress-fill" style="width:84%"></div>
-        </div>
-        <div class="progress-label">
-          <span class="left">▲ 32 vagas restantes</span>
-          <span>de 200</span>
-        </div>
-        <div class="featured-footer">
-          <span class="id">SET-2213</span>
-          <span class="date">DEZ<br>19</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="block" id="programacao">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <h2>Programação da semana</h2>
-          <p>Atualizada em tempo real conforme novos eventos são publicados.</p>
-        </div>
-        <a href="evento.html" class="section-link">Ver tudo →</a>
-      </div>
-
-      <div class="event-grid">
-
-        <div class="event-card">
-          <div class="event-thumb t1">
-            <div class="event-date-badge">DEZ<span class="day">14</span></div>
-            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
-              <i class="fa-regular fa-heart">♡</i>
-            </button>
-          </div>
-          <div class="event-body">
-            <div class="event-cat">Música</div>
-            <h3>Sarau na Vila Madalena</h3>
-            <div class="meta">19h30 · Vila Madalena, SP</div>
-            <div class="progress-track">
-              <div class="progress-fill" style="width:40%"></div>
-            </div>
-            <div class="progress-label">
-              <span class="left">72 vagas restantes</span>
-              <span>de 120</span>
-            </div>
-            <div class="event-foot">
-              <span class="price">Grátis</span>
-              <span class="going">48 confirmados</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="event-card">
-          <div class="event-thumb t2">
-            <div class="event-date-badge">DEZ<span class="day">15</span></div>
-            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
-              <i class="fa-regular fa-heart">♡</i>
-            </button>
-          </div>
-          <div class="event-body">
-            <div class="event-cat">Gastronomia</div>
-            <h3>Feira Gastronômica do Ibirapuera</h3>
-            <div class="meta">11h · Parque Ibirapuera, SP</div>
-            <div class="progress-track">
-              <div class="progress-fill" style="width:78%"></div>
-            </div>
-            <div class="progress-label">
-              <span class="left">88 vagas restantes</span>
-              <span>de 400</span>
-            </div>
-            <div class="event-foot">
-              <span class="price">R$ 20</span>
-              <span class="going">312 confirmados</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="event-card">
-          <div class="event-thumb t3">
-            <div class="event-date-badge">DEZ<span class="day">16</span></div>
-            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
-              <i class="fa-regular fa-heart">♡</i>
-            </button>
-          </div>
-          <div class="event-body">
-            <div class="event-cat">Negócios</div>
-            <h3>Workshop de IA para Criadores</h3>
-            <div class="meta">14h · Pinheiros, SP</div>
-            <div class="progress-track">
-              <div class="progress-fill" style="width:76%"></div>
-            </div>
-            <div class="progress-label">
-              <span class="left">19 vagas restantes</span>
-              <span>de 80</span>
-            </div>
-            <div class="event-foot">
-              <span class="price">R$ 89</span>
-              <span class="going">61 confirmados</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="event-card">
-          <div class="event-thumb t4">
-            <div class="event-date-badge">DEZ<span class="day">17</span></div>
-            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
-              <i class="fa-regular fa-heart">♡</i>
-            </button>
-          </div>
-          <div class="event-body">
-            <div class="event-cat">Arte &amp; Cultura</div>
-            <h3>Noite de Curtas no MASP</h3>
-            <div class="meta">20h · Av. Paulista, SP</div>
-            <div class="progress-track">
-              <div class="progress-fill" style="width:59%"></div>
-            </div>
-            <div class="progress-label">
-              <span class="left">61 vagas restantes</span>
-              <span>de 150</span>
-            </div>
-            <div class="event-foot">
-              <span class="price">R$ 35</span>
-              <span class="going">89 confirmados</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="event-card">
-          <div class="event-thumb t5">
-            <div class="event-date-badge">DEZ<span class="day">18</span></div>
-            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
-              <i class="fa-regular fa-heart">♡</i>
-            </button>
-          </div>
-          <div class="event-body">
-            <div class="event-cat">Esporte</div>
-            <h3>Corrida Noturna no Parque Villa-Lobos</h3>
-            <div class="meta">19h · Villa-Lobos, SP</div>
-            <div class="progress-track">
-              <div class="progress-fill" style="width:68%"></div>
-            </div>
-            <div class="progress-label">
-              <span class="left">96 vagas restantes</span>
-              <span>de 300</span>
-            </div>
-            <div class="event-foot">
-              <span class="price">Grátis</span>
-              <span class="going">204 confirmados</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="event-card">
-          <div class="event-thumb t6">
-            <div class="event-date-badge">DEZ<span class="day">19</span></div>
-            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
-              <i class="fa-regular fa-heart">♡</i>
-            </button>
-          </div>
-          <div class="event-body">
-            <div class="event-cat">Música</div>
-            <h3>Noite Eletrônica no Cais</h3>
-            <div class="meta">20h · Armazém 4, Santos</div>
-            <div class="progress-track">
-              <div class="progress-fill" style="width:84%"></div>
-            </div>
-            <div class="progress-label">
-              <span class="left">32 vagas restantes</span>
-              <span>de 200</span>
-            </div>
-            <div class="event-foot">
-              <span class="price">R$ 60</span>
-              <span class="going">168 confirmados</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <section class="block" id="depoimentos">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <h2>Quem usou, aprovou</h2>
-          <p>Avaliações de pessoas que já encontraram seus próximos eventos por aqui.</p>
-        </div>
-      </div>
-
-      <div class="testi-grid">
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">Achei uma festa incrível em Santos que nem sabia que existia. A busca por cidade é
-            rápida e direta ao ponto.</p>
-          <div class="testi-author">
-            <div class="testi-avatar">AC</div>
-            <div>
-              <h4>Amanda Castro</h4>
-              <span>São Paulo, SP</span>
-            </div>
-          </div>
-        </div>
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">Uso toda semana pra ver o que tem perto de casa. Já fui em três saraus que só descobri
-            aqui.</p>
-          <div class="testi-author">
-            <div class="testi-avatar">SP</div>
-            <div>
-              <h4>Sofia Pereira</h4>
-              <span>São Paulo, SP</span>
-            </div>
-          </div>
-        </div>
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">Marquei presença em um workshop de IA em cinco minutos, sem complicação nenhuma.
-            Recomendo demais.</p>
-          <div class="testi-author">
-            <div class="testi-avatar">BC</div>
-            <div>
-              <h4>Bruno Carvalho</h4>
-              <span>Curitiba, PR</span>
-            </div>
-          </div>
-        </div>
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">A curadoria é ótima, principalmente pros eventos de gastronomia. Virou meu app fixo de
-            fim de semana.</p>
-          <div class="testi-author">
-            <div class="testi-avatar">FG</div>
-            <div>
-              <h4>Fernanda Gomes</h4>
-              <span>Rio de Janeiro, RJ</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="block" id="cidades">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <h2>Explore por cidade</h2>
-          <p>Eventos ativos agora, organizados por onde você está.</p>
-        </div>
-      </div>
-
-      <div class="city-grid">
-        <a href="#" class="city-chip"><span class="name">São Paulo</span><span class="count">312 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Rio de Janeiro</span><span class="count">198 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Belo Horizonte</span><span class="count">74 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Curitiba</span><span class="count">51 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Porto Alegre</span><span class="count">46 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Salvador</span><span class="count">39 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Recife</span><span class="count">28 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Florianópolis</span><span class="count">22 eventos</span></a>
-      </div>
-    </div>
-  </section>
-
-  <section class="cta-organizer">
-    <div class="wrap">
-      <div class="cta-box">
+      <div class="event-section"><div class="home-section-heading"><div><div class="home-eyebrow"><i></i> Não perca a data</div><h2 class="home-section-title">Acontecendo em breve</h2></div><a href="evento.html" class="home-more">Ver todos →</a></div><div class="image-event-grid compact-grid"></div></div>
+      <section class="organizer-banner organizer-banner-centered">
         <h2>Organiza eventos? Publique o seu.</h2>
         <p>Crie sua página, venda ingressos e alcance quem está procurando exatamente o que você organiza.</p>
-        <div class="cta-buttons">
-          <button href="" class="btn-primary">Publicar evento</button>
-          <button class="btn-secondary">Ver planos</button>
+        <div class="organizer-actions">
+          <a href="criar-evento.html" class="home-primary">Publicar evento</a>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
+    </section>
+  </main>
 
-  <footer>
-    <div class="wrap footer-grid">
-      <div class="logo" style="font-size:1.05rem;">LittleVitor<span>.com</span></div>
-      <div class="footer-links">
-        <a href="">Eventos</a>
-        <a href="#">Categorias</a>
-        <a href="#">Preços</a>
-        <a href="#">Ajuda</a>
-      </div>
-      <div class="footer-social">
-        <a href="https://www.Instagram.com/littlevittor.comm">Instagram</a>
-        <a href="#">X</a>
-        <a href="#">contato@littlevitor.com</a>
-      </div>
-    </div>
-  </footer>
+  <footer class="home-footer"><div class="home-wrap"><a href="index.html" class="home-logo"><span></span>LittleVitor</a><div><a href="sobre.html">Sobre</a><a href="categorias.html">Categorias</a><a href="login.html">Entrar</a></div></div></footer>
 
   <script>
-    const words = ["perto de você.", "hoje à noite.", "esse fim de semana.", "na sua cidade."];
-    let i = 0;
-    const el = document.getElementById('rotating-word');
-    setInterval(() => {
-      i = (i + 1) % words.length;
-      el.style.opacity = 0;
-      setTimeout(() => {
-        el.textContent = words[i];
-        el.style.opacity = 1;
-      }, 250);
-    }, 3000);
-    el.style.transition = 'opacity .25s ease';
+    const eventCards = [...document.querySelectorAll('.image-event')];
+    const filterButtons = [...document.querySelectorAll('.filter-pill')];
+    const searchInputs = [document.querySelector('.nav-search input'), document.getElementById('hero-search-input')];
+    const emptySections = document.querySelectorAll('.compact-grid');
 
-    const glow = document.querySelector('.mouse-glow');
-    document.addEventListener('mousemove', (e) => {
-      glow.style.transform = `translate(${e.clientX - 210}px, ${e.clientY - 210}px)`;
-    });
-    let mouseX = 0, mouseY = 0;
-    let glowX = 0, glowY = 0;
-    // Movimentação da bolinha
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
-    // Animação da bolinha que segue o mouse
-    function animate() {
-      glowX += (mouseX - glowX) * 0.08; // quanto menor, mais "atraso"
-      glowY += (mouseY - glowY) * 0.08;
-      glow.style.transform = `translate(${glowX - 210}px, ${glowY - 210}px)`;
-      requestAnimationFrame(animate);
-    }
-    animate();
-    // Seleciona Todos os botões de curtir
-    document.querySelectorAll('.btn-like').forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.classList.toggle('ativo');
-
-        const icon = btn.querySelector('i');
-        if (btn.classList.contains('ativo')) {
-          icon.classList.remove('fa-regular', 'fa-heart');
-          icon.classList.add('fa-solid', 'fa-heart');
-          // Aqui você pode salvar no localStorage ou no back 
-        } else {
-          icon.classList.remove('fa-solid', 'fa-heart');
-          icon.classList.add('fa-regular')
-        }
+    function filterEvents(category = 'todos', term = '') {
+      const normalizedTerm = term.trim().toLowerCase();
+      eventCards.forEach((card) => {
+        const matchesCategory = category === 'todos' || card.dataset.category === category;
+        const matchesTerm = !normalizedTerm || card.dataset.title.includes(normalizedTerm);
+        card.hidden = !(matchesCategory && matchesTerm);
       });
-    });
-    // ---  Formata a data atual em português  ---
-    function formatarData() {
-      const dias = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"];
-      const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
-      const hoje = new Date();
-      const diaSemana = dias[hoje.getDay()];
-      const dia = String(hoje.getDate()).padStart(2, "0");
-      const mes = meses[hoje.getMonth()];
-      return `${diaSemana}, ${dia} DE ${mes}`;
-    }
-    // ---  Detecta a cidade do visitante automaticamente pelo IP --- 
-    async function detectarCidade() {
-      try {
-        const resposta = await fetch("https://ipapi.co/json/");
-        const dados = await resposta.json();
-        return (dados.city || "LOCAL DESCONHECIDO").toUpperCase();
-      } catch (erro) {
-        return "LOCAL DESCONHECIDO";
-      }
+      emptySections.forEach((grid) => {
+        if (!grid.children.length) grid.innerHTML = eventCards.slice(0, 4).map((card) => card.outerHTML).join('');
+      });
     }
 
-    // ---  Monta o texto final e injeta no HTML ---
-    async function atualizarBadge() {
-      const data = formatarData();
-      const cidade = await detectarCidade();
-      document.getElementById("badge-text").textContent = `${data} · ${cidade}`;
-    }
-    atualizarBadge();
+    filterButtons.forEach((button) => button.addEventListener('click', () => {
+      filterButtons.forEach((item) => item.classList.toggle('active', item === button));
+      filterEvents(button.dataset.filter, document.getElementById('hero-search-input').value);
+    }));
+    searchInputs.forEach((input) => input.addEventListener('input', () => filterEvents(document.querySelector('.filter-pill.active').dataset.filter, input.value)));
+    document.getElementById('hero-search').addEventListener('submit', (event) => event.preventDefault());
+    document.querySelectorAll('.image-event-media button').forEach((button) => button.addEventListener('click', (event) => { event.preventDefault(); button.classList.toggle('saved'); button.textContent = button.classList.contains('saved') ? '♥' : '♡'; }));
+    filterEvents();
   </script>
-
 </body>
 
 </html>

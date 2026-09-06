@@ -13,7 +13,7 @@
     <script src="toast.js"></script>
 </head>
 
-<body>
+<body class="cadastro-page">
 
     <div class="auth-page">
 
@@ -21,35 +21,25 @@
             <div class="logo">LittleVitor<span>.com</span></div>
 
             <div class="auth-visual-quote">
-                <div class="eyebrow"><span class="dot"></span> JUNTE-SE À COMUNIDADE</div>
-                <h2>Seus eventos favoritos, <em>num só lugar.</em></h2>
-                <p>Crie sua conta gratuita e comece a seguir comunidades, salvar eventos e montar seu roteiro da semana.
-                </p>
-
-                <div class="auth-mini-card">
-                    <span class="featured-badge">● EM DESTAQUE</span>
-                    <h4>Noite Eletrônica no Cais</h4>
-                    <span>20:00 · Armazém 4, Santos</span>
-                </div>
+                <div class="eyebrow"><span class="dot"></span> COMECE AGORA</div>
+                <h2>Comece de graça e<br>publique seu primeiro<br>evento hoje.</h2>
+                <p>Crie sua conta em menos de um minuto e tenha acesso<br> a ferramentas completas de venda de ingressos.</p>
             </div>
 
-            <div></div>
+            <div class="auth-visual-stats">
+                <div><strong>12k+</strong><span>Organizadores</span></div>
+                <div><strong>98%</strong><span>Satisfação</span></div>
+                <div><strong>0%</strong><span>Taxa de adesão</span></div>
+            </div>
         </div>
 
         <div class="auth-form-panel">
             <div class="auth-form-box">
 
-                <a href="index.html" class="back-link">← Voltar ao início</a>
-
                 <h1>Crie sua conta</h1>
                 <p class="auth-sub">Já tem uma conta? <a href="login.html">Entrar</a></p>
 
                 <form id="cadastro-form">
-                    <button type="button" class="btn-social"><span class="icon">G</span> Cadastrar com Google</button>
-                    <button type="button" class="btn-social"><span class="icon">◆</span> Cadastrar com Apple</button>
-
-                    <div class="auth-divider">ou cadastre-se com e-mail</div>
-
                     <div class="field-group">
                         <label for="nome">Nome completo</label>
                         <input class="field-input" type="text" id="nome" placeholder="Como você se chama">
@@ -66,23 +56,45 @@
                             <input class="field-input" type="password" id="senha" placeholder="Crie uma senha">
                             <button type="button" class="field-toggle">mostrar</button>
                         </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="confirmar-senha">Confirmar senha</label>
+                        <div class="field-password-wrap">
+                            <input class="field-input" type="password" id="confirmar-senha" placeholder="Repita a senha">
+                            <button type="button" class="field-toggle confirm-toggle">mostrar</button>
+                        </div>
                         <div class="strength-meter">
                             <div class="bar" id="bar1"></div>
                             <div class="bar" id="bar2"></div>
                             <div class="bar" id="bar3"></div>
+                            <div class="bar" id="bar4"></div>
                         </div>
-                        <div class="field-hint" id="strength-hint">Use ao menos 8 caracteres, com números e letras.
-                        </div>
+                        <div class="field-hint" id="strength-hint">Use ao menos 8 caracteres, com números e letras.</div>
+                        <ul class="password-checklist" aria-live="polite">
+                            <li data-requirement="letter"><span class="check-icon">•</span><span>Está faltando letra</span></li>
+                            <li data-requirement="number"><span class="check-icon">•</span><span>Está faltando número</span></li>
+                            <li data-requirement="uppercase"><span class="check-icon">•</span><span>Está faltando letra maiúscula</span></li>
+                            <li data-requirement="lowercase"><span class="check-icon">•</span><span>Está faltando letra minúscula</span></li>
+                            <li data-requirement="special"><span class="check-icon">•</span><span>Está faltando caractere especial</span></li>
+                        </ul>
                     </div>
 
-                    <div class="field-row-between" style="margin-bottom:22px;">
+                    <div class="field-row-between cadastro-terms-row">
                         <label class="checkbox-line">
                             <input type="checkbox" required>
-                            Aceito os <a href="#" class="link-quiet" style="margin-left:4px;">Termos de uso</a>
+                            <span>Eu li e concordo com os <a href="#" class="link-quiet cadastro-terms-link">Termos de Uso</a> e a <a href="#" class="link-quiet cadastro-terms-link">Política de Privacidade</a>.</span>
                         </label>
                     </div>
 
-                    <button type="submit" class="btn-auth-primary">Criar conta grátis</button>
+                    <button type="submit" class="btn-auth-primary">Criar minha conta</button>
+
+                    <div class="auth-divider">ou cadastre-se com</div>
+
+                    <div class="cadastro-social-row">
+                        <button type="button" class="btn-social"><span class="icon">G</span> Google</button>
+                        <button type="button" class="btn-social"><span class="icon">◆</span> Apple</button>
+                    </div>
                 </form>
 
                 <p class="auth-footer-note">Ao se cadastrar, você concorda em receber avisos de eventos por e-mail.
@@ -107,6 +119,25 @@
             const nome = document.getElementById('nome').value;
             const email = document.getElementById('email').value;
             const senha = document.getElementById('senha').value;
+            const confirmarSenha = document.getElementById('confirmar-senha').value;
+            const passwordIsValid = senha.length >= 8
+                && /[a-zA-Z]/.test(senha)
+                && /[0-9]/.test(senha)
+                && /[A-Z]/.test(senha)
+                && /[a-z]/.test(senha)
+                && /[^a-zA-Z0-9]/.test(senha);
+
+            if (!passwordIsValid) {
+                mostrarToast('Preencha todos os requisitos da senha antes de continuar.', 'erro');
+                document.getElementById('senha').focus();
+                return;
+            }
+
+            if (senha !== confirmarSenha) {
+                mostrarToast('As senhas não coincidem.', 'erro');
+                document.getElementById('confirmar-senha').focus();
+                return;
+            }
 
             try {
                 //faz a req para o back end
@@ -154,33 +185,55 @@
 
             }
         });
-
-
-
-
-
-
-
-
-        const toggle = document.querySelector('.field-toggle');
-        const senha = document.getElementById('senha');
-        toggle.addEventListener('click', () => {
-            const isPassword = senha.type === 'password';
-            senha.type = isPassword ? 'text' : 'password';
-            toggle.textContent = isPassword ? 'ocultar' : 'mostrar';
+        
+        const passwordToggles = document.querySelectorAll('.field-toggle');
+        passwordToggles.forEach((toggle) => {
+            toggle.addEventListener('click', () => {
+                const passwordInput = toggle.parentElement.querySelector('.field-input');
+                const isPassword = passwordInput.type === 'password';
+                passwordInput.type = isPassword ? 'text' : 'password';
+                toggle.textContent = isPassword ? 'ocultar' : 'mostrar';
+            });
         });
 
-        const bars = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3')];
+        const senha = document.getElementById('senha');
+
+        const bars = [
+            document.getElementById('bar1'),
+            document.getElementById('bar2'),
+            document.getElementById('bar3'),
+            document.getElementById('bar4')
+        ];
         const hint = document.getElementById('strength-hint');
+        const requirementItems = {
+            letter: document.querySelector('[data-requirement="letter"]'),
+            number: document.querySelector('[data-requirement="number"]'),
+            uppercase: document.querySelector('[data-requirement="uppercase"]'),
+            lowercase: document.querySelector('[data-requirement="lowercase"]'),
+            special: document.querySelector('[data-requirement="special"]')
+        };
 
         senha.addEventListener('input', () => {
             const val = senha.value;
+            const requirements = {
+                letter: /[a-zA-Z]/.test(val),
+                number: /[0-9]/.test(val),
+                uppercase: /[A-Z]/.test(val),
+                lowercase: /[a-z]/.test(val),
+                special: /[^a-zA-Z0-9]/.test(val)
+            };
             let score = 0;
             if (val.length >= 8) score++;
-            if (/[0-9]/.test(val) && /[a-zA-Z]/.test(val)) score++;
+            if (/[a-zA-Z]/.test(val)) score++;
+            if (/[0-9]/.test(val)) score++;
             if (/[A-Z]/.test(val) && /[^a-zA-Z0-9]/.test(val)) score++;
 
             bars.forEach(b => b.className = 'bar');
+            Object.entries(requirements).forEach(([name, isValid]) => {
+                const item = requirementItems[name];
+                item.classList.toggle('valid', isValid);
+                item.querySelector('.check-icon').textContent = isValid ? '✓' : '•';
+            });
 
             if (val.length === 0) {
                 hint.textContent = 'Use ao menos 8 caracteres, com números e letras.';
@@ -193,6 +246,9 @@
                 bars[0].classList.add('active-mid');
                 bars[1].classList.add('active-mid');
                 hint.textContent = 'Senha média. Considere adicionar um símbolo.';
+            } else if (score === 3) {
+                bars.slice(0, 3).forEach(b => b.classList.add('active-mid'));
+                hint.textContent = 'Senha quase forte. Adicione um símbolo.';
             } else {
                 bars.forEach(b => b.classList.add('active-strong'));
                 hint.textContent = 'Senha forte.';
