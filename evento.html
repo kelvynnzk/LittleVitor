@@ -149,24 +149,13 @@
     </footer>
 
     <script>
-        // ------------------------------------------------------------------
-        // DADOS DOS EVENTOS
-        // Isso aqui é só um mock pra você ter a página funcionando enquanto
-        // o back-end não fica pronto. Quando a API estiver de pé, troque o
-        // array EVENTOS por uma chamada real, por exemplo:
-        //
-        //   let EVENTOS = [];
-        //   async function carregarEventos() {
-        //     const resp = await fetch('/api/eventos');
-        //     EVENTOS = await resp.json();
-        //   }
-        //   await carregarEventos();
-        //
-        // O formato de cada objeto abaixo é o "contrato" que a sua API
-        // (e a aba "criar evento") precisam respeitar pra tudo continuar
-        // funcionando sem mudar o resto do código.
-        // ------------------------------------------------------------------
-        const EVENTOS = [
+        // ============================================================
+        // EVENTOS DE EXEMPLO (fallback)
+        // Só são usados se a chamada à API falhar (ex: back-end Flask
+        // fora do ar). Servem pra página nunca ficar completamente
+        // vazia/quebrada durante o desenvolvimento ou se o servidor cair.
+        // ============================================================
+        const EVENTOS_EXEMPLO = [
             {
                 id: 1,
                 titulo: "Noite Eletrônica no Cais",
@@ -246,10 +235,139 @@
             }
         ];
 
+        // EVENTOS é a lista que a página realmente usa pra renderizar
+        // (lista e detalhe). Começa vazia e é preenchida por
+        // carregarEventos() antes de qualquer renderização.
+        let EVENTOS = [];
+
+        // ============================================================
+        // TABELAS DE APOIO PRA FORMATAR DATA/CATEGORIA
+        // (o banco de dados só guarda "data" como AAAA-MM-DD e
+        // "horario" como HH:MM:SS — o resto é montado aqui no front)
+        // ============================================================
+        const DIAS_SEMANA = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"];
+        const MESES_ABREV = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+        const MESES_POR_EXTENSO = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+        const THUMB_CLASSES = ["t1", "t2", "t3", "t4"];
+
+        // Transforma "musica", "Música", "MÚSICA"... sempre na mesma
+        // classe CSS "tag-musica" — removendo acento e caixa alta,
+        // pra bater com as classes que já existem no styles.css.
+        function categoriaParaClasse(categoria) {
+            const slug = (categoria || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, ''); // remove acentos (á, ç, ã...)
+            return 'tag-' + (slug || 'geral');
+        }
+
+        // "20:00:00" (formato que vem do banco) -> "20:00"
+        function formatarHorario(horario) {
+            return (horario || '').slice(0, 5);
+        }
+
+        // "2026-09-20" -> { ano: 2026, mes: 9, dia: 20 }
+        function partesDaData(dataISO) {
+            const [ano, mes, dia] = (dataISO || '').split('-').map(Number);
+            return { ano, mes, dia };
+        }
+
+        // Monta o "selo" de data usado nos cards da lista (dia + mês
+        // abreviado), no mesmo formato que já existia no mock.
+        function formatarDataBadge(dataISO) {
+            const { mes, dia } = partesDaData(dataISO);
+            if (!dia) return { dia: '--', mes: '---' };
+            return { dia: String(dia).padStart(2, '0'), mes: MESES_ABREV[mes - 1] };
+        }
+
+        // Monta a frase completa de data/hora usada na página de
+        // detalhe (ex: "Sex, 19 de dezembro · 20:00"), calculando o
+        // dia da semana a partir da data.
+        function formatarQuando(dataISO, horario) {
+            const { ano, mes, dia } = partesDaData(dataISO);
+            if (!ano) return 'Data a confirmar';
+            const dataObj = new Date(ano, mes - 1, dia); // horário local, sem risco de virar o dia por fuso
+            const diaSemana = DIAS_SEMANA[dataObj.getDay()];
+            return `${diaSemana}, ${String(dia).padStart(2, '0')} de ${MESES_POR_EXTENSO[mes - 1]} · ${formatarHorario(horario)}`;
+        }
+
+        // Formata preço em reais — e trata o caso de não termos um
+        // preço real ainda (o banco não guarda valor de ingresso hoje).
         function formatarPreco(valor) {
+            if (valor === null || valor === undefined) return 'Consulte o valor';
             return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
+        // ============================================================
+        // ADAPTA UM EVENTO DA API (campos simples: titulo, categoria,
+        // descricao, data, horario, local, cidade) PRO FORMATO "RICO"
+        // que a página usa pra renderizar (com selo de data, classe de
+        // cor da tag, seção "o que levar", ingressos etc.)
+        //
+        // Vários desses campos ainda NÃO existem no banco de dados
+        // (imagem, preço do ingresso, capacidade, "o que levar",
+        // nome do organizador) — por isso preenchemos com valores
+        // padrão/genéricos aqui, só pra a página continuar funcionando
+        // igual. Quando o backend passar a guardar esses dados de
+        // verdade, é só trocar os valores fixos abaixo pelos campos
+        // reais que vierem de "evento".
+        // ============================================================
+        function mapearEventoApiParaView(evento, indice) {
+            return {
+                id: evento.id,
+                titulo: evento.titulo,
+                categoria: evento.categoria,
+                tagClass: categoriaParaClasse(evento.categoria),
+                thumbClass: THUMB_CLASSES[indice % THUMB_CLASSES.length], // alterna a cor de fundo do card
+                dataBadge: formatarDataBadge(evento.data),
+                quando: formatarQuando(evento.data, evento.horario),
+                onde: `${evento.local}, ${evento.cidade}`,
+                organizador: 'Equipe organizadora', // o banco não guarda o nome do organizador ainda
+                sub: evento.descricao
+                    ? (evento.descricao.length > 160 ? evento.descricao.slice(0, 160) + '…' : evento.descricao)
+                    : 'Detalhes em breve.',
+                descricao: evento.descricao
+                    ? [evento.descricao]
+                    : ['Este evento ainda não tem uma descrição detalhada.'],
+                oQueLevar: [
+                    'Documento com foto',
+                    'Ingresso digital (print ou celular)',
+                    'Chegue com alguns minutos de antecedência'
+                ],
+                endereco: `${evento.local}<br>${evento.cidade}`,
+                // Sem preço real cadastrado ainda — "preco: null" faz
+                // formatarPreco() mostrar "Consulte o valor" no lugar
+                // de um número inventado.
+                ingressos: [
+                    { nome: 'Ingresso', preco: null }
+                ]
+            };
+        }
+
+        // ============================================================
+        // CARREGAMENTO DOS EVENTOS REAIS (conexão com o back-end)
+        // ============================================================
+        // Busca todos os eventos cadastrados na API pública (GET
+        // /eventos) e preenche EVENTOS com eles, já convertidos pro
+        // formato que a página usa. Se a API falhar, cai pros
+        // EVENTOS_EXEMPLO (mock) só pra não deixar a tela vazia.
+        async function carregarEventos() {
+            try {
+                const resposta = await fetch('http://127.0.0.1:5000/eventos');
+                const dados = await resposta.json();
+                const eventosApi = dados.eventos || [];
+
+                EVENTOS = eventosApi.map((evento, indice) => mapearEventoApiParaView(evento, indice));
+
+            } catch (erro) {
+                console.error('Não foi possível conectar ao back-end, usando eventos de exemplo:', erro);
+                EVENTOS = EVENTOS_EXEMPLO;
+            }
+        }
+
+        // ============================================================
+        // RENDERIZAÇÃO DA LISTA DE EVENTOS (evento.html sem ?id)
+        // ============================================================
         function renderLista() {
             const grid = document.getElementById('eventos-grid');
             const vazio = document.getElementById('eventos-vazio');
@@ -263,7 +381,11 @@
             vazio.classList.add('hidden');
 
             EVENTOS.forEach(ev => {
-                const precoMin = Math.min(...ev.ingressos.map(i => i.preco));
+                // Preço mínimo entre os ingressos, ignorando os que
+                // ainda não têm valor definido (preco: null).
+                const precosConhecidos = ev.ingressos.map(i => i.preco).filter(p => p !== null && p !== undefined);
+                const precoMin = precosConhecidos.length ? Math.min(...precosConhecidos) : null;
+                const textoPreco = precoMin !== null ? `A partir de ${formatarPreco(precoMin)}` : 'Consulte o valor';
 
                 const card = document.createElement('article');
                 card.className = 'event-card';
@@ -278,7 +400,7 @@
                         <h3>${ev.titulo}</h3>
                         <div class="meta">${ev.onde}</div>
                         <div class="event-foot">
-                            <span class="price">A partir de ${formatarPreco(precoMin)}</span>
+                            <span class="price">${textoPreco}</span>
                             <a href="evento.html?id=${ev.id}" class="btn btn-primary">Ver evento</a>
                         </div>
                     </div>
@@ -287,6 +409,9 @@
             });
         }
 
+        // ============================================================
+        // RENDERIZAÇÃO DO DETALHE DE UM EVENTO (evento.html?id=X)
+        // ============================================================
         function renderDetalhe(ev) {
             document.title = ev.titulo + ' — Agenda';
 
@@ -319,13 +444,26 @@
             document.getElementById('det-endereco').innerHTML = ev.endereco;
         }
 
+        // ============================================================
+        // CONTROLE DE QUAL "VISTA" (lista / detalhe / não encontrado)
+        // fica visível na página
+        // ============================================================
         function mostrarView(nome) {
             document.getElementById('vista-lista').classList.toggle('hidden', nome !== 'lista');
             document.getElementById('vista-detalhe').classList.toggle('hidden', nome !== 'detalhe');
             document.getElementById('evento-nao-encontrado').classList.toggle('hidden', nome !== 'nao-encontrado');
         }
 
-        function init() {
+        // ============================================================
+        // PONTO DE PARTIDA DA PÁGINA
+        // ============================================================
+        // Precisa ser "async" porque agora esperamos os eventos
+        // chegarem da API (carregarEventos) antes de decidir o que
+        // mostrar — lista, detalhe de um evento específico, ou a
+        // tela de "evento não encontrado".
+        async function init() {
+            await carregarEventos();
+
             const params = new URLSearchParams(window.location.search);
             const id = params.get('id');
 
@@ -348,11 +486,12 @@
 
         document.addEventListener('DOMContentLoaded', init);
 
-        // Placeholder de envio do formulário de compra, até o back-end real existir.
+        // Placeholder de envio do formulário de compra, até o back-end
+        // ter uma rota de verdade pra processar compra de ingresso.
         document.addEventListener('submit', function (e) {
             if (e.target.matches('.compra-form')) {
                 e.preventDefault();
-                alert('Compra simulada! Quando o back-end estiver pronto, isso vai enviar o pedido pra sua API.');
+                alert('Compra simulada! Quando o back-end tiver uma rota de compra, isso vai enviar o pedido pra sua API.');
             }
         });
     </script>
