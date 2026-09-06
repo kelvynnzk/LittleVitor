@@ -5,21 +5,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LittleVitor — Descubra o que acontece perto de você</title>
+
+  <!-- Google Fonts: Fraunces (títulos/serifada) + Inter (texto) + JetBrains Mono (números/detalhes) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Todo o CSS do site (essa versão nova usa a folha de estilo única styles.css) -->
   <link rel="stylesheet" href="styles.css">
 </head>
 
+<!-- Classe "home-v2" identifica esse layout como a versão nova da home,
+     usada pelo CSS pra aplicar os estilos certos (diferente da home antiga) -->
 <body class="home-v2">
+
+  <!-- ===================== CABEÇALHO / MENU ===================== -->
   <header class="home-header">
     <nav class="home-nav">
+      <!-- Logo, sempre volta pra home -->
       <a href="index.html" class="home-logo"><span></span>LittleVitor</a>
+
+      <!-- Links principais de navegação -->
       <div class="home-links">
         <a class="is-active" href="#explorar">Explorar</a>
         <a href="categorias.html">Categorias</a>
         <a href="criar-evento.html">Criar evento</a>
         <a href="painel.html">Dashboard</a>
       </div>
+
+      <!-- Busca rápida no topo + botões de entrar/cadastrar -->
       <div class="home-actions">
         <label class="nav-search"><span>⌕</span><input type="search" placeholder="Buscar eventos..." aria-label="Buscar eventos"></label>
         <a href="login.html" class="home-login">Entrar</a>
@@ -29,23 +42,37 @@
   </header>
 
   <main id="explorar">
+
+    <!-- ===================== HERO (banner principal) ===================== -->
     <section class="home-hero">
       <div class="home-wrap hero-content">
+
+        <!-- Texto e busca principal do hero -->
         <div class="hero-copy">
           <div class="home-eyebrow"><i></i> Mais de 2.400 eventos ativos agora</div>
           <h1>Viva experiências que<br><em>valem a pena contar.</em></h1>
           <p>A LittleVitor conecta você aos melhores shows, festas, workshops e encontros da sua cidade, e te dá as ferramentas para criar o seu próprio evento em minutos.</p>
+
+          <!-- Formulário de busca do hero. O submit é bloqueado no JS
+               (não recarrega a página) — a busca de verdade acontece
+               ao digitar, filtrando os cards já carregados na tela. -->
           <form class="hero-search" id="hero-search">
             <span>⌕</span>
             <input id="hero-search-input" type="search" placeholder="Shows, festivais, workshops..." aria-label="Buscar na programação">
             <button type="submit">Buscar</button>
           </form>
+
           <div class="hero-actions">
             <a href="criar-evento.html" class="home-primary">Criar meu evento</a>
             <a href="#destaques" class="home-secondary">Ver eventos em destaque</a>
           </div>
+
+          <!-- Números de destaque (estáticos, só decorativos por enquanto) -->
           <div class="hero-stats"><div><strong>2.4k+</strong><span>Eventos ativos</span></div><div><strong>180k</strong><span>Ingressos vendidos</span></div><div><strong>4.9/5</strong><span>Avaliação média</span></div></div>
         </div>
+
+        <!-- Cartõezinhos flutuantes ilustrativos ao lado do hero.
+             Conteúdo fixo/decorativo — não vem do banco de dados. -->
         <div class="hero-collage" aria-label="Eventos em destaque">
           <article class="float-card float-card-one"><img src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=700&q=85" alt="Pessoa em um festival na floresta"><strong>Festival Noite Roxa</strong><small>Sáb, 20:00 · São Paulo</small></article>
           <article class="float-card float-card-two"><img src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=700&q=85" alt="Floresta para um encontro ao ar livre"><strong>Summit de Tecnologia</strong><small>Ter, 09:00 · Rio de Janeiro</small></article>
@@ -54,6 +81,10 @@
       </div>
     </section>
 
+    <!-- ===================== CATEGORIAS EM ALTA ===================== -->
+    <!-- Atalhos visuais de categoria. Por enquanto todos apontam pra
+         "#destaques" (rolam até a seção de eventos) — não filtram
+         de verdade ainda, só os botões "filter-pill" abaixo filtram. -->
     <section class="home-wrap category-section">
       <div class="home-eyebrow"><i></i> Navegue por interesse</div>
       <h2 class="home-section-title">Categorias em alta</h2>
@@ -67,7 +98,12 @@
       </div>
     </section>
 
+    <!-- ===================== SEÇÃO DE DESCOBERTA (filtros + eventos) ===================== -->
     <section class="home-wrap discovery-section" id="destaques">
+
+      <!-- Barra de filtros por categoria + ordenação.
+           Os "filter-pill" são os botões que o JS usa pra filtrar
+           os cards de evento pela categoria clicada. -->
       <div class="filter-row">
         <div class="filter-pills" role="tablist" aria-label="Filtrar eventos">
           <button class="filter-pill active" data-filter="todos">Todos</button>
@@ -78,9 +114,17 @@
           <button class="filter-pill" data-filter="esporte">✦ Esporte</button>
           <button class="filter-pill" data-filter="arte">◌ Arte</button>
         </div>
+        <!-- Select de ordenação — visual apenas, ainda sem lógica de ordenar de verdade -->
         <select class="sort-select" aria-label="Ordenar eventos"><option>Relevância</option><option>Mais recentes</option><option>Menor preço</option></select>
       </div>
 
+      <!-- Grade de eventos em destaque. Esses 4 cards abaixo (<article
+           class="image-event">) são o CONTEÚDO FIXO/MOCK original do
+           design — servem de exemplo visual e também de FALLBACK: se
+           o back-end estiver fora do ar, o JS deixa esses cards aqui
+           mesmo. Quando a API responde com sucesso, o JS APAGA esses
+           4 cards fixos e coloca no lugar os eventos reais vindos do
+           banco de dados (função carregarEventosPublicos, no bloco de script mais abaixo). -->
       <div class="event-section" id="event-section-destaque">
         <div class="home-section-heading"><div><div class="home-eyebrow"><i></i> Selecionados para você</div><h2 class="home-section-title">Em destaque</h2></div></div>
         <div class="image-event-grid">
@@ -91,7 +135,14 @@
         </div>
       </div>
 
+      <!-- Seção "Acontecendo em breve": a div ".compact-grid" começa
+           VAZIA de propósito. A função filterEvents(), lá no script,
+           preenche ela automaticamente com os 4 primeiros eventos
+           carregados (repetindo os mesmos cards da seção de cima),
+           só pra essa seção nunca ficar em branco. -->
       <div class="event-section"><div class="home-section-heading"><div><div class="home-eyebrow"><i></i> Não perca a data</div><h2 class="home-section-title">Acontecendo em breve</h2></div><a href="evento.html" class="home-more">Ver todos →</a></div><div class="image-event-grid compact-grid"></div></div>
+
+      <!-- Banner de call-to-action pra quem quer criar/organizar um evento -->
       <section class="organizer-banner organizer-banner-centered">
         <h2>Organiza eventos? Publique o seu.</h2>
         <p>Crie sua página, venda ingressos e alcance quem está procurando exatamente o que você organiza.</p>
@@ -102,34 +153,197 @@
     </section>
   </main>
 
+  <!-- ===================== RODAPÉ ===================== -->
   <footer class="home-footer"><div class="home-wrap"><a href="index.html" class="home-logo"><span></span>LittleVitor</a><div><a href="sobre.html">Sobre</a><a href="categorias.html">Categorias</a><a href="login.html">Entrar</a></div></div></footer>
 
   <script>
-    const eventCards = [...document.querySelectorAll('.image-event')];
+    // ============================================================
+    // ESTADO E REFERÊNCIAS GLOBAIS DA PÁGINA
+    // ============================================================
+
+    // eventCards guarda a lista de cards de evento ATUALMENTE na tela.
+    // Começa vazia (em vez de já pegar os cards fixos do HTML) porque
+    // ela é reconstruída assim que os eventos reais chegam da API —
+    // ver a função carregarEventosPublicos() mais abaixo.
+    let eventCards = [];
+
+    // Botões de filtro por categoria (Todos, Música, Tecnologia...)
     const filterButtons = [...document.querySelectorAll('.filter-pill')];
+
+    // Os dois campos de busca da página (o de cima, no menu, e o do hero)
+    // — os dois disparam o mesmo filtro ao digitar.
     const searchInputs = [document.querySelector('.nav-search input'), document.getElementById('hero-search-input')];
+
+    // Seção(ões) que começam vazias no HTML e são preenchidas
+    // automaticamente com os primeiros eventos carregados
+    // (hoje, só a seção "Acontecendo em breve").
     const emptySections = document.querySelectorAll('.compact-grid');
 
+    // ============================================================
+    // FILTRO DE EVENTOS (por categoria e por texto digitado)
+    // ============================================================
     function filterEvents(category = 'todos', term = '') {
       const normalizedTerm = term.trim().toLowerCase();
+
+      // Passa por todos os cards atuais e decide se cada um deve
+      // ficar visível ou escondido (`hidden`), comparando a
+      // categoria do card e o texto do título com o que foi digitado/clicado.
       eventCards.forEach((card) => {
         const matchesCategory = category === 'todos' || card.dataset.category === category;
         const matchesTerm = !normalizedTerm || card.dataset.title.includes(normalizedTerm);
         card.hidden = !(matchesCategory && matchesTerm);
       });
+
+      // Sempre que existir uma seção "vazia" (como a de "Acontecendo
+      // em breve") e ela ainda não tiver nenhum card dentro, copia os
+      // 4 primeiros cards de evento pra dentro dela — assim a seção
+      // nunca fica em branco, mesmo sem termos dados próprios pra ela ainda.
       emptySections.forEach((grid) => {
         if (!grid.children.length) grid.innerHTML = eventCards.slice(0, 4).map((card) => card.outerHTML).join('');
       });
     }
 
+    // ============================================================
+    // BOTÃO DE "SALVAR" (♡ vira ♥ ao clicar)
+    // ============================================================
+    // Liga o clique do botão de "salvar" em TODOS os cards de evento
+    // presentes na página no momento em que a função é chamada.
+    // Precisa ser chamada de novo depois que novos cards são inseridos
+    // dinamicamente (pelos eventos vindos da API) — senão os cards
+    // novos ficam sem esse clique funcionando, já que eles não
+    // existiam ainda quando a página carregou pela primeira vez.
+    function ligarBotoesSalvar() {
+      document.querySelectorAll('.image-event-media button').forEach((button) => {
+        button.addEventListener('click', (event) => {
+          event.preventDefault();               // não deixa o clique navegar/recarregar nada
+          button.classList.toggle('saved');       // alterna o estado visual "salvo"
+          button.textContent = button.classList.contains('saved') ? '♥' : '♡'; // troca o ícone
+        });
+      });
+    }
+
+    // ============================================================
+    // MONTAGEM DE UM CARD DE EVENTO A PARTIR DOS DADOS DA API
+    // ============================================================
+    // Recebe um objeto "evento" (do jeito que a rota GET /eventos do
+    // back-end devolve) e monta um <article class="image-event">
+    // igualzinho, visualmente, aos cards fixos que já existiam no
+    // design — só que com dados reais no lugar dos dados de exemplo.
+    function montarCardEvento(evento) {
+      const article = document.createElement('article');
+      article.className = 'image-event';
+
+      // data-category e data-title são o que a função filterEvents()
+      // usa pra decidir se esse card deve aparecer ou não — por isso
+      // sempre em minúsculo, pra bater com o texto digitado na busca
+      // e com o "data-filter" dos botões de categoria.
+      article.dataset.category = (evento.categoria || '').toLowerCase();
+      article.dataset.title = (evento.titulo || '').toLowerCase();
+
+      // O banco de dados (tabela "eventos") ainda não guarda imagem,
+      // preço nem quantidade de vagas do evento — só titulo, categoria,
+      // descricao, data, horario, local e cidade. Por isso:
+      // - usamos uma foto de placeholder (picsum.photos), com uma
+      //   "seed" fixa baseada no id do evento, pra sempre vir a MESMA
+      //   foto pro mesmo evento (em vez de mudar a cada recarregamento);
+      // - não mostramos o rodapé de preço/disponibilidade que existia
+      //   nos cards de exemplo, já que não temos esse dado ainda.
+      article.innerHTML = `
+        <div class="image-event-media">
+          <img src="https://picsum.photos/seed/evento${evento.id}/900/600" alt="${evento.titulo}">
+          <button aria-label="Salvar ${evento.titulo}">♡</button>
+        </div>
+        <div class="image-event-body">
+          <small>${evento.categoria}</small>
+          <h3>${evento.titulo}</h3>
+          <p>▣ &nbsp;${evento.data} · ${evento.horario}</p>
+          <p>⌖ &nbsp;${evento.local}, ${evento.cidade}</p>
+        </div>
+      `;
+      return article;
+    }
+
+    // ============================================================
+    // CARREGAMENTO DOS EVENTOS REAIS (conexão com o back-end)
+    // ============================================================
+    // Busca todos os eventos públicos na API (rota GET /eventos, que
+    // não exige usuário logado) e substitui os cards de exemplo fixos
+    // no HTML pelos eventos reais cadastrados no banco de dados.
+    async function carregarEventosPublicos() {
+      // Pega o container onde os cards de "Em destaque" ficam —
+      // é dentro dele que vamos inserir os cards reais.
+      const grid = document.querySelector('#event-section-destaque .image-event-grid');
+
+      try {
+        // Chamada de verdade pro back-end Flask, que precisa estar
+        // rodando em http://127.0.0.1:5000 (ver api.py).
+        const resposta = await fetch('http://127.0.0.1:5000/eventos');
+        const dados = await resposta.json();
+        const eventos = dados.eventos || [];
+
+        // Se a API respondeu certinho mas não existe NENHUM evento
+        // cadastrado ainda no banco, mostra uma mensagem simples em
+        // vez de deixar a grade vazia ou com os cards de exemplo.
+        if (eventos.length === 0) {
+          grid.innerHTML = '<p>Nenhum evento cadastrado ainda.</p>';
+          eventCards = [];
+          filterEvents();
+          return;
+        }
+
+        // Deu certo: apaga os 4 cards de exemplo fixos e coloca no
+        // lugar um card pra cada evento que veio do banco.
+        grid.innerHTML = '';
+        eventos.forEach((evento) => grid.appendChild(montarCardEvento(evento)));
+
+        // Atualiza a lista de cards "atuais" da página (pra filtro e
+        // busca funcionarem nos cards novos) e liga o clique do
+        // botão de salvar neles, já que são elementos recém-criados.
+        eventCards = [...document.querySelectorAll('.image-event')];
+        ligarBotoesSalvar();
+        filterEvents();
+
+      } catch (erro) {
+        // Se der erro (por exemplo, o back-end Flask não está rodando),
+        // NÃO apagamos os cards de exemplo que já vieram fixos no
+        // HTML — assim a página continua com uma boa aparência mesmo
+        // sem conexão com a API. Só ligamos os filtros e o botão de
+        // salvar neles, já que esses cards continuam sendo os mesmos
+        // do HTML original.
+        console.error('Erro ao carregar eventos:', erro);
+        eventCards = [...document.querySelectorAll('.image-event')];
+        ligarBotoesSalvar();
+        filterEvents();
+      }
+    }
+
+    // ============================================================
+    // EVENTOS DE CLIQUE/DIGITAÇÃO DA INTERFACE (filtros e busca)
+    // ============================================================
+
+    // Ao clicar em um botão de categoria: marca ele como "active"
+    // (tirando o "active" dos outros) e refiltra os cards de acordo
+    // com a categoria clicada + o que já estiver digitado na busca do hero.
     filterButtons.forEach((button) => button.addEventListener('click', () => {
       filterButtons.forEach((item) => item.classList.toggle('active', item === button));
       filterEvents(button.dataset.filter, document.getElementById('hero-search-input').value);
     }));
+
+    // Ao digitar em qualquer um dos dois campos de busca: refiltra os
+    // cards usando a categoria que estiver ativa no momento + o texto
+    // digitado (funciona em tempo real, a cada tecla).
     searchInputs.forEach((input) => input.addEventListener('input', () => filterEvents(document.querySelector('.filter-pill.active').dataset.filter, input.value)));
+
+    // Impede que o formulário de busca do hero recarregue a página ao
+    // apertar Enter ou clicar em "Buscar" — a busca já acontece sozinha
+    // enquanto a pessoa digita (listener de cima), então aqui só
+    // bloqueamos o comportamento padrão do <form>.
     document.getElementById('hero-search').addEventListener('submit', (event) => event.preventDefault());
-    document.querySelectorAll('.image-event-media button').forEach((button) => button.addEventListener('click', (event) => { event.preventDefault(); button.classList.toggle('saved'); button.textContent = button.classList.contains('saved') ? '♥' : '♡'; }));
-    filterEvents();
+
+    // ============================================================
+    // PONTO DE PARTIDA: chama o carregamento assim que o script roda
+    // ============================================================
+    carregarEventosPublicos();
   </script>
 </body>
 
