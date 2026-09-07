@@ -11,6 +11,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="toast.js"></script>
+    <script src="sessao.js"></script>
 </head>
 
 <body>
@@ -94,6 +95,26 @@
     </div>
 
     <script>
+
+        // ------------------------------------------------------------------
+        // Se a pessoa já estiver logada, não faz sentido mostrar a tela
+        // de cadastro de novo. Verificamos se existe um "retorno" pendente
+        // antes de decidir para onde mandar.
+        // ------------------------------------------------------------------
+        const usuarioJaLogado = obterUsuarioLogado();
+
+        if (usuarioJaLogado) {
+            const urlParamsInicial = new URLSearchParams(window.location.search);
+            const retornoInicial = urlParamsInicial.get('retorno');
+
+            if (retornoInicial) {
+                window.location.href = retornoInicial;
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+
         //pega o formulario pelo id existente no html
         const formCadastro = document.getElementById('cadastro-form');
 
@@ -154,12 +175,6 @@
 
             }
         });
-
-
-
-
-
-
 
 
         const toggle = document.querySelector('.field-toggle');

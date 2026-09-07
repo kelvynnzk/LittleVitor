@@ -11,6 +11,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="toast.js"></script>
+    <script src="sessao.js"></script>
 </head>
 
 <body>
@@ -52,22 +53,24 @@
 
                     <div class="auth-divider">ou entre com e-mail</div>
 
-                    <div class="field-group">
+                    <div class="field-group" id="grupo-email">
                         <label for="email">E-mail</label>
                         <input class="field-input" type="email" id="email" placeholder="LittleVitor@exemplo.com">
+                        <span class="field-erro" id="erro-email" hidden></span>
                     </div>
 
-                    <div class="field-group">
+                    <div class="field-group" id="grupo-senha">
                         <label for="senha">Senha</label>
                         <div class="field-password-wrap">
                             <input class="field-input" type="password" id="senha" placeholder="Sua senha">
                             <button type="button" class="field-toggle">mostrar</button>
                         </div>
+                        <span class="field-erro" id="erro-senha" hidden></span>
                     </div>
 
                     <div class="field-row-between">
                         <label class="checkbox-line">
-                            <input type="checkbox">
+                            <input type="checkbox" id="manter-conectado">
                             Manter conectado
                         </label>
                         <a href="esqueci_senha.html" class="link-quiet">Esqueci minha senha</a>
@@ -87,6 +90,28 @@
 
     <script>
 
+        // ------------------------------------------------------------------
+        // Se a pessoa já estiver logada, não faz sentido mostrar a tela
+        // de login de novo. Mas, antes de redirecionar, verificamos se
+        // existe um "retorno" pendente (ex: veio do fluxo de criar evento
+        // sem estar logado, mas já logou em outra aba nesse meio tempo) —
+        // nesse caso, respeitamos esse destino específico em vez de
+        // sempre mandar pro index.
+        // ------------------------------------------------------------------
+        const usuarioJaLogado = obterUsuarioLogado();
+
+        if (usuarioJaLogado) {
+            const urlParamsInicial = new URLSearchParams(window.location.search);
+            const retornoInicial = urlParamsInicial.get('retorno');
+
+            if (retornoInicial) {
+                window.location.href = retornoInicial;
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+
         // Se existir um parâmetro "retorno" na URL, repassa ele também
         // pro link de cadastro, para não perder essa informação.
         // (Isso é usado no fluxo de "criar evento sem estar logado":
@@ -103,14 +128,57 @@
         // Pega o formulário de login pelo ID que existe no HTML
         const formLogin = document.getElementById('login-form');
 
+        // ------------------------------------------------------------------
+        // VALIDAÇÃO DE CAMPOS E ERROS ESPECÍFICOS
+        // Em vez de só um toast genérico, cada campo com problema ganha
+        // uma borda vermelha e uma mensagem embaixo dele, específica pro
+        // que deu errado (campo vazio, e-mail não encontrado, ou senha
+        // incorreta).
+        // ------------------------------------------------------------------
+        function mostrarErroCampo(idGrupo, idErro, mensagem) {
+            document.getElementById(idGrupo).classList.add('is-invalido');
+            const elementoErro = document.getElementById(idErro);
+            elementoErro.textContent = mensagem;
+            elementoErro.hidden = false;
+        }
+
+        function limparErroCampo(idGrupo, idErro) {
+            document.getElementById(idGrupo).classList.remove('is-invalido');
+            document.getElementById(idErro).hidden = true;
+        }
+
+        function limparTodosOsErros() {
+            limparErroCampo('grupo-email', 'erro-email');
+            limparErroCampo('grupo-senha', 'erro-senha');
+        }
+
         // Escuta o envio do formulário (clique no botão "Entrar")
         formLogin.addEventListener('submit', async (evento) => {
             // Impede o comportamento padrão do navegador (recarregar a página)
             evento.preventDefault();
 
+            limparTodosOsErros();
+
             // Pega os valores digitados nos campos
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const senha = document.getElementById('senha').value;
+            const manterConectado = document.getElementById('manter-conectado').checked;
+
+            // Cobra os campos obrigatórios ANTES de gastar uma requisição
+            // pro servidor — se algum estiver vazio, nem tenta logar.
+            let temCampoVazio = false;
+
+            if (!email) {
+                mostrarErroCampo('grupo-email', 'erro-email', 'Digite seu e-mail.');
+                temCampoVazio = true;
+            }
+            if (!senha) {
+                mostrarErroCampo('grupo-senha', 'erro-senha', 'Digite sua senha.');
+                temCampoVazio = true;
+            }
+            if (temCampoVazio) {
+                return;
+            }
 
             try {
                 // Faz a requisição para a rota de login do backend
@@ -126,10 +194,11 @@
                 const dados = await resposta.json();
 
                 if (resposta.ok) {
-                    // Login deu certo: guarda os dados do usuário no navegador,
-                    // para que outras páginas (index, painel, etc.) consigam
-                    // saber quem está logado.
-                    localStorage.setItem('usuario', JSON.stringify(dados.usuario));
+                    // Login deu certo: guarda os dados do usuário — em
+                    // localStorage (sobrevive fechando o navegador) só se
+                    // "Manter conectado" estiver marcado; senão, guarda em
+                    // sessionStorage (some ao fechar a aba/navegador).
+                    salvarUsuarioLogado(dados.usuario, manterConectado);
                     mostrarToast(dados.mensagem, 'sucesso');
 
                     // Espera 1.5s pra pessoa ver o toast antes de sair da página
@@ -153,7 +222,15 @@
                     }, 1500);
 
                 } else {
-                    // Login falhou (email ou senha incorretos)
+                    // Login falhou — mostra o erro no campo certo, de
+                    // acordo com o "motivo" que o backend devolveu.
+                    if (dados.motivo === 'email_nao_encontrado') {
+                        mostrarErroCampo('grupo-email', 'erro-email', dados.mensagem);
+                    } else if (dados.motivo === 'senha_incorreta') {
+                        mostrarErroCampo('grupo-senha', 'erro-senha', dados.mensagem);
+                    } else if (dados.motivo === 'email_nao_verificado') {
+                        mostrarErroCampo('grupo-email', 'erro-email', dados.mensagem);
+                    }
                     mostrarToast(dados.mensagem, 'erro');
                 }
 
@@ -164,6 +241,12 @@
             }
         });
 
+
+        // Assim que a pessoa começa a corrigir um campo com erro, tira
+        // a borda vermelha e a mensagem — não precisa esperar reenviar
+        // o formulário pra ver que já está digitando de novo.
+        document.getElementById('email').addEventListener('input', () => limparErroCampo('grupo-email', 'erro-email'));
+        document.getElementById('senha').addEventListener('input', () => limparErroCampo('grupo-senha', 'erro-senha'));
 
         // Alterna a visibilidade da senha (mostrar/ocultar)
         const toggle = document.querySelector('.field-toggle');

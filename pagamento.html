@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento — LittleVitor.com</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="toast.js"></script>
+    <script src="sessao.js"></script>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="wrap header-inner">
+            <a href="index.html" class="logo">LittleVitor<span class="logo-dot">.com</span></a>
+            <nav class="main-nav">
+                <a href="painel.html">Meus eventos</a>
+                <a href="index.html#eventos">Ver agenda</a>
+            </nav>
+            <a href="index.html" id="btn-sair" class="btn btn-ghost">Sair</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="wrap">
+            <a href="#" id="link-voltar-evento" class="back-link">&larr; Voltar para o evento</a>
+        </div>
+
+        <section class="form-page">
+            <div class="wrap">
+
+                <div class="section-head">
+                    <h1>Finalizar compra</h1>
+                    <p>Confira o pedido e simule o pagamento. Nenhum dado de cartão é enviado ou armazenado de
+                        verdade.</p>
+                </div>
+
+                <!-- ============ CONTEÚDO PRINCIPAL: FORM + RESUMO ============ -->
+                <div class="pagamento-layout" id="pagamento-conteudo">
+
+                    <!-- COLUNA DO FORMULÁRIO -->
+                    <form id="form-pagamento" class="evento-form">
+
+                        <div class="cartao-preview">
+                            <span class="cartao-numero" id="preview-numero">•••• •••• •••• ••••</span>
+                            <div class="cartao-rodape">
+                                <span id="preview-nome">NOME NO CARTÃO</span>
+                                <span id="preview-validade">MM/AA</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="nome_titular">Nome do titular</label>
+                            <input type="text" id="nome_titular" name="nome_titular" placeholder="Nome completo"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="email_titular">E-mail para envio do ingresso</label>
+                            <input type="email" id="email_titular" name="email_titular"
+                                placeholder="voce@exemplo.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="nome_cartao">Nome impresso no cartão</label>
+                            <input type="text" id="nome_cartao" name="nome_cartao" placeholder="Como está no cartão"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="numero_cartao">Número do cartão</label>
+                            <input type="text" id="numero_cartao" name="numero_cartao"
+                                placeholder="0000 0000 0000 0000" inputmode="numeric" maxlength="19" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="validade_cartao">Validade</label>
+                                <input type="text" id="validade_cartao" name="validade_cartao" placeholder="MM/AA"
+                                    maxlength="5" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cvv_cartao">CVV</label>
+                                <input type="text" id="cvv_cartao" name="cvv_cartao" placeholder="123"
+                                    inputmode="numeric" maxlength="4" required>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-full" id="btn-confirmar-pagamento">Confirmar
+                                pagamento</button>
+                        </div>
+                        <p class="compra-aviso">Este é um pagamento simulado, feito só para fins de estudo/teste.</p>
+                    </form>
+
+                    <!-- COLUNA DO RESUMO DO PEDIDO -->
+                    <aside class="resumo-compra">
+                        <h3 id="resumo-evento-titulo">Carregando…</h3>
+
+                        <div class="resumo-linha">
+                            <span>Quando</span>
+                            <span class="valor" id="resumo-evento-quando"></span>
+                        </div>
+                        <div class="resumo-linha">
+                            <span>Tipo de ingresso</span>
+                            <span class="valor" id="resumo-tipo"></span>
+                        </div>
+                        <div class="resumo-linha">
+                            <span>Quantidade</span>
+                            <span class="valor" id="resumo-quantidade"></span>
+                        </div>
+                        <div class="resumo-linha">
+                            <span>Valor unitário</span>
+                            <span class="valor" id="resumo-unitario"></span>
+                        </div>
+
+                        <div class="resumo-total">
+                            <span class="label">Total</span>
+                            <span class="valor" id="resumo-total-valor">R$ 0,00</span>
+                        </div>
+                    </aside>
+
+                </div>
+
+                <!-- ============ VISTA: PEDIDO INVÁLIDO ============ -->
+                <div id="pagamento-erro" class="evento-nao-encontrado hidden">
+                    <h2>Não foi possível abrir este pagamento</h2>
+                    <p id="pagamento-erro-texto" style="margin-top:10px;">Verifique se o link está correto.</p>
+                    <p style="margin-top:18px;"><a href="index.html">&larr; Voltar pra agenda</a></p>
+                </div>
+
+                <!-- ============ VISTA: COMPRA CONFIRMADA ============ -->
+                <div id="pagamento-sucesso" class="compra-sucesso hidden">
+                    <div class="icone-sucesso">&#10003;</div>
+                    <h2>Compra confirmada!</h2>
+                    <p id="pagamento-sucesso-texto">Os ingressos foram reservados em seu nome.</p>
+                    <a href="index.html" class="btn btn-primary">Ver mais eventos</a>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap footer-inner">
+            <p>LittleVitor<span class="logo-dot">.com</span> — feito para conectar pessoas a experiências reais.</p>
+            <p class="footer-meta">&copy; 2026 LittleVitor. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Formata um valor numérico como preço em reais (mesma função
+        // usada em evento.html e index.html).
+        function formatarPreco(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        // ------------------------------------------------------------------
+        // EXIGE LOGIN
+        // Assim como criar-evento.html, essa página só faz sentido pra
+        // quem está logado (a compra é sempre vinculada a um usuário).
+        // Se alguém abrir esse link direto sem estar logada, manda pro
+        // login e guarda o link atual pra voltar exatamente aqui depois.
+        // ------------------------------------------------------------------
+        const usuarioSalvo = obterUsuarioLogado();
+
+        if (!usuarioSalvo) {
+            const destinoAtual = window.location.pathname.split('/').pop() + window.location.search;
+            window.location.href = `login.html?retorno=${encodeURIComponent(destinoAtual)}`;
+        }
+
+        const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+
+        // Botão "Sair"
+        // "intencao_compra" também é limpa aqui, pelo mesmo motivo de
+        // evento.html/criar-evento.html: se ficasse guardada, o próximo
+        // usuário a logar nesse navegador seria jogado direto pra um
+        // pagamento que nunca escolheu.
+        const btnSair = document.getElementById('btn-sair');
+        btnSair.addEventListener('click', () => {
+            removerUsuarioLogado();
+            localStorage.removeItem('intencao_compra');
+        });
+
+        // ------------------------------------------------------------------
+        // LÊ OS PARÂMETROS DA URL
+        // pagamento.html só recebe os IDs (evento, tipo de ingresso e
+        // quantidade) — todos os outros dados (título, preço, etc.) são
+        // buscados de novo no backend, pra garantir que o preço mostrado
+        // aqui é sempre o preço real e atualizado, nunca um valor que
+        // poderia ter sido alterado no navegador.
+        // ------------------------------------------------------------------
+        const params = new URLSearchParams(window.location.search);
+        const eventoId = params.get('evento_id');
+        const tipoIngressoId = params.get('tipo_ingresso_id');
+        const quantidade = Number(params.get('quantidade')) || 1;
+
+        let tipoEscolhido = null;
+
+        function mostrarErro(mensagem) {
+            document.getElementById('pagamento-conteudo').classList.add('hidden');
+            document.getElementById('pagamento-erro-texto').textContent = mensagem;
+            document.getElementById('pagamento-erro').classList.remove('hidden');
+        }
+
+        async function carregarResumo() {
+            if (!eventoId || !tipoIngressoId) {
+                mostrarErro('Este link de pagamento está incompleto.');
+                return;
+            }
+
+            document.getElementById('link-voltar-evento').href = `evento.html?id=${eventoId}`;
+
+            try {
+                const [respostaEvento, respostaTipos] = await Promise.all([
+                    fetch(`http://127.0.0.1:5000/evento/${eventoId}`),
+                    fetch(`http://127.0.0.1:5000/tipos-ingresso/${eventoId}`)
+                ]);
+
+                if (!respostaEvento.ok) {
+                    mostrarErro('Evento não encontrado.');
+                    return;
+                }
+
+                const dadosEvento = await respostaEvento.json();
+                const dadosTipos = await respostaTipos.json();
+                const evento = dadosEvento.evento;
+                const tipos = dadosTipos.tipos_ingresso || [];
+
+                tipoEscolhido = tipos.find(t => String(t.id) === String(tipoIngressoId));
+
+                if (!tipoEscolhido) {
+                    mostrarErro('Esse tipo de ingresso não existe mais para este evento.');
+                    return;
+                }
+
+                if (tipoEscolhido.disponivel < quantidade) {
+                    mostrarErro(`Restam apenas ${tipoEscolhido.disponivel} ingresso(s) desse tipo — volte e escolha uma quantidade menor.`);
+                    return;
+                }
+
+                document.getElementById('resumo-evento-titulo').textContent = evento.titulo;
+                document.getElementById('resumo-evento-quando').textContent = `${evento.data} · ${evento.horario}`;
+                document.getElementById('resumo-tipo').textContent = tipoEscolhido.nome;
+                document.getElementById('resumo-quantidade').textContent = quantidade;
+                document.getElementById('resumo-unitario').textContent = formatarPreco(tipoEscolhido.preco);
+                document.getElementById('resumo-total-valor').textContent = formatarPreco(tipoEscolhido.preco * quantidade);
+
+                // Pré-preenche os dados de contato com o que já sabemos
+                // do usuário logado.
+                if (usuario) {
+                    document.getElementById('nome_titular').value = usuario.nome || '';
+                    document.getElementById('email_titular').value = usuario.email || '';
+                }
+
+            } catch (erro) {
+                console.error('Erro ao carregar resumo do pagamento:', erro);
+                mostrarErro('Não foi possível conectar ao servidor. Tente novamente.');
+            }
+        }
+
+        carregarResumo();
+
+        // ------------------------------------------------------------------
+        // PREVIEW DO CARTÃO (decorativo)
+        // Só reflete o que a pessoa digita na tela, pra dar a sensação de
+        // um checkout de verdade — esses valores nunca saem do navegador.
+        // ------------------------------------------------------------------
+        document.getElementById('numero_cartao').addEventListener('input', (e) => {
+            const digitos = e.target.value.replace(/\D/g, '').slice(0, 16);
+            e.target.value = digitos.replace(/(.{4})/g, '$1 ').trim();
+
+            const preview = document.getElementById('preview-numero');
+            const grupos = digitos.padEnd(16, '•').match(/.{1,4}/g);
+            preview.textContent = grupos.join(' ');
+        });
+
+        document.getElementById('nome_cartao').addEventListener('input', (e) => {
+            document.getElementById('preview-nome').textContent = e.target.value.toUpperCase() || 'NOME NO CARTÃO';
+        });
+
+        document.getElementById('validade_cartao').addEventListener('input', (e) => {
+            let valor = e.target.value.replace(/\D/g, '').slice(0, 4);
+            if (valor.length > 2) {
+                valor = valor.slice(0, 2) + '/' + valor.slice(2);
+            }
+            e.target.value = valor;
+            document.getElementById('preview-validade').textContent = valor || 'MM/AA';
+        });
+
+        document.getElementById('cvv_cartao').addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
+        });
+
+        // ------------------------------------------------------------------
+        // ENVIO DO PAGAMENTO (SIMULADO)
+        // Repare que NENHUM dado de cartão é enviado no corpo da
+        // requisição — só os dados necessários pra registrar a compra de
+        // verdade no banco (quem comprou, o quê, e quanto).
+        // ------------------------------------------------------------------
+        const formPagamento = document.getElementById('form-pagamento');
+
+        formPagamento.addEventListener('submit', async (evento) => {
+            evento.preventDefault();
+
+            if (!tipoEscolhido || !usuario) {
+                return;
+            }
+
+            const botao = document.getElementById('btn-confirmar-pagamento');
+            botao.disabled = true;
+            botao.textContent = 'Processando...';
+
+            const nomeTitular = document.getElementById('nome_titular').value;
+            const emailTitular = document.getElementById('email_titular').value;
+
+            try {
+                const resposta = await fetch('http://127.0.0.1:5000/comprar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        tipo_ingresso_id: tipoEscolhido.id,
+                        usuario_id: usuario.id,
+                        quantidade: quantidade,
+                        nome_titular: nomeTitular,
+                        email_titular: emailTitular
+                    })
+                });
+
+                const dados = await resposta.json();
+
+                if (resposta.ok) {
+                    // Limpa qualquer intenção de compra que ainda estivesse
+                    // guardada (normalmente já foi limpa em evento.html,
+                    // mas não custa garantir).
+                    localStorage.removeItem('intencao_compra');
+
+                    document.getElementById('pagamento-conteudo').classList.add('hidden');
+                    document.getElementById('pagamento-sucesso-texto').textContent =
+                        `${quantidade}x ${tipoEscolhido.nome} — total de ${formatarPreco(dados.valor_total)}. Enviamos a confirmação para ${emailTitular}.`;
+                    document.getElementById('pagamento-sucesso').classList.remove('hidden');
+
+                } else {
+                    mostrarToast(dados.mensagem, 'erro');
+                    botao.disabled = false;
+                    botao.textContent = 'Confirmar pagamento';
+                }
+
+            } catch (erro) {
+                console.error('Erro ao processar pagamento:', erro);
+                mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
+                botao.disabled = false;
+                botao.textContent = 'Confirmar pagamento';
+            }
+        });
+    </script>
+
+</body>
+
+</html>

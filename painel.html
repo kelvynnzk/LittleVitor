@@ -12,6 +12,7 @@
         rel="stylesheet">
         <link rel="stylesheet" href="styles.css">
         <script src="toast.js"></script>
+        <script src="sessao.js"></script>
 </head>
 
 <body>
@@ -43,74 +44,66 @@
                 <!-- RESUMO -->
                 <div class="stats-row">
                     <div class="stat-card">
-                        <span class="stat-num">3</span>
+                        <span class="stat-num" id="stat-eventos-ativos">—</span>
                         <span class="stat-label">Eventos ativos</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-num">184</span>
+                        <span class="stat-num" id="stat-ingressos-vendidos">—</span>
                         <span class="stat-label">Ingressos vendidos</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-num">R$ 12.640</span>
+                        <span class="stat-num" id="stat-total-arrecadado">—</span>
                         <span class="stat-label">Total arrecadado</span>
                     </div>
                 </div>
 
+                <!-- FILTROS -->
+                <div class="painel-filtros">
+                    <input type="text" id="filtro-busca" placeholder="Buscar pelo nome do evento">
+                    <select id="filtro-categoria">
+                        <option value="">Todas as categorias</option>
+                        <option value="musica">Música</option>
+                        <option value="gastronomia">Gastronomia</option>
+                        <option value="arte">Arte &amp; Cultura</option>
+                        <option value="negocios">Negócios</option>
+                        <option value="esporte">Esporte</option>
+                        <option value="bem-estar">Bem-estar</option>
+                    </select>
+                </div>
+
                 <!-- LISTA DE EVENTOS -->
-                <div class="painel-lista "  id="lista-eventos">
+                <div class="painel-lista" id="lista-eventos">
 
-                    <article class="painel-card">
-                        <div class="painel-card-info">
-                            <span class="tag tag-musica">Música</span>
-                            <h3>Noite Eletrônica no Cais</h3>
-                            <p class="painel-card-meta">Sex, 19 de dezembro · Armazém 4</p>
-                            <div class="painel-progress">
-                                <div class="painel-progress-bar" style="width: 68%"></div>
-                            </div>
-                            <p class="painel-progress-label">136 / 200 ingressos vendidos</p>
-                        </div>
-                        <div class="painel-card-actions">
-                            <a href="evento.html" class="btn btn-outline">Ver anúncio</a>
-                            <a href="criar-evento.html" class="btn btn-outline">Editar</a>
-                            <button type="button" class="btn-icon-delete" aria-label="Excluir evento">&times;</button>
-                        </div>
-                    </article>
+                </div>
 
-                    <article class="painel-card">
-                        <div class="painel-card-info">
-                            <span class="tag tag-negocios">Negócios</span>
-                            <h3>Encontro de Founders — Coworking Vértice</h3>
-                            <p class="painel-card-meta">Sex, 19 de dezembro · Coworking Vértice</p>
-                            <div class="painel-progress">
-                                <div class="painel-progress-bar" style="width: 32%"></div>
-                            </div>
-                            <p class="painel-progress-label">32 / 100 ingressos vendidos</p>
-                        </div>
-                        <div class="painel-card-actions">
-                            <a href="evento.html" class="btn btn-outline">Ver anúncio</a>
-                            <a href="criar-evento.html" class="btn btn-outline">Editar</a>
-                            <button type="button" class="btn-icon-delete" aria-label="Excluir evento">&times;</button>
-                        </div>
-                    </article>
+                <!-- MEUS RASCUNHOS -->
+                <div class="painel-head" style="margin-top:56px;">
+                    <div>
+                        <h1 style="font-size:1.6rem;">Meus rascunhos</h1>
+                        <p>Eventos que você começou a criar, mas ainda não publicou.</p>
+                    </div>
+                </div>
 
-                    <article class="painel-card is-rascunho">
-                        <div class="painel-card-info">
-                            <span class="tag tag-gastronomia">Gastronomia</span>
-                            <span class="badge-rascunho">Rascunho</span>
-                            <h3>Feira de Food Trucks — Parque Ibirapuera</h3>
-                            <p class="painel-card-meta">Ainda não publicado</p>
-                        </div>
-                        <div class="painel-card-actions">
-                            <a href="criar-evento.html" class="btn btn-outline">Continuar edição</a>
-                            <button type="button" class="btn-icon-delete" aria-label="Excluir evento">&times;</button>
-                        </div>
-                    </article>
+                <div class="painel-lista" id="lista-rascunhos">
 
                 </div>
 
             </div>
         </section>
     </main>
+
+    <!-- Modal de confirmação, usado no lugar do confirm() nativo do
+         navegador. Fica escondido (hidden) até que algum JS o abra. -->
+    <div class="modal-overlay" id="modal-confirmar" hidden>
+        <div class="modal-box">
+            <h3>Excluir evento?</h3>
+            <p id="modal-confirmar-texto">Essa ação não pode ser desfeita.</p>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-ghost" id="modal-btn-cancelar">Cancelar</button>
+                <button type="button" class="btn-danger" id="modal-btn-confirmar">Excluir</button>
+            </div>
+        </div>
+    </div>
 
     <footer class="site-footer">
         <div class="wrap footer-inner">
@@ -121,7 +114,7 @@
     <script>
         // Função que verifica o login e atualiza a tela
         function verificarLogin() {
-            const usuarioSalvo = localStorage.getItem('usuario');
+            const usuarioSalvo = obterUsuarioLogado();
             const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
             const divUsuario = document.getElementById('usuario-logado');
 
@@ -145,17 +138,32 @@
         });
 
         // Configura o botão "Sair"
+        // Repare que NÃO removemos "rascunho_evento" aqui — é de
+        // propósito (mesma lógica de criar-evento.html): se a pessoa
+        // tiver um rascunho em andamento, ele continua salvo mesmo
+        // depois de sair, caso ela volte e faça login de novo depois.
+        // Já "intencao_compra" (a escolha de ingresso guardada antes de
+        // mandar pra tela de login) tem que sair — senão, se outra
+        // pessoa fizer login nesse mesmo navegador depois, ela seria
+        // jogada direto pro pagamento de um ingresso que nunca escolheu.
         const btnSair = document.getElementById('btn-sair');
         btnSair.addEventListener('click', () => {
-            localStorage.removeItem('usuario');
+            removerUsuarioLogado();
+            localStorage.removeItem('intencao_compra');
         });
 
 
-// Função que busca os eventos do usuário logado e mostra na tela.
+// Guarda a lista completa de eventos do usuário (já com os dados de
+// venda embutidos), pra os filtros conseguirem reaproveitá-la sem
+// precisar buscar tudo de novo no servidor a cada letra digitada.
+let meusEventos = [];
+
+// Função que busca os eventos do usuário logado, junto com quantos
+// ingressos cada um já vendeu, e guarda tudo em meusEventos.
 async function carregarEventos() {
 
     // Pega o usuário salvo no localStorage (mesma lógica de sempre)
-    const usuarioSalvo = localStorage.getItem('usuario');
+    const usuarioSalvo = obterUsuarioLogado();
 
     // Se não tiver usuário logado, não tem como buscar eventos —
     // essa função nem deveria ter sido chamada nesse caso, mas
@@ -167,64 +175,342 @@ async function carregarEventos() {
     const usuario = JSON.parse(usuarioSalvo);
 
     try {
-        // Faz a requisição GET, passando o id do usuário como
-        // parâmetro na URL (não no body, como vimos na rota).
-        const resposta = await fetch(`http://127.0.0.1:5000/meus-eventos?usuario_id=${usuario.id}`);
+        // Busca os eventos e as vendas de cada um ao mesmo tempo
+        // (duas rotas diferentes), em vez de uma depois da outra.
+        const [respostaEventos, respostaVendas] = await Promise.all([
+            fetch(`http://127.0.0.1:5000/meus-eventos?usuario_id=${usuario.id}`),
+            fetch(`http://127.0.0.1:5000/vendas-por-evento?usuario_id=${usuario.id}`)
+        ]);
 
-        const dados = await resposta.json();
+        const dadosEventos = await respostaEventos.json();
+        const dadosVendas = await respostaVendas.json();
 
-        // A rota devolve um objeto tipo { "eventos": [...] }
-        const eventos = dados.eventos;
+        // Monta um "mapa" (evento_id -> vendas) pra conseguir juntar
+        // com os eventos sem precisar procurar linha por linha.
+        const vendasPorId = {};
+        dadosVendas.vendas.forEach((v) => {
+            vendasPorId[v.evento_id] = v;
+        });
 
-     // Pega o container onde os cards devem aparecer
-const listaEventos = document.getElementById('lista-eventos');
+        // Junta cada evento com seus dados de venda (ou 0/0, se o
+        // evento ainda não tiver nenhum tipo de ingresso cadastrado).
+        meusEventos = dadosEventos.eventos.map((evento) => {
+            const vendas = vendasPorId[evento.id];
+            return {
+                ...evento,
+                vendidos: vendas ? vendas.vendidos : 0,
+                total_ingressos: vendas ? vendas.total_ingressos : 0
+            };
+        });
 
-// Limpa o conteúdo atual (removendo os cards fixos de exemplo)
-listaEventos.innerHTML = '';
-
-// Se não tiver nenhum evento, mostra uma mensagem amigável
-if (eventos.length === 0) {
-    listaEventos.innerHTML = '<p>Você ainda não criou nenhum evento.</p>';
-    return;
-}
-
-// Para cada evento recebido, monta o HTML do card e adiciona na tela
-eventos.forEach((evento) => {
-
-    // Cria o elemento <article> que vai representar o card
-    const card = document.createElement('article');
-    card.className = 'painel-card';
-
-    // Usa a categoria do evento para montar a classe da tag
-    // (ex: categoria "musica" vira a classe "tag-musica")
-    const tagClasse = `tag-${evento.categoria}`;
-
-    // Monta o HTML interno do card, usando um template string
-    // para inserir os dados do evento nos lugares certos.
-    card.innerHTML = `
-        <div class="painel-card-info">
-            <span class="tag ${tagClasse}">${evento.categoria}</span>
-            <h3>${evento.titulo}</h3>
-            <p class="painel-card-meta">${evento.data} · ${evento.horario} · ${evento.local}, ${evento.cidade}</p>
-        </div>
-        <div class="painel-card-actions">
-            <a href="evento.html" class="btn btn-outline">Ver anúncio</a>
-            <a href="criar-evento.html" class="btn btn-outline">Editar</a>
-            <button type="button" class="btn-icon-delete" aria-label="Excluir evento">&times;</button>
-        </div>
-    `;
-
-    // Adiciona esse card recém-criado dentro do container na página
-    listaEventos.appendChild(card);
-});
+        aplicarFiltros();
 
     } catch (erro) {
         console.error('Erro ao carregar eventos:', erro);
     }
 }
 
-// Chama a função assim que a página carrega.
+// Desenha os cards na tela a partir de uma lista de eventos (que já
+// pode estar filtrada). Reaproveitada tanto para a lista completa
+// quanto para os resultados da busca/filtro por categoria.
+function renderizarEventos(lista) {
+    const listaEventos = document.getElementById('lista-eventos');
+    listaEventos.innerHTML = '';
+
+    if (meusEventos.length === 0) {
+        listaEventos.innerHTML = '<p class="painel-vazio">Você ainda não criou nenhum evento.</p>';
+        return;
+    }
+
+    if (lista.length === 0) {
+        listaEventos.innerHTML = '<p class="painel-vazio">Nenhum evento encontrado com esse filtro.</p>';
+        return;
+    }
+
+    lista.forEach((evento) => {
+
+        // Cria o elemento <article> que vai representar o card
+        const card = document.createElement('article');
+        card.className = 'painel-card';
+
+        // Usa a categoria do evento para montar a classe da tag
+        // (ex: categoria "musica" vira a classe "tag-musica")
+        const tagClasse = `tag-${evento.categoria}`;
+
+        // Monta a barra de progresso de vendas com números reais —
+        // ou uma mensagem, se o evento ainda não tem nenhum tipo de
+        // ingresso cadastrado (não daria pra calcular uma porcentagem).
+        const progressoHtml = evento.total_ingressos > 0
+            ? `
+                <div class="painel-progress">
+                    <div class="painel-progress-bar" style="width: ${Math.min(100, (evento.vendidos / evento.total_ingressos) * 100)}%"></div>
+                </div>
+                <p class="painel-progress-label">${evento.vendidos} / ${evento.total_ingressos} ingressos vendidos</p>
+              `
+            : `<p class="painel-progress-label">Nenhum ingresso cadastrado ainda</p>`;
+
+        // Monta o HTML interno do card, usando um template string
+        // para inserir os dados do evento nos lugares certos.
+        card.innerHTML = `
+            <div class="painel-card-info">
+                <span class="tag ${tagClasse}">${evento.categoria}</span>
+                <h3>${evento.titulo}</h3>
+                <p class="painel-card-meta">${evento.data} · ${evento.horario} · ${evento.local}, ${evento.cidade}</p>
+                ${progressoHtml}
+            </div>
+            <div class="painel-card-actions">
+                <a href="evento.html?id=${evento.id}" class="btn btn-outline">Ver anúncio</a>
+                <a href="criar-evento.html?id=${evento.id}" class="btn btn-outline">Editar</a>
+                <button type="button" class="btn-icon-delete" data-id="${evento.id}" aria-label="Excluir evento">&times;</button>
+            </div>
+        `;
+
+        // Adiciona esse card recém-criado dentro do container na página
+        listaEventos.appendChild(card);
+    });
+}
+
+// Lê o que está no campo de busca e no select de categoria, filtra
+// meusEventos de acordo, e redesenha a lista com o resultado.
+function aplicarFiltros() {
+    const termo = document.getElementById('filtro-busca').value.trim().toLowerCase();
+    const categoria = document.getElementById('filtro-categoria').value;
+
+    const filtrados = meusEventos.filter((evento) => {
+        const bateBusca = termo === '' || evento.titulo.toLowerCase().includes(termo);
+        const bateCategoria = categoria === '' || evento.categoria === categoria;
+        return bateBusca && bateCategoria;
+    });
+
+    renderizarEventos(filtrados);
+}
+
+document.getElementById('filtro-busca').addEventListener('input', aplicarFiltros);
+document.getElementById('filtro-categoria').addEventListener('change', aplicarFiltros);
+
+// Busca os números reais do painel (eventos ativos, ingressos
+// vendidos, total arrecadado) e substitui os travessões pelos
+// valores vindos do banco.
+async function carregarEstatisticas() {
+
+    const usuarioSalvo = obterUsuarioLogado();
+    if (!usuarioSalvo) {
+        return;
+    }
+    const usuario = JSON.parse(usuarioSalvo);
+
+    try {
+        const resposta = await fetch(`http://127.0.0.1:5000/painel-stats?usuario_id=${usuario.id}`);
+        const stats = await resposta.json();
+
+        document.getElementById('stat-eventos-ativos').textContent = stats.eventos_ativos;
+        document.getElementById('stat-ingressos-vendidos').textContent = stats.ingressos_vendidos;
+        document.getElementById('stat-total-arrecadado').textContent =
+            stats.total_arrecadado.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    } catch (erro) {
+        console.error('Erro ao carregar estatísticas do painel:', erro);
+    }
+}
+
+// ------------------------------------------------------------------
+// MEUS RASCUNHOS
+// Mesma lógica de armazenamento usada em criar-evento.html: uma
+// lista de rascunhos guardada por usuário (chave "rascunhos_<id>"),
+// pra evitar que apareçam pro usuário errado no mesmo navegador.
+// ------------------------------------------------------------------
+function chaveRascunhos(usuarioId) {
+    return `rascunhos_${usuarioId}`;
+}
+function carregarListaRascunhos(usuarioId) {
+    const salvo = localStorage.getItem(chaveRascunhos(usuarioId));
+    return salvo ? JSON.parse(salvo) : [];
+}
+function salvarListaRascunhos(usuarioId, lista) {
+    localStorage.setItem(chaveRascunhos(usuarioId), JSON.stringify(lista));
+}
+
+// Formata o momento em que o rascunho foi salvo, num formato curto.
+function formatarDataRascunho(isoString) {
+    const data = new Date(isoString);
+    return data.toLocaleString('pt-BR', {
+        day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+}
+
+function carregarRascunhosSalvos() {
+    const usuarioSalvo = obterUsuarioLogado();
+    const listaRascunhosEl = document.getElementById('lista-rascunhos');
+
+    if (!usuarioSalvo) {
+        return;
+    }
+    const usuario = JSON.parse(usuarioSalvo);
+    const rascunhos = carregarListaRascunhos(usuario.id);
+
+    listaRascunhosEl.innerHTML = '';
+
+    if (rascunhos.length === 0) {
+        listaRascunhosEl.innerHTML = '<p class="painel-vazio">Você não tem nenhum rascunho salvo.</p>';
+        return;
+    }
+
+    // Mostra os mais recentes primeiro.
+    const ordenados = [...rascunhos].sort((a, b) => new Date(b.salvo_em) - new Date(a.salvo_em));
+
+    ordenados.forEach((rascunho) => {
+        const card = document.createElement('article');
+        card.className = 'painel-card is-rascunho';
+
+        const tituloExibido = (rascunho.titulo && rascunho.titulo.trim()) ? rascunho.titulo : 'Rascunho sem título';
+        const tagHtml = rascunho.categoria ? `<span class="tag tag-${rascunho.categoria}">${rascunho.categoria}</span>` : '';
+
+        card.innerHTML = `
+            <div class="painel-card-info">
+                ${tagHtml}
+                <span class="badge-rascunho">Rascunho</span>
+                <h3>${tituloExibido}</h3>
+                <p class="painel-card-meta">Salvo em ${formatarDataRascunho(rascunho.salvo_em)}</p>
+            </div>
+            <div class="painel-card-actions">
+                <a href="criar-evento.html?rascunho=${rascunho.id}" class="btn btn-outline">Continuar edição</a>
+                <button type="button" class="btn-icon-delete" data-rascunho-id="${rascunho.id}" aria-label="Excluir rascunho">&times;</button>
+            </div>
+        `;
+
+        listaRascunhosEl.appendChild(card);
+    });
+}
+
+// Chama as funções assim que a página carrega.
 carregarEventos();
+carregarEstatisticas();
+carregarRascunhosSalvos();
+
+// ------------------------------------------------------------------
+// MODAL DE CONFIRMAÇÃO (substitui o confirm() nativo do navegador)
+// Mostra o modal já existente no HTML e devolve uma Promise que só
+// resolve quando a pessoa clica em "Excluir" (true) ou "Cancelar"/
+// clica fora da caixa (false) — assim dá pra usar com "await",
+// igual usaríamos com confirm().
+// ------------------------------------------------------------------
+function confirmarNoModal(mensagem) {
+    return new Promise((resolve) => {
+        const overlay = document.getElementById('modal-confirmar');
+        const texto = document.getElementById('modal-confirmar-texto');
+        const btnConfirmar = document.getElementById('modal-btn-confirmar');
+        const btnCancelar = document.getElementById('modal-btn-cancelar');
+
+        texto.textContent = mensagem;
+        overlay.hidden = false;
+
+        function fechar(resultado) {
+            overlay.hidden = true;
+            btnConfirmar.removeEventListener('click', aoConfirmar);
+            btnCancelar.removeEventListener('click', aoCancelar);
+            overlay.removeEventListener('click', aoClicarFora);
+            resolve(resultado);
+        }
+
+        function aoConfirmar() { fechar(true); }
+        function aoCancelar() { fechar(false); }
+        // Clicar no fundo escuro (fora da caixa) também cancela.
+        function aoClicarFora(evento) {
+            if (evento.target === overlay) {
+                fechar(false);
+            }
+        }
+
+        btnConfirmar.addEventListener('click', aoConfirmar);
+        btnCancelar.addEventListener('click', aoCancelar);
+        overlay.addEventListener('click', aoClicarFora);
+    });
+}
+
+// Botão "Excluir evento": os cards são recriados toda vez que
+// carregarEventos() roda, então em vez de colocar um listener em
+// cada botão (que teria que ser refeito sempre), colocamos UM
+// listener no container que nunca é recriado, e verificamos se o
+// clique aconteceu dentro de um ".btn-icon-delete" (delegação de evento).
+const listaEventosContainer = document.getElementById('lista-eventos');
+
+listaEventosContainer.addEventListener('click', async (evento) => {
+    const botao = evento.target.closest('.btn-icon-delete');
+
+    // Se o clique não foi em um botão de excluir (ou num filho dele),
+    // não faz nada.
+    if (!botao) {
+        return;
+    }
+
+    const eventoId = botao.dataset.id;
+
+    const confirmou = await confirmarNoModal('Tem certeza que deseja excluir este evento? Essa ação não pode ser desfeita.');
+    if (!confirmou) {
+        return;
+    }
+
+    const usuarioSalvo = obterUsuarioLogado();
+    const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+
+    if (!usuario) {
+        return;
+    }
+
+    try {
+        const resposta = await fetch(`http://127.0.0.1:5000/evento/${eventoId}?usuario_id=${usuario.id}`, {
+            method: 'DELETE'
+        });
+
+        const dados = await resposta.json();
+
+        if (resposta.ok) {
+            mostrarToast(dados.mensagem, 'sucesso');
+            // Remove o card da tela sem precisar recarregar a lista inteira.
+            botao.closest('.painel-card').remove();
+        } else {
+            mostrarToast(dados.mensagem, 'erro');
+        }
+
+    } catch (erro) {
+        console.error('Erro ao excluir evento:', erro);
+        mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
+    }
+});
+
+// Botão "Excluir rascunho": ao contrário de um evento publicado, um
+// rascunho só existe no localStorage — excluir é só tirar ele da
+// lista salva, sem chamar o backend.
+const listaRascunhosContainer = document.getElementById('lista-rascunhos');
+
+listaRascunhosContainer.addEventListener('click', async (evento) => {
+    const botao = evento.target.closest('.btn-icon-delete');
+
+    if (!botao) {
+        return;
+    }
+
+    const rascunhoId = botao.dataset.rascunhoId;
+
+    const confirmou = await confirmarNoModal('Tem certeza que deseja excluir este rascunho? Essa ação não pode ser desfeita.');
+    if (!confirmou) {
+        return;
+    }
+
+    const usuarioSalvo = obterUsuarioLogado();
+    const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+
+    if (!usuario) {
+        return;
+    }
+
+    const rascunhos = carregarListaRascunhos(usuario.id);
+    const restantes = rascunhos.filter((r) => r.id !== rascunhoId);
+    salvarListaRascunhos(usuario.id, restantes);
+
+    mostrarToast('Rascunho excluído.', 'sucesso');
+    botao.closest('.painel-card').remove();
+});
 </script>
 
 

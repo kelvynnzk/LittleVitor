@@ -10,7 +10,8 @@
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-   <script src="auth-ui.js"></script>
+  <script src="sessao.js"></script>
+  <script src="auth-ui.js"></script>
 </head>
 
 <body>
@@ -25,7 +26,7 @@
         <a href="#cidades">Cidades</a>
         <a href="categorias.html">Categorias</a>
       </div>
-     <a href="login.html" class="btn-entrar" id="link-entrar">Entrar</a>
+      <a href="login.html" id="link-entrar" class="btn-entrar">Entrar</a>
     </nav>
   </header>
 
@@ -41,9 +42,12 @@
         <p class="hero-sub">Shows, festas, workshops e encontros — organizados por data, prontos pra você marcar
           presença.</p>
 
+        <!-- Barra de busca: com ids para o campo de texto e o botão,
+             para o JavaScript conseguir filtrar a lista de eventos
+             por título, categoria ou cidade. -->
         <div class="search-bar">
-          <input type="text" placeholder="Buscar por cidade, artista ou tipo de evento">
-          <button class="btn-buscar">Buscar</button>
+          <input type="text" id="campo-busca" placeholder="Buscar por cidade, artista ou tipo de evento">
+          <button class="btn-buscar" id="btn-buscar">Buscar</button>
         </div>
 
         <div class="pills">
@@ -56,17 +60,17 @@
         </div>
       </div>
 
-      <div class="featured-card">
+      <a href="evento.html" id="featured-card" class="featured-card">
         <span class="featured-badge">● EM DESTAQUE</span>
         <div class="featured-art"></div>
-        <div class="featured-title">Noite Eletrônica no Cais</div>
-        <div class="featured-meta">20:00 · Armazém 4, Santos</div>
-        <div class="spots">▲ 32 vagas restantes de 200</div>
+        <div class="featured-title" id="featured-titulo">Carregando…</div>
+        <div class="featured-meta" id="featured-meta"></div>
+        <div class="spots" id="featured-spots"></div>
         <div class="featured-footer">
-          <span class="id">SET-2213</span>
-          <span class="date">DEZ<br>19</span>
+          <span class="id" id="featured-categoria"></span>
+          <span class="date" id="featured-data"></span>
         </div>
-      </div>
+      </a>
     </div>
   </section>
 
@@ -80,116 +84,11 @@
         <a href="evento.html" class="section-link">Ver tudo →</a>
       </div>
 
-     <div class="event-grid" id="lista-eventos-publicos">
-
-        <div class="event-card">
-          <div class="event-thumb t1">
-            <div class="event-date-badge">DEZ<span class="day">14</span></div>
-            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
-              <i class="fa-regular fa-heart">♡</i>
-            </button>
-          </div>
-          <div class="event-body">
-            <div class="event-cat">Música</div>
-            <h3>Sarau na Vila Madalena</h3>
-            <div class="meta">19h30 · Vila Madalena, SP</div>
-            <div class="event-foot">
-              <span class="price">Grátis</span>
-              <span class="going">48 confirmados</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="event-card">
-          <div class="event-thumb t2">
-            <div class="event-date-badge">DEZ<span class="day">15</span></div>
-            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
-              <i class="fa-regular fa-heart">♡</i>
-            </button>
-          </div>
-          <div class="event-body">
-            <div class="event-cat">Gastronomia</div>
-            <h3>Feira Gastronômica do Ibirapuera</h3>
-            <div class="meta">11h · Parque Ibirapuera, SP</div>
-            <div class="event-foot">
-              <span class="price">R$ 20</span>
-              <span class="going">312 confirmados</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="event-card">
-          <div class="event-thumb t3">
-            <div class="event-date-badge">DEZ<span class="day">16</span></div>
-            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
-              <i class="fa-regular fa-heart">♡</i>
-            </button>
-          </div>
-          <div class="event-body">
-            <div class="event-cat">Negócios</div>
-            <h3>Workshop de IA para Criadores</h3>
-            <div class="meta">14h · Pinheiros, SP</div>
-            <div class="event-foot">
-              <span class="price">R$ 89</span>
-              <span class="going">61 confirmados</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="event-card">
-          <div class="event-thumb t4">
-            <div class="event-date-badge">DEZ<span class="day">17</span></div>
-            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
-              <i class="fa-regular fa-heart">♡</i>
-            </button>
-          </div>
-          <div class="event-body">
-            <div class="event-cat">Arte &amp; Cultura</div>
-            <h3>Noite de Curtas no MASP</h3>
-            <div class="meta">20h · Av. Paulista, SP</div>
-            <div class="event-foot">
-              <span class="price">R$ 35</span>
-              <span class="going">89 confirmados</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="event-card">
-          <div class="event-thumb t5">
-            <div class="event-date-badge">DEZ<span class="day">18</span></div>
-            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
-              <i class="fa-regular fa-heart">♡</i>
-            </button>
-          </div>
-          <div class="event-body">
-            <div class="event-cat">Esporte</div>
-            <h3>Corrida Noturna no Parque Villa-Lobos</h3>
-            <div class="meta">19h · Villa-Lobos, SP</div>
-            <div class="event-foot">
-              <span class="price">Grátis</span>
-              <span class="going">204 confirmados</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="event-card">
-          <div class="event-thumb t6">
-            <div class="event-date-badge">DEZ<span class="day">19</span></div>
-            <button class="btn-like" data-evento="1" aria-label="Curtir evento">
-              <i class="fa-regular fa-heart">♡</i>
-            </button>
-          </div>
-          <div class="event-body">
-            <div class="event-cat">Música</div>
-            <h3>Noite Eletrônica no Cais</h3>
-            <div class="meta">20h · Armazém 4, Santos</div>
-            <div class="event-foot">
-              <span class="price">R$ 60</span>
-              <span class="going">168 confirmados</span>
-            </div>
-          </div>
-        </div>
-
+      <!-- Container dos cards de evento. Preenchido dinamicamente pelo
+           JavaScript, tanto no carregamento inicial quanto após buscas
+           e cliques nos chips de cidade. -->
+      <div class="event-grid" id="lista-eventos-publicos">
+        <!-- cards gerados via JS -->
       </div>
     </div>
   </section>
@@ -265,16 +164,17 @@
         </div>
       </div>
 
-      <div class="city-grid">
-        <a href="#" class="city-chip"><span class="name">São Paulo</span><span class="count">312 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Rio de Janeiro</span><span class="count">198 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Belo Horizonte</span><span class="count">74 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Curitiba</span><span class="count">51 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Porto Alegre</span><span class="count">46 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Salvador</span><span class="count">39 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Recife</span><span class="count">28 eventos</span></a>
-        <a href="#" class="city-chip"><span class="name">Florianópolis</span><span class="count">22 eventos</span></a>
+      <!-- Chips de cidade: gerados via JS a partir de /cidades-com-eventos,
+           só aparecem cidades que realmente têm evento cadastrado, com
+           a contagem real. Cada chip tem "data-cidade" com o nome exato
+           da cidade, usado pelo JavaScript para filtrar a lista de
+           eventos ao clicar. -->
+      <div class="city-grid" id="cidades-grid">
+        <!-- chips gerados via JS -->
       </div>
+      <p id="cidades-vazio" class="hidden" style="color:var(--text-mid); margin-top:8px;">
+        Nenhuma cidade com eventos cadastrados ainda.
+      </p>
     </div>
   </section>
 
@@ -301,7 +201,7 @@
         <a href="#">Ajuda</a>
       </div>
       <div class="footer-social">
-        <a href="https://www.Instagram.com/littlevittor.comm">Instagram</a>
+        <a href="https://www.Instagram.com/littlevittor.comm" target="_blank">Instagram</a>
         <a href="#">X</a>
         <a href="#">contato@littlevitor.com</a>
       </div>
@@ -309,6 +209,9 @@
   </footer>
 
   <script>
+    // ------------------------------------------------------------------
+    // Efeito de texto rotativo ao lado do título principal
+    // ------------------------------------------------------------------
     const words = ["perto de você.", "hoje à noite.", "esse fim de semana.", "na sua cidade."];
     let i = 0;
     const el = document.getElementById('rotating-word');
@@ -322,42 +225,27 @@
     }, 3000);
     el.style.transition = 'opacity .25s ease';
 
+    // ------------------------------------------------------------------
+    // Efeito de brilho que segue o mouse pela tela
+    // ------------------------------------------------------------------
     const glow = document.querySelector('.mouse-glow');
-    document.addEventListener('mousemove', (e) => {
-      glow.style.transform = `translate(${e.clientX - 210}px, ${e.clientY - 210}px)`;
-    });
     let mouseX = 0, mouseY = 0;
     let glowX = 0, glowY = 0;
-    // Movimentação da bolinha
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
     });
-    // Animação da bolinha que segue o mouse
     function animate() {
-      glowX += (mouseX - glowX) * 0.08; // quanto menor, mais "atraso"
+      glowX += (mouseX - glowX) * 0.08;
       glowY += (mouseY - glowY) * 0.08;
       glow.style.transform = `translate(${glowX - 210}px, ${glowY - 210}px)`;
       requestAnimationFrame(animate);
     }
     animate();
-    // Seleciona Todos os botões de curtir
-    document.querySelectorAll('.btn-like').forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.classList.toggle('ativo');
 
-        const icon = btn.querySelector('i');
-        if (btn.classList.contains('ativo')) {
-          icon.classList.remove('fa-regular', 'fa-heart');
-          icon.classList.add('fa-solid', 'fa-heart');
-          // Aqui você pode salvar no localStorage ou no back 
-        } else {
-          icon.classList.remove('fa-solid', 'fa-heart');
-          icon.classList.add('fa-regular')
-        }
-      });
-    });
-    // ---  Formata a data atual em português  ---
+    // ------------------------------------------------------------------
+    // Formata a data atual em português, para o badge no topo da página
+    // ------------------------------------------------------------------
     function formatarData() {
       const dias = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"];
       const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
@@ -367,7 +255,8 @@
       const mes = meses[hoje.getMonth()];
       return `${diaSemana}, ${dia} DE ${mes}`;
     }
-    // ---  Detecta a cidade do visitante automaticamente pelo IP --- 
+
+    // Detecta a cidade do visitante automaticamente pelo IP
     async function detectarCidade() {
       try {
         const resposta = await fetch("https://ipapi.co/json/");
@@ -378,74 +267,228 @@
       }
     }
 
-    // ---  Monta o texto final e injeta no HTML ---
     async function atualizarBadge() {
       const data = formatarData();
       const cidade = await detectarCidade();
       document.getElementById("badge-text").textContent = `${data} · ${cidade}`;
     }
     atualizarBadge();
-  
-  
-  
-  // Função que busca todos os eventos públicos e gera os cards na tela.
-async function carregarEventosPublicos() {
 
-    try {
-        // Requisição GET simples — sem precisar de usuário logado,
-        // porque essa rota é pública.
+    // ------------------------------------------------------------------
+    // BUSCA E FILTRO DE EVENTOS
+    // ------------------------------------------------------------------
+
+    // Variável "global" que guarda TODOS os eventos vindos do backend.
+    // Fica acessível pelo carregamento inicial, pela busca por texto e
+    // pelo filtro por cidade, sem precisar buscar de novo no servidor.
+    let todosEventos = [];
+
+    // Desenha os cards na tela, a partir de uma lista de eventos.
+    // Reaproveitada tanto para mostrar TODOS os eventos quanto para
+    // mostrar resultados filtrados (por texto ou por cidade).
+    function renderizarEventosPublicos(listaEventos) {
+
+      const container = document.getElementById('lista-eventos-publicos');
+      container.innerHTML = '';
+
+      // Se a lista estiver vazia, mostra a mensagem correspondente.
+      if (listaEventos.length === 0) {
+        container.innerHTML = '<p>Esse evento não foi achado.</p>';
+        return;
+      }
+
+      listaEventos.forEach((evento) => {
+        // Usamos um <a>, não uma <div>, pra o card inteiro virar um link
+        // clicável de verdade — antes só tinha o efeito de hover do CSS,
+        // mas nada acontecia ao clicar.
+        const card = document.createElement('a');
+        card.href = `evento.html?id=${evento.id}`;
+        card.className = 'event-card';
+
+        card.innerHTML = `
+          <div class="event-thumb t1">
+            <div class="event-date-badge">${evento.data}</div>
+          </div>
+          <div class="event-body">
+            <div class="event-cat">${evento.categoria}</div>
+            <h3>${evento.titulo}</h3>
+            <div class="meta">${evento.horario} · ${evento.local}, ${evento.cidade}</div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    // Busca TODOS os eventos no backend (uma única vez, ao carregar a
+    // página) e guarda na variável "todosEventos". Depois manda desenhar
+    // a lista completa na tela.
+    async function carregarEventosPublicos() {
+      try {
         const resposta = await fetch('http://127.0.0.1:5000/eventos');
-
         const dados = await resposta.json();
 
-        const eventos = dados.eventos;
+        todosEventos = dados.eventos;
 
-        // Pega o container onde os cards devem aparecer
-        const listaEventos = document.getElementById('lista-eventos-publicos');
+        renderizarEventosPublicos(todosEventos);
 
-        // Limpa os cards fixos de exemplo
-        listaEventos.innerHTML = '';
+      } catch (erro) {
+        console.error('Erro ao carregar eventos:', erro);
+      }
+    }
 
-        // Se não tiver nenhum evento no sistema ainda
-        if (eventos.length === 0) {
-            listaEventos.innerHTML = '<p>Nenhum evento cadastrado ainda.</p>';
-            return;
+    // Filtra a lista "todosEventos" com base no texto digitado no
+    // campo de busca, sem precisar fazer uma nova requisição.
+    function buscarEventos() {
+
+      const campoBusca = document.getElementById('campo-busca');
+      const termo = campoBusca.value.trim().toLowerCase();
+
+      // Campo vazio: mostra todos os eventos de novo.
+      if (termo === '') {
+        renderizarEventosPublicos(todosEventos);
+        return;
+      }
+
+      // Verifica se o termo aparece no título, categoria ou cidade.
+      const resultado = todosEventos.filter((evento) => {
+        return (
+          evento.titulo.toLowerCase().includes(termo) ||
+          evento.categoria.toLowerCase().includes(termo) ||
+          evento.cidade.toLowerCase().includes(termo)
+        );
+      });
+
+      renderizarEventosPublicos(resultado);
+    }
+
+    // Chama a busca quando o botão "Buscar" é clicado.
+    document.getElementById('btn-buscar').addEventListener('click', buscarEventos);
+
+    // Chama a função assim que a página carrega, buscando todos os
+    // eventos pela primeira vez.
+    carregarEventosPublicos();
+
+    // ------------------------------------------------------------------
+    // CARD "EM DESTAQUE"
+    // Busca o evento que já vendeu mais ingressos no total, e preenche
+    // o card fixo da direita com os dados reais dele (antes era um
+    // evento inventado, sempre igual, que não levava a lugar nenhum).
+    // ------------------------------------------------------------------
+    async function carregarEventoDestaque() {
+        const card = document.getElementById('featured-card');
+
+        try {
+            const resposta = await fetch('http://127.0.0.1:5000/evento-destaque');
+            const dados = await resposta.json();
+            const evento = dados.evento;
+
+            // Sem nenhum evento cadastrado ainda: esconde o card em vez
+            // de mostrar dados inventados.
+            if (!evento) {
+                card.classList.add('hidden');
+                return;
+            }
+
+            card.href = `evento.html?id=${evento.id}`;
+            document.getElementById('featured-titulo').textContent = evento.titulo;
+            document.getElementById('featured-meta').textContent =
+                `${evento.horario} · ${evento.local}, ${evento.cidade}`;
+
+            document.getElementById('featured-spots').textContent = evento.total_ingressos > 0
+                ? `▲ ${evento.disponivel} vagas restantes de ${evento.total_ingressos}`
+                : 'Ingressos em breve';
+
+            document.getElementById('featured-categoria').textContent = evento.categoria.toUpperCase();
+
+            // Formata a data (ex: "2026-12-19") como "DEZ" + "19" pra
+            // combinar com o estilo do card.
+            const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+            const [ano, mes, dia] = evento.data.split('-');
+            document.getElementById('featured-data').innerHTML = `${meses[Number(mes) - 1]}<br>${dia}`;
+
+        } catch (erro) {
+            console.error('Erro ao carregar evento em destaque:', erro);
+            card.classList.add('hidden');
         }
+    }
+    carregarEventoDestaque();
 
-        // Para cada evento, monta o card e adiciona na tela
-        eventos.forEach((evento) => {
+    // ------------------------------------------------------------------
+    // FILTRO POR CIDADE (chips da seção "Explore por cidade")
+    // Busca as cidades que realmente têm evento cadastrado (com a
+    // contagem real) e monta os chips dinamicamente — antes eram 8
+    // cidades e números fixos, sempre iguais, sem relação com os
+    // eventos reais.
+    async function carregarCidadesComEventos() {
+      const grid = document.getElementById('cidades-grid');
+      const vazio = document.getElementById('cidades-vazio');
 
-            const card = document.createElement('div');
-            card.className = 'event-card';
+      try {
+        const resposta = await fetch('http://127.0.0.1:5000/cidades-com-eventos');
+        const dados = await resposta.json();
+        const cidades = dados.cidades || [];
 
-            // Monta o HTML interno do card, com os dados que temos.
-            // Removemos os campos que não existem no banco ainda
-            // (preço, confirmados, imagem de fundo específica).
-            card.innerHTML = `
-                <div class="event-thumb t1">
-                    <div class="event-date-badge">${evento.data}</div>
-                </div>
-                <div class="event-body">
-                    <div class="event-cat">${evento.categoria}</div>
-                    <h3>${evento.titulo}</h3>
-                    <div class="meta">${evento.horario} · ${evento.local}, ${evento.cidade}</div>
-                </div>
-            `;
+        grid.innerHTML = '';
 
-            listaEventos.appendChild(card);
+        if (cidades.length === 0) {
+          vazio.classList.remove('hidden');
+          return;
+        }
+        vazio.classList.add('hidden');
+
+        cidades.forEach((c) => {
+          const chip = document.createElement('a');
+          chip.href = '#programacao';
+          chip.className = 'city-chip';
+          chip.dataset.cidade = c.cidade;
+          const rotuloEventos = c.total === 1 ? 'evento' : 'eventos';
+          chip.innerHTML = `<span class="name">${c.cidade}</span><span class="count">${c.total} ${rotuloEventos}</span>`;
+          grid.appendChild(chip);
         });
 
-    } catch (erro) {
-        console.error('Erro ao carregar eventos:', erro);
+      } catch (erro) {
+        console.error('Erro ao carregar cidades com eventos:', erro);
+      }
     }
-}
+    carregarCidadesComEventos();
 
-// Chama a função assim que a página carrega.
-carregarEventosPublicos();
-  
+    // ------------------------------------------------------------------
+    // Clique num chip de cidade: reaproveita a mesma lógica de filtro
+    // da busca por texto. Como os chips são criados dinamicamente pelo
+    // JS acima, o listener fica no container (delegação de evento) em
+    // vez de em cada chip — assim continua funcionando mesmo depois
+    // de recarregar a lista.
+    // ------------------------------------------------------------------
+    document.getElementById('cidades-grid').addEventListener('click', (evento) => {
+      const chip = evento.target.closest('.city-chip');
+      if (!chip) {
+        return;
+      }
 
+      // Impede o link de pular direto para a âncora — vamos rolar
+      // a tela manualmente, depois de aplicar o filtro.
+      evento.preventDefault();
 
+      // Pega o nome da cidade guardado no atributo data-cidade.
+      const cidade = chip.dataset.cidade;
+      const termo = cidade.toLowerCase();
 
+      // Mesma lógica de filtro: verifica se a cidade do evento
+      // contém o nome da cidade clicada.
+      const resultado = todosEventos.filter((ev) => {
+        return ev.cidade.toLowerCase().includes(termo);
+      });
+
+      renderizarEventosPublicos(resultado);
+
+      // Atualiza o campo de busca visualmente, para a pessoa ver
+      // que a cidade foi aplicada como filtro.
+      document.getElementById('campo-busca').value = cidade;
+
+      // Rola a página suavemente até a seção de eventos.
+      document.getElementById('programacao').scrollIntoView({ behavior: 'smooth' });
+    });
 
   </script>
 

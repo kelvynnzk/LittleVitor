@@ -796,6 +796,18 @@
     border-color: var(--purple-500);
     box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
   }
+  .field-group.is-invalido .field-input{
+    border-color: #ef4444;
+  }
+  .field-group.is-invalido .field-input:focus{
+    box-shadow: 0 0 0 3px rgba(239,68,68,0.15);
+  }
+  .field-erro{
+    display: block;
+    color: #ef4444;
+    font-size: 0.78rem;
+    margin-top: 7px;
+  }
 
   .field-password-wrap{ position: relative; }
   .field-toggle{
@@ -1075,6 +1087,32 @@
   color: var(--text-mid);
 }
 
+.painel-filtros{
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+.painel-filtros input[type="text"],
+.painel-filtros select{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    color: var(--text-hi);
+    padding: 11px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-family: var(--font-body);
+}
+.painel-filtros input[type="text"]{ flex: 1; min-width: 220px; }
+.painel-filtros input[type="text"]::placeholder{ color: var(--text-low); }
+.painel-filtros input:focus,
+.painel-filtros select:focus{
+    outline: none;
+    border-color: var(--purple-500);
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
+}
+.painel-vazio{ color: var(--text-mid); font-size: 0.92rem; padding: 12px 0; }
+
 .painel-lista{
   display: flex;
   flex-direction: column;
@@ -1120,6 +1158,9 @@
 .tag-musica{ color: var(--purple-400); background: rgba(139,92,246,0.12); }
 .tag-negocios{ color: var(--green-400); background: rgba(34,197,94,0.12); }
 .tag-gastronomia{ color: #f59e0b; background: rgba(245,158,11,0.12); }
+.tag-arte{ color: #ec4899; background: rgba(236,72,153,0.12); }
+.tag-esporte{ color: #38bdf8; background: rgba(56,189,248,0.12); }
+.tag-bem-estar{ color: #2dd4bf; background: rgba(45,212,191,0.12); }
 
 .badge-rascunho{
   display: inline-block;
@@ -1412,4 +1453,360 @@
 
 .toast.erro {
     background-color: #ef4444;
+}
+
+/* ---------- MODAL DE CONFIRMAÇÃO ---------- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+}
+
+.modal-overlay[hidden] {
+    display: none;
+}
+
+.modal-box {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 28px;
+    max-width: 380px;
+    width: 100%;
+    box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.6);
+}
+
+.modal-box h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--text-hi);
+    margin-bottom: 10px;
+}
+
+.modal-box p {
+    color: var(--text-mid);
+    font-size: 0.92rem;
+    margin-bottom: 24px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+/* ================= EVENTO — DETALHE E COMPRA (evento.html) ================= */
+
+.evento-hero{ padding: 40px 0 64px; }
+.evento-hero-inner{
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 48px;
+    align-items: start;
+}
+
+#det-titulo{
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 2.6rem;
+    line-height: 1.15;
+    margin: 14px 0 12px;
+}
+.evento-sub{
+    color: var(--text-mid);
+    font-size: 1rem;
+    max-width: 60ch;
+    margin-bottom: 32px;
+}
+
+.evento-facts{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.evento-facts li{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line-soft);
+}
+.evento-facts li:last-child{ border-bottom: none; padding-bottom: 0; }
+.fact-label{
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-low);
+}
+.fact-value{ color: var(--text-hi); font-size: 0.98rem; }
+
+/* card de compra */
+.compra-card{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 26px;
+    position: sticky;
+    top: 90px;
+}
+.ticket-top{ margin-bottom: 16px; }
+.ticket-label{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--text-low);
+    margin-bottom: 10px;
+}
+.ticket-label.is-live::before{
+    content:'';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green-500);
+    box-shadow: 0 0 8px var(--green-glow);
+}
+.ticket-top h3{
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.compra-form{ display: flex; flex-direction: column; gap: 16px; }
+
+#ingressos-lista{ display: flex; flex-direction: column; gap: 10px; }
+.ingresso-opcao{
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    transition: border-color .2s, background .2s;
+}
+.ingresso-opcao.is-selecionada{
+    border-color: var(--purple-500);
+    background: rgba(139,92,246,0.08);
+}
+.ingresso-opcao label{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+.ingresso-opcao input[type="radio"]{ accent-color: var(--purple-500); }
+.opcao-nome{ flex: 1; color: var(--text-hi); font-size: 0.92rem; font-weight: 500; }
+.opcao-preco{ font-family: var(--font-mono); font-size: 0.88rem; color: var(--text-hi); font-weight: 600; white-space: nowrap; }
+.ingresso-opcao.esgotado{ opacity: 0.55; }
+.ingresso-opcao.esgotado label{ cursor: not-allowed; }
+.opcao-esgotado{ font-size: 0.68rem; color: #ef4444; font-family: var(--font-mono); text-transform: uppercase; white-space: nowrap; }
+.ingressos-vazio{ color: var(--text-mid); font-size: 0.88rem; }
+
+.qtd-row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.qtd-row label{ font-size: 0.85rem; color: var(--text-mid); }
+.qtd-row input{
+    width: 80px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--line);
+    color: var(--text-hi);
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.92rem;
+    text-align: center;
+    font-family: var(--font-body);
+}
+.qtd-row input:focus{ outline: none; border-color: var(--purple-500); }
+
+.compra-total{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 14px;
+    border-top: 1px solid var(--line-soft);
+}
+.compra-total .label{ color: var(--text-mid); font-size: 0.85rem; }
+.compra-total .valor{ font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; color: var(--text-hi); }
+
+.btn-full{ width: 100%; }
+.btn:disabled{ opacity: 0.5; cursor: not-allowed; }
+.compra-aviso{
+    font-size: 0.75rem;
+    color: var(--text-low);
+    text-align: center;
+    margin-top: 2px;
+}
+
+/* SOBRE + MAPA */
+.evento-sobre{ padding: 8px 0 80px; }
+.evento-sobre-inner{
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 48px;
+    padding-top: 48px;
+    border-top: 1px solid var(--line-soft);
+}
+.evento-descricao h2{ font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; margin-bottom: 16px; }
+.evento-descricao p{ color: var(--text-mid); line-height: 1.7; }
+.evento-mapa-box h3{ font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; }
+.evento-mapa-box p{ color: var(--text-mid); font-size: 0.9rem; margin-bottom: 14px; line-height: 1.5; }
+.mapa-placeholder{
+    height: 160px;
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--line);
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated));
+}
+
+.evento-nao-encontrado{ padding: 100px 0; text-align: center; }
+.evento-nao-encontrado h2{ font-family: var(--font-display); font-size: 1.8rem; font-weight: 500; margin-bottom: 8px; }
+.evento-nao-encontrado p{ color: var(--text-mid); }
+.evento-nao-encontrado a{ color: var(--purple-400); }
+
+@media (max-width: 900px){
+    .evento-hero-inner, .evento-sobre-inner{ grid-template-columns: 1fr; }
+    .compra-card{ position: static; }
+}
+
+/* ================= PAGAMENTO (pagamento.html) ================= */
+
+.pagamento-layout{
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.cartao-preview{
+    background: linear-gradient(150deg, var(--purple-900), #1a1428 70%);
+    border-radius: var(--radius-md);
+    padding: 22px;
+    margin-bottom: 24px;
+    font-family: var(--font-mono);
+    color: var(--text-hi);
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.cartao-preview .cartao-numero{ font-size: 1.15rem; letter-spacing: 0.12em; }
+.cartao-preview .cartao-rodape{
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: var(--text-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.resumo-compra{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 26px;
+    position: sticky;
+    top: 90px;
+}
+.resumo-compra h3{ font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; margin-bottom: 18px; }
+.resumo-linha{
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 0.88rem;
+    color: var(--text-mid);
+}
+.resumo-linha .valor{ color: var(--text-hi); font-weight: 600; }
+.resumo-total{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 16px;
+    margin-top: 4px;
+}
+.resumo-total .label{ color: var(--text-mid); font-size: 0.85rem; }
+.resumo-total .valor{ font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; color: var(--text-hi); }
+
+.compra-sucesso{ text-align: center; padding: 90px 0; }
+.icone-sucesso{
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(34,197,94,0.12);
+    color: var(--green-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 20px;
+}
+.compra-sucesso h2{ font-family: var(--font-display); font-size: 2rem; font-weight: 500; margin-bottom: 10px; }
+.compra-sucesso p{ color: var(--text-mid); margin-bottom: 28px; }
+
+@media (max-width: 900px){
+    .pagamento-layout{ grid-template-columns: 1fr; }
+    .resumo-compra{ position: static; }
+}
+
+/* ================= AUTOCOMPLETE DE CIDADE (criar-evento.html) ================= */
+
+.autocomplete-wrap{ position: relative; }
+
+.autocomplete-lista{
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    max-height: 230px;
+    overflow-y: auto;
+    z-index: 20;
+    box-shadow: 0 16px 40px -12px rgba(0,0,0,0.6);
+}
+
+.autocomplete-item{
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    color: var(--text-hi);
+    cursor: pointer;
+}
+.autocomplete-item:hover,
+.autocomplete-item.is-ativo{
+    background: rgba(139,92,246,0.14);
+}
+.autocomplete-item .uf{
+    color: var(--text-low);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    margin-left: 6px;
+}
+
+.autocomplete-vazio{
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: var(--text-low);
 }

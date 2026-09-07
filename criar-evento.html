@@ -12,6 +12,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="toast.js"></script>
+    <script src="sessao.js"></script>
 </head>
 
 <body>
@@ -39,7 +40,7 @@
             <div class="wrap form-page-inner">
 
                 <div class="section-head">
-                    <h1>Criar evento</h1>
+                    <h1 id="titulo-pagina">Criar evento</h1>
                     <p>Preencha os detalhes abaixo. Você pode editar tudo isso depois de publicar.</p>
                 </div>
 
@@ -104,9 +105,11 @@
                             <label class="form-label" for="local">Local</label>
                             <input type="text" id="local" name="local" placeholder="Ex: Armazém 4 — Cais Mauá">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group autocomplete-wrap">
                             <label class="form-label" for="cidade">Cidade</label>
-                            <input type="text" id="cidade" name="cidade" placeholder="Ex: Porto Alegre — RS">
+                            <input type="text" id="cidade" name="cidade" placeholder="Comece a digitar sua cidade..."
+                                autocomplete="off" required>
+                            <div id="cidade-sugestoes" class="autocomplete-lista hidden"></div>
                         </div>
                     </div>
 
@@ -116,14 +119,14 @@
 
                         <div id="lista-ingressos" class="lista-ingressos">
                             <div class="ingresso-row">
-                                <input type="text" name="ingresso_nome[]" placeholder="Nome (ex: Pista)" required>
-                                <input type="number" name="ingresso_preco[]" placeholder="Preço" min="0" step="0.01"
-                                    required>
-                                <input type="number" name="ingresso_qtd[]" placeholder="Quantidade" min="1" required>
+                                <input type="text" name="ingresso_nome[]" placeholder="Nome (ex: Pista)">
+                                <input type="number" name="ingresso_preco[]" placeholder="Preço" min="0" step="0.01">
+                                <input type="number" name="ingresso_qtd[]" placeholder="Quantidade" min="1">
                                 <button type="button" class="btn-remover" onclick="removerIngresso(this)"
                                     aria-label="Remover tipo de ingresso">&times;</button>
                             </div>
                         </div>
+                        <p style="font-size:0.8rem; color:var(--text-low); margin-top:6px;">Opcional — deixe em branco se ainda não quiser vender ingressos para este evento.</p>
 
                         <button type="button" class="btn btn-outline btn-add" onclick="adicionarIngresso()">+ Adicionar
                             tipo de ingresso</button>
@@ -131,8 +134,8 @@
 
                     <!-- AÇÕES -->
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Publicar evento</button>
-                        <button type="button" class="btn btn-ghost">Salvar rascunho</button>
+                        <button type="submit" class="btn btn-primary" id="btn-publicar">Publicar evento</button>
+                        <button type="button" class="btn btn-ghost" id="btn-salvar-rascunho">Salvar rascunho</button>
                     </div>
 
                 </form>
@@ -159,19 +162,55 @@
         // ------------------------------------------------------------------
         const btnSair = document.getElementById('btn-sair');
         btnSair.addEventListener('click', () => {
-            localStorage.removeItem('usuario');
+            removerUsuarioLogado();
+            // "intencao_compra" (a escolha de ingresso guardada antes de
+            // mandar pra tela de login) tem que sair junto — senão, se
+            // outra pessoa fizer login nesse mesmo navegador depois, ela
+            // seria jogada direto pro pagamento de um ingresso que nunca
+            // escolheu.
+            localStorage.removeItem('intencao_compra');
         });
 
+        // ------------------------------------------------------------------
+        // MODO EDIÇÃO
+        // Se a URL tiver "?id=X" (ex: criar-evento.html?id=4), essa página
+        // vira um formulário de EDIÇÃO em vez de criação: carregamos os
+        // dados do evento existente e, no submit, mandamos um PUT em vez
+        // de um POST.
+        // ------------------------------------------------------------------
+        const parametros = new URLSearchParams(window.location.search);
+        const idEdicao = parametros.get('id');
+        const modoEdicao = idEdicao !== null;
+        const rascunhoIdParam = parametros.get('rascunho');
 
-        // Ao carregar a página, verifica se existe um rascunho salvo
-        // (isso acontece quando a pessoa foi mandada pro login/cadastro
-        // no meio do preenchimento do formulário).
-        const rascunhoSalvo = localStorage.getItem('rascunho_evento');
+        // ------------------------------------------------------------------
+        // RASCUNHOS SALVOS (localStorage, por usuário)
+        // Cada usuário pode ter vários rascunhos ao mesmo tempo, então
+        // guardamos uma LISTA (não um único objeto), numa chave separada
+        // por usuário — "rascunhos_17", "rascunhos_24" etc. Isso também
+        // evita que o rascunho de uma pessoa apareça pra outra que logar
+        // depois no mesmo navegador.
+        // ------------------------------------------------------------------
+        function chaveRascunhos(usuarioId) {
+            return `rascunhos_${usuarioId}`;
+        }
+        function carregarListaRascunhos(usuarioId) {
+            const salvo = localStorage.getItem(chaveRascunhos(usuarioId));
+            return salvo ? JSON.parse(salvo) : [];
+        }
+        function salvarListaRascunhos(usuarioId, lista) {
+            localStorage.setItem(chaveRascunhos(usuarioId), JSON.stringify(lista));
+        }
 
-        if (rascunhoSalvo) {
-            const rascunho = JSON.parse(rascunhoSalvo);
+        // Guarda o id do rascunho que está sendo continuado nesta visita
+        // (se houver) — usado pra "Salvar rascunho" atualizar o mesmo
+        // item em vez de criar um novo a cada clique, e pra apagá-lo da
+        // lista quando o evento for publicado de verdade.
+        let rascunhoAtualId = rascunhoIdParam;
 
-            // Preenche cada campo do formulário com o valor salvo.
+        // Preenche o formulário inteiro (campos + tipos de ingresso) a
+        // partir de um objeto de rascunho salvo.
+        function preencherFormularioComRascunho(rascunho) {
             document.getElementById('titulo').value = rascunho.titulo || '';
             document.getElementById('categoria').value = rascunho.categoria || '';
             document.getElementById('descricao').value = rascunho.descricao || '';
@@ -179,9 +218,294 @@
             document.getElementById('horario').value = rascunho.horario || '';
             document.getElementById('local').value = rascunho.local || '';
             document.getElementById('cidade').value = rascunho.cidade || '';
+
+            if (rascunho.ingressos && rascunho.ingressos.length) {
+                const lista = document.getElementById('lista-ingressos');
+                lista.innerHTML = '';
+                rascunho.ingressos.forEach((ingresso) => {
+                    const linha = document.createElement('div');
+                    linha.className = 'ingresso-row';
+                    linha.innerHTML = `
+                        <input type="text" name="ingresso_nome[]" placeholder="Nome (ex: Pista)" value="${ingresso.nome}">
+                        <input type="number" name="ingresso_preco[]" placeholder="Preço" min="0" step="0.01" value="${ingresso.preco}">
+                        <input type="number" name="ingresso_qtd[]" placeholder="Quantidade" min="1" value="${ingresso.quantidade}">
+                        <button type="button" class="btn-remover" onclick="removerIngresso(this)" aria-label="Remover tipo de ingresso">&times;</button>
+                    `;
+                    lista.appendChild(linha);
+                });
+            }
         }
 
-        // Pega o formulário de criação de evento
+        async function carregarEventoParaEdicao(id) {
+            try {
+                const resposta = await fetch(`http://127.0.0.1:5000/evento/${id}`);
+                const dados = await resposta.json();
+
+                if (!resposta.ok) {
+                    mostrarToast(dados.mensagem || 'Evento não encontrado.', 'erro');
+                    return;
+                }
+
+                const evento = dados.evento;
+
+                document.getElementById('titulo').value = evento.titulo || '';
+                document.getElementById('categoria').value = evento.categoria || '';
+                document.getElementById('descricao').value = evento.descricao || '';
+                document.getElementById('data').value = evento.data || '';
+                // O <input type="time"> espera "HH:MM"; o banco devolve
+                // "HH:MM:SS", então cortamos os segundos.
+                document.getElementById('horario').value = (evento.horario || '').slice(0, 5);
+                document.getElementById('local').value = evento.local || '';
+                document.getElementById('cidade').value = evento.cidade || '';
+
+                await carregarIngressosParaEdicao(id);
+
+            } catch (erro) {
+                console.error('Erro ao carregar evento:', erro);
+                mostrarToast('Não foi possível carregar os dados do evento.', 'erro');
+            }
+        }
+
+        // Busca os tipos de ingresso já cadastrados pra esse evento e
+        // substitui a linha em branco padrão por uma linha pra cada
+        // tipo existente (assim dá pra editar preço/quantidade, ou
+        // adicionar/remover tipos, igual na criação).
+        async function carregarIngressosParaEdicao(eventoId) {
+            try {
+                const resposta = await fetch(`http://127.0.0.1:5000/tipos-ingresso/${eventoId}`);
+                const dados = await resposta.json();
+                const tipos = dados.tipos_ingresso || [];
+
+                if (!tipos.length) {
+                    // Sem tipos cadastrados ainda: deixa a linha em branco padrão.
+                    return;
+                }
+
+                const lista = document.getElementById('lista-ingressos');
+                lista.innerHTML = '';
+
+                tipos.forEach((tipo) => {
+                    const linha = document.createElement('div');
+                    linha.className = 'ingresso-row';
+                    linha.innerHTML = `
+                        <input type="text" name="ingresso_nome[]" placeholder="Nome (ex: Pista)" value="${tipo.nome}">
+                        <input type="number" name="ingresso_preco[]" placeholder="Preço" min="0" step="0.01" value="${tipo.preco}">
+                        <input type="number" name="ingresso_qtd[]" placeholder="Quantidade" min="1" value="${tipo.quantidade_total}">
+                        <button type="button" class="btn-remover" onclick="removerIngresso(this)" aria-label="Remover tipo de ingresso">&times;</button>
+                    `;
+                    lista.appendChild(linha);
+                });
+
+            } catch (erro) {
+                console.error('Erro ao carregar tipos de ingresso:', erro);
+            }
+        }
+
+        // Lê as linhas da seção "Tipos de ingresso" do formulário e monta
+        // a lista que vai ser enviada junto com o evento. Linhas deixadas
+        // em branco (ex: a linha padrão, se ninguém preencher nada) são
+        // ignoradas.
+        function coletarIngressosDoFormulario() {
+            const linhas = document.querySelectorAll('#lista-ingressos .ingresso-row');
+            const ingressos = [];
+
+            linhas.forEach((linha) => {
+                const nome = linha.querySelector('input[name="ingresso_nome[]"]').value.trim();
+                const preco = linha.querySelector('input[name="ingresso_preco[]"]').value;
+                const quantidade = linha.querySelector('input[name="ingresso_qtd[]"]').value;
+
+                if (!nome || !preco || !quantidade) {
+                    return;
+                }
+
+                ingressos.push({
+                    nome: nome,
+                    preco: Number(preco),
+                    quantidade: Number(quantidade)
+                });
+            });
+
+            return ingressos;
+        }
+
+        // ------------------------------------------------------------------
+        // AUTOCOMPLETE DE CIDADE (só aceita cidades reais do Brasil)
+        // Carrega, uma única vez, a lista de todos os municípios do
+        // Brasil (nome + estado), gerada a partir da API oficial do
+        // IBGE. Enquanto a pessoa digita, filtramos essa lista e
+        // mostramos só os nomes que combinam com o que foi digitado —
+        // e, na hora de publicar, conferimos se o texto final é
+        // exatamente uma dessas cidades (não qualquer texto digitado).
+        // ------------------------------------------------------------------
+        let CIDADES_BRASIL = [];
+
+        // Guardamos a Promise (não só o resultado) porque o formulário
+        // pode ser enviado antes desse fetch terminar — no submit,
+        // damos "await" nela pra garantir que a lista já está pronta
+        // antes de validar a cidade digitada.
+        const promessaCidades = fetch('cidades-brasil.json')
+            .then((resposta) => resposta.json())
+            .then((dados) => { CIDADES_BRASIL = dados; return dados; })
+            .catch((erro) => {
+                console.error('Erro ao carregar lista de cidades:', erro);
+                return [];
+            });
+
+        // Remove acentos e deixa em minúsculo, pra "sao" encontrar "São Paulo".
+        // Troca cada letra acentuada pela sua versão sem acento, uma por
+        // uma — mais simples de entender do que mexer com os códigos
+        // Unicode dos acentos.
+        const MAPA_ACENTOS = {
+            'á': 'a', 'à': 'a', 'ã': 'a', 'â': 'a', 'ä': 'a',
+            'é': 'e', 'è': 'e', 'ê': 'e', 'ë': 'e',
+            'í': 'i', 'ì': 'i', 'î': 'i', 'ï': 'i',
+            'ó': 'o', 'ò': 'o', 'õ': 'o', 'ô': 'o', 'ö': 'o',
+            'ú': 'u', 'ù': 'u', 'û': 'u', 'ü': 'u',
+            'ç': 'c', 'ñ': 'n'
+        };
+        function normalizarTexto(texto) {
+            return texto
+                .toLowerCase()
+                .trim()
+                .split('')
+                .map((letra) => MAPA_ACENTOS[letra] || letra)
+                .join('');
+        }
+
+        const campoCidade = document.getElementById('cidade');
+        const listaSugestoes = document.getElementById('cidade-sugestoes');
+        let indiceAtivo = -1;
+
+        function esconderSugestoes() {
+            listaSugestoes.classList.add('hidden');
+            listaSugestoes.innerHTML = '';
+            indiceAtivo = -1;
+        }
+
+        function mostrarSugestoes(termo) {
+            const termoNormalizado = normalizarTexto(termo);
+
+            if (termoNormalizado.length < 2) {
+                esconderSugestoes();
+                return;
+            }
+
+            // Prioriza cidades cujo nome COMEÇA com o termo digitado,
+            // e completa com as que só CONTÊM o termo em algum lugar.
+            const comecaCom = CIDADES_BRASIL.filter((c) => normalizarTexto(c.nome).startsWith(termoNormalizado));
+            const contem = CIDADES_BRASIL.filter((c) => !normalizarTexto(c.nome).startsWith(termoNormalizado) && normalizarTexto(c.nome).includes(termoNormalizado));
+            const resultado = [...comecaCom, ...contem].slice(0, 8);
+
+            listaSugestoes.innerHTML = '';
+            indiceAtivo = -1;
+
+            if (resultado.length === 0) {
+                listaSugestoes.innerHTML = '<div class="autocomplete-vazio">Nenhuma cidade encontrada.</div>';
+                listaSugestoes.classList.remove('hidden');
+                return;
+            }
+
+            resultado.forEach((cidade) => {
+                const item = document.createElement('div');
+                item.className = 'autocomplete-item';
+                item.innerHTML = `${cidade.nome}<span class="uf">${cidade.uf}</span>`;
+                item.addEventListener('click', () => {
+                    campoCidade.value = cidade.nome;
+                    esconderSugestoes();
+                });
+                listaSugestoes.appendChild(item);
+            });
+
+            listaSugestoes.classList.remove('hidden');
+        }
+
+        campoCidade.addEventListener('input', () => mostrarSugestoes(campoCidade.value));
+
+        // Navegação pelo teclado (setas + Enter) entre as sugestões.
+        campoCidade.addEventListener('keydown', (evento) => {
+            const itens = listaSugestoes.querySelectorAll('.autocomplete-item');
+            if (listaSugestoes.classList.contains('hidden') || itens.length === 0) {
+                return;
+            }
+
+            if (evento.key === 'ArrowDown') {
+                evento.preventDefault();
+                indiceAtivo = (indiceAtivo + 1) % itens.length;
+            } else if (evento.key === 'ArrowUp') {
+                evento.preventDefault();
+                indiceAtivo = (indiceAtivo - 1 + itens.length) % itens.length;
+            } else if (evento.key === 'Enter' && indiceAtivo !== -1) {
+                evento.preventDefault();
+                itens[indiceAtivo].click();
+                return;
+            } else {
+                return;
+            }
+
+            itens.forEach((item, i) => item.classList.toggle('is-ativo', i === indiceAtivo));
+        });
+
+        // Fecha a lista se a pessoa clicar fora do campo/dropdown.
+        document.addEventListener('click', (evento) => {
+            if (!evento.target.closest('.autocomplete-wrap')) {
+                esconderSugestoes();
+            }
+        });
+
+        // Confere se o texto digitado é exatamente uma cidade real
+        // (ignorando maiúsculas/minúsculas e acentos) — usado antes de
+        // publicar ou salvar alterações, não antes de salvar rascunho
+        // (um rascunho pode ficar incompleto de propósito).
+        function cidadeEhValida(texto) {
+            const normalizado = normalizarTexto(texto);
+            return CIDADES_BRASIL.some((c) => normalizarTexto(c.nome) === normalizado);
+        }
+
+        if (modoEdicao) {
+            // Editar exige estar logado, assim como criar.
+            const usuarioSalvo = obterUsuarioLogado();
+            if (!usuarioSalvo) {
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('titulo-pagina').textContent = 'Editar evento';
+                document.getElementById('btn-publicar').textContent = 'Salvar alterações';
+                // Não faz sentido "salvar como rascunho" um evento que já
+                // foi publicado de verdade — esconde o botão nesse caso.
+                document.getElementById('btn-salvar-rascunho').style.display = 'none';
+                carregarEventoParaEdicao(idEdicao);
+            }
+        } else if (rascunhoIdParam) {
+            // Continuando um rascunho específico, aberto a partir de
+            // "Meus rascunhos" no painel.
+            const usuarioSalvo = obterUsuarioLogado();
+            if (!usuarioSalvo) {
+                window.location.href = 'login.html';
+            } else {
+                const usuario = JSON.parse(usuarioSalvo);
+                const rascunhos = carregarListaRascunhos(usuario.id);
+                const rascunho = rascunhos.find((r) => r.id === rascunhoIdParam);
+
+                if (rascunho) {
+                    document.getElementById('titulo-pagina').textContent = 'Continuar rascunho';
+                    preencherFormularioComRascunho(rascunho);
+                } else {
+                    mostrarToast('Esse rascunho não foi encontrado.', 'erro');
+                }
+            }
+        } else {
+            // Ao carregar a página em modo criação, verifica se existe um
+            // rascunho anônimo salvo (isso acontece quando a pessoa foi
+            // mandada pro login/cadastro no meio do preenchimento do
+            // formulário, sem ainda ter uma conta pra guardar rascunhos
+            // nomeados).
+            const rascunhoSalvo = localStorage.getItem('rascunho_evento');
+
+            if (rascunhoSalvo) {
+                preencherFormularioComRascunho(JSON.parse(rascunhoSalvo));
+            }
+        }
+
+        // Pega o formulário de criação/edição de evento
         const formEvento = document.getElementById('form-evento');
 
         formEvento.addEventListener('submit', async (evento) => {
@@ -189,16 +513,29 @@
             // o que fazer, dependendo se tem usuário logado ou não.
             evento.preventDefault();
 
+            // Espera a lista de cidades terminar de carregar (caso o
+            // clique em publicar tenha sido mais rápido que o fetch).
+            await promessaCidades;
+
+            // Só publica/atualiza de verdade se a cidade digitada for uma
+            // cidade real (uma das sugeridas), não qualquer texto — isso
+            // não se aplica a "Salvar rascunho", só a publicar de verdade.
+            if (!cidadeEhValida(campoCidade.value)) {
+                mostrarToast('Escolha uma cidade válida na lista de sugestões.', 'erro');
+                campoCidade.focus();
+                return;
+            }
+
             // Verifica se existe um usuário logado
-            const usuarioSalvo = localStorage.getItem('usuario');
+            const usuarioSalvo = obterUsuarioLogado();
 
             if (usuarioSalvo) {
                 // Converte o texto salvo no localStorage de volta para um
                 // objeto JavaScript, para conseguirmos acessar o campo "id".
                 const usuario = JSON.parse(usuarioSalvo);
 
-                // Monta um objeto com todos os dados que a rota /criar-evento
-                // espera receber — os campos do formulário, mais o id do
+                // Monta um objeto com todos os dados que a rota espera
+                // receber — os campos do formulário, mais o id do
                 // usuário logado (que não vem de nenhum input, e sim do
                 // localStorage).
                 const dadosEvento = {
@@ -209,13 +546,21 @@
                     horario: document.getElementById('horario').value,
                     local: document.getElementById('local').value,
                     cidade: document.getElementById('cidade').value,
-                    usuario_id: usuario.id
+                    usuario_id: usuario.id,
+                    ingressos: coletarIngressosDoFormulario()
                 };
+
+                // Em modo edição, chamamos PUT /evento/<id>; em modo
+                // criação, continuamos chamando POST /criar-evento.
+                const url = modoEdicao
+                    ? `http://127.0.0.1:5000/evento/${idEdicao}`
+                    : 'http://127.0.0.1:5000/criar-evento';
+                const metodo = modoEdicao ? 'PUT' : 'POST';
 
                 try {
                     // Faz a requisição de verdade para o backend.
-                    const resposta = await fetch('http://127.0.0.1:5000/criar-evento', {
-                        method: 'POST',
+                    const resposta = await fetch(url, {
+                        method: metodo,
                         headers: {
                             'Content-Type': 'application/json'
                         },
@@ -228,6 +573,15 @@
                         mostrarToast(dados.mensagem, 'sucesso');
                         localStorage.removeItem('rascunho_evento');
 
+                        // Se estávamos continuando um rascunho salvo, ele
+                        // acabou de virar um evento de verdade — remove
+                        // ele da lista de rascunhos.
+                        if (rascunhoAtualId) {
+                            const rascunhos = carregarListaRascunhos(usuario.id);
+                            const restantes = rascunhos.filter((r) => r.id !== rascunhoAtualId);
+                            salvarListaRascunhos(usuario.id, restantes);
+                        }
+
                         setTimeout(() => {
                             window.location.href = 'painel.html';
                         }, 1500);
@@ -237,7 +591,7 @@
                     }
 
                 } catch (erro) {
-                    console.error('Erro ao criar evento:', erro);
+                    console.error('Erro ao salvar evento:', erro);
                     mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
                 }
             } else {
@@ -263,6 +617,67 @@
             }
         });
 
+        // ------------------------------------------------------------------
+        // BOTÃO "SALVAR RASCUNHO"
+        // Salva os campos preenchidos até agora (sem publicar de verdade)
+        // na lista de rascunhos do usuário logado, pra aparecer em "Meus
+        // rascunhos" no painel. Pode ser clicado várias vezes na mesma
+        // visita — da segunda vez em diante, atualiza o mesmo rascunho
+        // em vez de criar um novo.
+        // ------------------------------------------------------------------
+        document.getElementById('btn-salvar-rascunho').addEventListener('click', () => {
+            const usuarioSalvo = obterUsuarioLogado();
+
+            const dadosRascunho = {
+                titulo: document.getElementById('titulo').value,
+                categoria: document.getElementById('categoria').value,
+                descricao: document.getElementById('descricao').value,
+                data: document.getElementById('data').value,
+                horario: document.getElementById('horario').value,
+                local: document.getElementById('local').value,
+                cidade: document.getElementById('cidade').value,
+                ingressos: coletarIngressosDoFormulario()
+            };
+
+            if (!usuarioSalvo) {
+                // Sem login ainda: guarda como o rascunho único e anônimo
+                // de sempre, e manda pro login — mesmo comportamento de
+                // tentar publicar sem estar logado.
+                localStorage.setItem('rascunho_evento', JSON.stringify(dadosRascunho));
+                window.location.href = 'login.html?retorno=criar-evento.html';
+                return;
+            }
+
+            const usuario = JSON.parse(usuarioSalvo);
+            const rascunhos = carregarListaRascunhos(usuario.id);
+
+            if (rascunhoAtualId) {
+                // Já existe um rascunho sendo editado nesta visita:
+                // atualiza ele no lugar.
+                const indice = rascunhos.findIndex((r) => r.id === rascunhoAtualId);
+                const atualizado = { ...dadosRascunho, id: rascunhoAtualId, salvo_em: new Date().toISOString() };
+
+                if (indice !== -1) {
+                    rascunhos[indice] = atualizado;
+                } else {
+                    rascunhos.push(atualizado);
+                }
+            } else {
+                // Primeiro "Salvar rascunho" nesta visita: cria um novo
+                // id, e atualiza a URL pra refletir que agora estamos
+                // continuando esse rascunho específico (assim, cliques
+                // seguintes em "Salvar rascunho" atualizam o mesmo item).
+                rascunhoAtualId = 'rascunho_' + Date.now();
+                rascunhos.push({ ...dadosRascunho, id: rascunhoAtualId, salvo_em: new Date().toISOString() });
+
+                const novaUrl = `${window.location.pathname}?rascunho=${rascunhoAtualId}`;
+                window.history.replaceState(null, '', novaUrl);
+            }
+
+            salvarListaRascunhos(usuario.id, rascunhos);
+            mostrarToast('Rascunho salvo!', 'sucesso');
+        });
+
         // Preview da imagem de capa
         function mostrarPreview(input) {
             const preview = document.getElementById('preview-capa');
@@ -284,9 +699,9 @@
             const linha = document.createElement('div');
             linha.className = 'ingresso-row';
             linha.innerHTML = `
-        <input type="text" name="ingresso_nome[]" placeholder="Nome (ex: VIP)" required>
-        <input type="number" name="ingresso_preco[]" placeholder="Preço" min="0" step="0.01" required>
-        <input type="number" name="ingresso_qtd[]" placeholder="Quantidade" min="1" required>
+        <input type="text" name="ingresso_nome[]" placeholder="Nome (ex: VIP)">
+        <input type="number" name="ingresso_preco[]" placeholder="Preço" min="0" step="0.01">
+        <input type="number" name="ingresso_qtd[]" placeholder="Quantidade" min="1">
         <button type="button" class="btn-remover" onclick="removerIngresso(this)" aria-label="Remover tipo de ingresso">&times;</button>
       `;
             lista.appendChild(linha);

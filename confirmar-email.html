@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar e-mail — LittleVitor.com</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="sessao.js"></script>
+</head>
+
+<body>
+
+    <div class="auth-page">
+
+        <div class="auth-visual">
+            <div class="logo">LittleVitor<span>.com</span></div>
+
+            <div class="auth-visual-quote">
+                <div class="eyebrow"><span class="dot"></span> QUASE LÁ</div>
+                <h2>Só falta <em>confirmar seu e-mail.</em></h2>
+                <p>
+                    É assim que garantimos que sua conta é sua mesmo — e que os avisos de
+                    evento e ingressos chegam no endereço certo.
+                </p>
+            </div>
+
+            <div></div>
+        </div>
+
+        <div class="auth-form-panel">
+            <div class="auth-form-box" style="text-align:center;">
+
+                <!-- VISTA: CONFIRMANDO (enquanto a requisição roda) -->
+                <div id="vista-carregando">
+                    <h1>Confirmando seu e-mail...</h1>
+                    <p class="auth-sub">Só um instante.</p>
+                </div>
+
+                <!-- VISTA: SUCESSO -->
+                <div id="vista-sucesso" class="hidden">
+                    <div class="icone-sucesso" style="margin:0 auto 20px;">&#10003;</div>
+                    <h1>E-mail confirmado!</h1>
+                    <p class="auth-sub" style="justify-content:center;">Sua conta já está pronta. Pode entrar quando
+                        quiser.</p>
+                    <a href="login.html" class="btn-auth-primary"
+                        style="display:inline-block; text-decoration:none; margin-top:12px;">Entrar agora</a>
+                </div>
+
+                <!-- VISTA: ERRO (token inválido/já usado) -->
+                <div id="vista-erro" class="hidden">
+                    <h1>Link inválido</h1>
+                    <p class="auth-sub" id="texto-erro" style="justify-content:center;">Esse link de confirmação não
+                        é válido ou já foi usado.</p>
+                    <a href="cadastro.html" class="btn-auth-primary"
+                        style="display:inline-block; text-decoration:none; margin-top:12px;">Criar uma conta</a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Pega o token que veio na URL (ex: confirmar-email.html?token=xxxx)
+        const parametros = new URLSearchParams(window.location.search);
+        const token = parametros.get('token');
+
+        function mostrarVista(nome) {
+            document.getElementById('vista-carregando').classList.toggle('hidden', nome !== 'carregando');
+            document.getElementById('vista-sucesso').classList.toggle('hidden', nome !== 'sucesso');
+            document.getElementById('vista-erro').classList.toggle('hidden', nome !== 'erro');
+        }
+
+        async function confirmarEmail() {
+            // Sem token nenhum na URL — nem tenta chamar o backend.
+            if (!token) {
+                mostrarVista('erro');
+                return;
+            }
+
+            try {
+                const resposta = await fetch('http://127.0.0.1:5000/confirmar-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token })
+                });
+
+                const dados = await resposta.json();
+
+                if (resposta.ok) {
+                    mostrarVista('sucesso');
+                } else {
+                    document.getElementById('texto-erro').textContent = dados.mensagem;
+                    mostrarVista('erro');
+                }
+
+            } catch (erro) {
+                console.error('Erro ao confirmar e-mail:', erro);
+                document.getElementById('texto-erro').textContent =
+                    'Não foi possível conectar ao servidor. Tente novamente em instantes.';
+                mostrarVista('erro');
+            }
+        }
+
+        confirmarEmail();
+    </script>
+
+</body>
+
+</html>

@@ -3,7 +3,7 @@
 // Reaproveitado em todas as páginas que têm esse botão visível.
 function atualizarBotaoEntrar() {
 
-    const usuarioSalvo = localStorage.getItem('usuario');
+    const usuarioSalvo = obterUsuarioLogado();
     const linkEntrar = document.getElementById('link-entrar');
 
     // Proteção extra: só executa se a página realmente tiver
