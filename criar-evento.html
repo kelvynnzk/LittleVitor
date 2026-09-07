@@ -10,6 +10,31 @@
     <link rel="stylesheet" href="LittleVitor2.0/css/profile.css">
     <link rel="stylesheet" href="LittleVitor2.0/css/responsive.css">
     <style>
+        body {
+            position: relative;
+            background:
+                radial-gradient(circle at 8% 18%, rgba(80, 54, 160, 0.28), transparent 34%),
+                radial-gradient(circle at 92% 82%, rgba(24, 122, 105, 0.24), transparent 38%),
+                linear-gradient(135deg, #121022 0%, #0b0a10 48%, #0b1415 100%);
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.22;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: linear-gradient(to bottom, black, transparent 82%);
+        }
+        .navbar,
+        main {
+            position: relative;
+            z-index: 1;
+        }
         .toast {
             position: fixed;
             right: 24px;
@@ -649,6 +674,7 @@ formEvento.addEventListener('submit',async (evento) => {
         atualizarPreviewEvento();
     </script>
 
+<script src="particles.js"></script>
 </body>
 
 </html>

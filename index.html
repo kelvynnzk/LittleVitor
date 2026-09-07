@@ -135,12 +135,24 @@
         </div>
       </div>
 
-      <!-- Seção "Acontecendo em breve": a div ".compact-grid" começa
-           VAZIA de propósito. A função filterEvents(), lá no script,
-           preenche ela automaticamente com os 4 primeiros eventos
-           carregados (repetindo os mesmos cards da seção de cima),
-           só pra essa seção nunca ficar em branco. -->
-      <div class="event-section"><div class="home-section-heading"><div><div class="home-eyebrow"><i></i> Não perca a data</div><h2 class="home-section-title">Acontecendo em breve</h2></div><a href="evento.html" class="home-more">Ver todos →</a></div><div class="image-event-grid compact-grid"></div></div>
+      <!-- Seção "Explore por cidade": lista fixa de cidades com a
+           contagem de eventos ativos em cada uma. Por enquanto os
+           números são estáticos/decorativos (não vêm do banco de
+           dados) — cada cartão aponta pra busca filtrando por essa cidade. -->
+      <div class="event-section">
+        <div class="home-section-heading"><div><div class="home-eyebrow"><i></i> Onde você está</div><h2 class="home-section-title">Explore por cidade</h2></div></div>
+        <p class="city-subtitle">Eventos ativos agora, organizados por onde você está.</p>
+        <div class="city-grid">
+          <a href="#destaques" class="city-card"><span>São Paulo</span><small>312 eventos</small></a>
+          <a href="#destaques" class="city-card"><span>Rio de Janeiro</span><small>198 eventos</small></a>
+          <a href="#destaques" class="city-card"><span>Belo Horizonte</span><small>74 eventos</small></a>
+          <a href="#destaques" class="city-card"><span>Curitiba</span><small>51 eventos</small></a>
+          <a href="#destaques" class="city-card"><span>Porto Alegre</span><small>46 eventos</small></a>
+          <a href="#destaques" class="city-card"><span>Salvador</span><small>39 eventos</small></a>
+          <a href="#destaques" class="city-card"><span>Recife</span><small>28 eventos</small></a>
+          <a href="#destaques" class="city-card"><span>Florianópolis</span><small>22 eventos</small></a>
+        </div>
+      </div>
 
       <!-- Banner de call-to-action pra quem quer criar/organizar um evento -->
       <section class="organizer-banner organizer-banner-centered">
@@ -174,11 +186,6 @@
     // — os dois disparam o mesmo filtro ao digitar.
     const searchInputs = [document.querySelector('.nav-search input'), document.getElementById('hero-search-input')];
 
-    // Seção(ões) que começam vazias no HTML e são preenchidas
-    // automaticamente com os primeiros eventos carregados
-    // (hoje, só a seção "Acontecendo em breve").
-    const emptySections = document.querySelectorAll('.compact-grid');
-
     // ============================================================
     // FILTRO DE EVENTOS (por categoria e por texto digitado)
     // ============================================================
@@ -192,14 +199,6 @@
         const matchesCategory = category === 'todos' || card.dataset.category === category;
         const matchesTerm = !normalizedTerm || card.dataset.title.includes(normalizedTerm);
         card.hidden = !(matchesCategory && matchesTerm);
-      });
-
-      // Sempre que existir uma seção "vazia" (como a de "Acontecendo
-      // em breve") e ela ainda não tiver nenhum card dentro, copia os
-      // 4 primeiros cards de evento pra dentro dela — assim a seção
-      // nunca fica em branco, mesmo sem termos dados próprios pra ela ainda.
-      emptySections.forEach((grid) => {
-        if (!grid.children.length) grid.innerHTML = eventCards.slice(0, 4).map((card) => card.outerHTML).join('');
       });
     }
 
@@ -345,6 +344,7 @@
     // ============================================================
     carregarEventosPublicos();
   </script>
+<script src="particles.js"></script>
 </body>
 
 </html>
