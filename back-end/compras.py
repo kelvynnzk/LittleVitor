@@ -211,11 +211,11 @@ def registrar_compra(tipo_ingresso_id, usuario_id, quantidade, nome_titular, ema
             "tipo": tipo
         }
 
-except Exception as e:
+    except Exception as e:
         print(f"Erro ao registrar compra: {e}")
         return {"sucesso": False, "mensagem": "Não foi possível concluir a compra.", "valor_total": 0}
 
-finally:
+    finally:
         cursor.close()
         conexao.close()
 
@@ -276,11 +276,11 @@ def estatisticas_organizador(usuario_id):
             "total_arrecadado": float(linha_arrecadado["total_arrecadado"])
         }
 
-except Exception as e:
+    except Exception as e:
         print(f"Erro ao calcular estatísticas do organizador: {e}")
         return {"eventos_ativos": 0, "ingressos_vendidos": 0, "total_arrecadado": 0}
 
-finally:
+    finally:
         cursor.close()
         conexao.close()
 
@@ -334,11 +334,11 @@ def buscar_evento_destaque():
 
         return evento
 
-except Exception as e:
+    except Exception as e:
         print(f"Erro ao buscar evento em destaque: {e}")
         return None
 
-finally:
+    finally:
         cursor.close()
         conexao.close()
 
