@@ -11,6 +11,9 @@
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="toast.js"></script>
+    <script src="sessao.js"></script>
+    <script src="google-client-id.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body class="cadastro-page">
@@ -18,7 +21,7 @@
     <div class="auth-page">
 
         <div class="auth-visual">
-            <div class="logo">LittleVitor<span>.com</span></div>
+            <a href="index.html" class="logo">LittleVitor<span>.com</span></a>
 
             <div class="auth-visual-quote">
                 <div class="eyebrow"><span class="dot"></span> COMECE AGORA</div>
@@ -82,18 +85,22 @@
 
                     <div class="field-row-between cadastro-terms-row">
                         <label class="checkbox-line">
-                            <input type="checkbox" required>
+                            <input type="checkbox" id="aceitar-termos" required>
                             <span>Eu li e concordo com os <a href="/termos/termos.html" class="link-quiet cadastro-terms-link">Termos de Uso</a> e a <a href="/termos/privacidade.html" class="link-quiet cadastro-terms-link">Política de Privacidade</a>.</span>
                         </label>
                     </div>
 
-                    <button type="submit" class="btn-auth-primary">Criar minha conta</button>
+                    <button type="submit" id="btn-criar-conta" class="btn-auth-primary" disabled>Criar minha conta</button>
 
                     <div class="auth-divider">ou cadastre-se com</div>
 
-                    <div class="cadastro-social-row">
-                        <button type="button" class="btn-social"><span class="icon">G</span> Google</button>
-                        <button type="button" class="btn-social"><span class="icon">◆</span> Apple</button>
+                    <div class="cadastro-social-row cadastro-social-row-google">
+                        <div class="google-signin-wrap">
+                            <div id="google-signin-button"></div>
+                            <!-- Fica por cima do botão do Google enquanto a pessoa não
+                                 marcar a caixinha de termos — some assim que ela marca. -->
+                            <div id="google-signin-bloqueio" class="google-signin-bloqueio"></div>
+                        </div>
                     </div>
                 </form>
 
@@ -109,11 +116,42 @@
         //pega o formulario pelo id existente no html
         const formCadastro = document.getElementById('cadastro-form');
 
+        // ------------------------------------------------------------------
+        // O botão "Criar minha conta" só fica habilitado depois que a
+        // pessoa marca a caixinha de "li e concordo com os termos". Isso
+        // deixa visualmente claro (botão apagado/desabilitado) que falta
+        // esse passo, além de bloquear o cadastro de verdade.
+        // ------------------------------------------------------------------
+        const checkboxTermos = document.getElementById('aceitar-termos');
+        const botaoCriarConta = document.getElementById('btn-criar-conta');
+        const bloqueioGoogle = document.getElementById('google-signin-bloqueio');
+
+        checkboxTermos.addEventListener('change', () => {
+            botaoCriarConta.disabled = !checkboxTermos.checked;
+            // O botão do Google não é nosso (é desenhado pelo SDK deles),
+            // então não dá pra "desabilitar" ele diretamente — em vez
+            // disso, escondemos/mostramos essa camada transparente por
+            // cima, que intercepta o clique enquanto os termos não forem
+            // aceitos.
+            bloqueioGoogle.style.display = checkboxTermos.checked ? 'none' : 'block';
+        });
+
+        bloqueioGoogle.addEventListener('click', () => {
+            mostrarToast('Você precisa concordar com os Termos de Uso e a Política de Privacidade para continuar.', 'erro');
+        });
+
         //escuta o evento de envio do formulario quando o botão criar conta gratis é clicado
         formCadastro.addEventListener('submit', async (evento) => {
 
             //impede o comportamento padrão do navegador, que seria recarregar a pagina inteira ao enviar o forumlário.
             evento.preventDefault();
+
+            // Segunda trava (além do botão desabilitado) — garante que
+            // ninguém consegue cadastrar sem concordar com os termos.
+            if (!checkboxTermos.checked) {
+                mostrarToast('Você precisa concordar com os Termos de Uso e a Política de Privacidade para continuar.', 'erro');
+                return;
+            }
 
             //pega os valores em cada campo dos ids
             const nome = document.getElementById('nome').value;
@@ -253,6 +291,57 @@
                 bars.forEach(b => b.classList.add('active-strong'));
                 hint.textContent = 'Senha forte.';
             }
+        });
+
+        // ------------------------------------------------------------------
+        // CADASTRO/LOGIN COM GOOGLE
+        // Mesma lógica do login.html: a pessoa entra com a conta do
+        // Google, a gente confere no back-end e já cria a conta na hora
+        // (sem precisar confirmar e-mail — o Google já garantiu isso).
+        // ------------------------------------------------------------------
+        async function aoReceberCredencialGoogle(resposta) {
+            try {
+                const resposta_api = await fetch('http://127.0.0.1:5000/login-google', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: resposta.credential })
+                });
+
+                const dados = await resposta_api.json();
+
+                if (resposta_api.ok) {
+                    salvarUsuarioLogado(dados.usuario, true);
+                    mostrarToast(dados.mensagem, 'sucesso');
+
+                    setTimeout(() => {
+                        const paginaRetorno = new URLSearchParams(window.location.search).get('retorno');
+                        window.location.href = paginaRetorno || 'painel.html';
+                    }, 1200);
+                } else {
+                    mostrarToast(dados.mensagem, 'erro');
+                }
+            } catch (erro) {
+                console.error('Erro ao entrar com o Google:', erro);
+                mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
+            }
+        }
+
+        window.addEventListener('load', () => {
+            if (!GOOGLE_CLIENT_ID || typeof google === 'undefined') {
+                document.getElementById('google-signin-button').innerHTML =
+                    '<p class="compra-aviso">Cadastro com Google ainda não está configurado.</p>';
+                return;
+            }
+
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: aoReceberCredencialGoogle,
+            });
+
+            google.accounts.id.renderButton(
+                document.getElementById('google-signin-button'),
+                { theme: 'filled_black', size: 'large', shape: 'pill', width: 320, text: 'signup_with' }
+            );
         });
     </script>
 

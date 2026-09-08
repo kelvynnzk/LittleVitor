@@ -1,5 +1,6 @@
 import dns.resolver
 
+
 def dominio_aceita_email(email):
     """
     Confere se o domínio do e-mail (a parte depois do @) tem

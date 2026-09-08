@@ -24,7 +24,12 @@ def menu():
     elif opcao == "2":
      email=input("Email : ")
      senha=input("senha : ")
-     log_user =login(email,senha)
+     resultado = login(email,senha)
+     if resultado["sucesso"]:
+      log_user = resultado["usuario"]
+     else:
+      print("Não foi possível entrar: " + resultado["motivo"])
+      log_user = None
 
     elif opcao=="3":
      if log_user:

@@ -1,10 +1,19 @@
 #importação da conexão do banco de dados 
 
 import mysql.connector
-  
+
 # Importa a classe Error dessa mesma biblioteca, usada para capturar
 # erros específicos de conexão.
 from mysql.connector import Error
+
+# Importa a "flag" que controla o que cursor.rowcount significa depois
+# de um UPDATE. Por padrão, o mysql-connector conta só as linhas que
+# TIVERAM algum valor realmente alterado — se você salvar um formulário
+# de edição sem mudar nada, rowcount vem 0 mesmo a linha existindo.
+# Com FOUND_ROWS, rowcount passa a contar as linhas que bateram no
+# WHERE (encontradas), que é o que atualizar_evento()/deletar_evento()
+# usam pra checar se o evento existe e pertence a esse usuário.
+from mysql.connector.constants import ClientFlag
 
 def get_connection():
     """
@@ -17,7 +26,8 @@ def get_connection():
             host="localhost",   # o banco está rodando na própria máquina
             user="root",        # usuário padrão do MySQL no XAMPP
             password="",        # senha vazia é o padrão do XAMPP
-            database="teste"    # nome do banco que você já criou
+            database="teste",   # nome do banco que você já criou
+            client_flags=[ClientFlag.FOUND_ROWS]
         )
         # Se chegou até aqui sem erro, a conexão deu certo.
         return conexao

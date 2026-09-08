@@ -143,23 +143,69 @@ def buscar_tipo_ingresso_por_id(tipo_ingresso_id):
         conexao.close()
 
 
-def registrar_compra(tipo_ingresso_id, usuario_id, quantidade, nome_titular, email_titular):
+def buscar_compra_por_mp_payment_id(mp_payment_id):
+    """
+    Busca uma compra já registrada a partir do id do pagamento no
+    Mercado Pago. Usada como trava de segurança contra registro
+    duplicado: um pagamento Pix é consultado várias vezes (polling)
+    até ser aprovado, e não podemos gravar a mesma compra de novo a
+    cada consulta depois da aprovação.
+    """
+    conexao = get_connection()
+
+    if conexao is None:
+        print("Não foi possível conectar ao banco.")
+        return None
+
+    cursor = conexao.cursor(dictionary=True)
+
+    try:
+        cursor.execute("SELECT * FROM compras WHERE mp_payment_id = %s", (mp_payment_id,))
+        return cursor.fetchone()
+
+    except Exception as e:
+        print(f"Erro ao buscar compra pelo payment_id do Mercado Pago: {e}")
+        return None
+
+    finally:
+        cursor.close()
+        conexao.close()
+
+
+def registrar_compra(tipo_ingresso_id, usuario_id, quantidade, nome_titular, email_titular, mp_payment_id=None, forma_pagamento=None):
     """
     Registra a compra de ingressos: confere se ainda há disponibilidade
     suficiente, grava a compra e soma a quantidade vendida no tipo de
     ingresso correspondente.
 
+    "mp_payment_id" e "forma_pagamento" só vêm preenchidos quando a
+    compra passou por um pagamento de verdade no Mercado Pago (ver
+    pagamentos.py) — servem de registro e, no caso do Pix, evitam
+    gravar a mesma compra duas vezes (ver buscar_compra_por_mp_payment_id).
+
     Retorna um dicionário {"sucesso": bool, "mensagem": str, "valor_total": float}.
 
-    Observação: como isso é uma simulação de compra (sem gateway de
-    pagamento de verdade) e roda num banco local de estudo, a conferência
-    de disponibilidade aqui é "olha e depois grava" (não usa transação
-    com lock). Em um sistema real, com várias pessoas comprando o mesmo
-    ingresso ao mesmo tempo, seria preciso um SELECT ... FOR UPDATE
-    dentro de uma transação pra evitar vender o mesmo ingresso duas vezes.
+    Observação: a conferência de disponibilidade aqui é "olha e depois
+    grava" (não usa transação com lock). Em um sistema com muito mais
+    tráfego, com várias pessoas comprando o mesmo ingresso ao mesmo
+    tempo, seria preciso um SELECT ... FOR UPDATE dentro de uma
+    transação pra evitar vender o mesmo ingresso duas vezes.
     """
     if not tipo_ingresso_id or not usuario_id or not quantidade or quantidade < 1:
         return {"sucesso": False, "mensagem": "Dados da compra incompletos.", "valor_total": 0}
+
+    if mp_payment_id:
+        compra_existente = buscar_compra_por_mp_payment_id(mp_payment_id)
+        if compra_existente:
+            compra_existente["valor_total"] = float(compra_existente["valor_total"])
+            return {
+                "sucesso": True,
+                "mensagem": "Compra realizada com sucesso!",
+                "valor_total": compra_existente["valor_total"],
+                "compra_id": compra_existente["id"],
+                "tipo": buscar_tipo_ingresso_por_id(tipo_ingresso_id),
+                "ja_registrada": True
+            }
 
     tipo = buscar_tipo_ingresso_por_id(tipo_ingresso_id)
 
@@ -184,10 +230,10 @@ def registrar_compra(tipo_ingresso_id, usuario_id, quantidade, nome_titular, ema
 
     try:
         query_compra = """
-            INSERT INTO compras (tipo_ingresso_id, usuario_id, quantidade, valor_total, nome_titular, email_titular)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO compras (tipo_ingresso_id, usuario_id, quantidade, valor_total, nome_titular, email_titular, mp_payment_id, forma_pagamento)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(query_compra, (tipo_ingresso_id, usuario_id, quantidade, valor_total, nome_titular, email_titular))
+        cursor.execute(query_compra, (tipo_ingresso_id, usuario_id, quantidade, valor_total, nome_titular, email_titular, mp_payment_id, forma_pagamento))
 
         query_atualizar = """
             UPDATE tipos_ingresso

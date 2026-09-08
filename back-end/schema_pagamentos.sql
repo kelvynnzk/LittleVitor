@@ -1,0 +1,3 @@
+ALTER TABLE compras
+  ADD COLUMN mp_payment_id VARCHAR(50) NULL UNIQUE,
+  ADD COLUMN forma_pagamento VARCHAR(20) NULL;

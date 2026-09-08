@@ -11,6 +11,9 @@
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="toast.js"></script>
+    <script src="sessao.js"></script>
+    <script src="google-client-id.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body class="login-page">
@@ -18,7 +21,7 @@
     <div class="auth-page">
 
         <div class="auth-visual">
-            <div class="logo">LittleVitor</div>
+            <a href="index.html" class="logo">LittleVitor</a>
 
             <div class="auth-visual-quote">
                 <div class="eyebrow"><span class="dot"></span> SÁB, 13 DE DEZ · SÃO PAULO</div>
@@ -48,22 +51,24 @@
                 <p class="auth-sub">Ainda não tem conta? <a href="cadastro.html">Cadastre-se grátis</a></p>
 
                 <form id="login-form">
-                    <div class="field-group">
+                    <div class="field-group" id="grupo-email">
                         <label for="email">E-mail</label>
                         <input class="field-input" type="email" id="email" placeholder="LittleVitor@exemplo.com">
+                        <span class="field-erro" id="erro-email" hidden></span>
                     </div>
 
-                    <div class="field-group">
+                    <div class="field-group" id="grupo-senha">
                         <label for="senha">Senha</label>
                         <div class="field-password-wrap">
                             <input class="field-input" type="password" id="senha" placeholder="Sua senha">
                             <button type="button" class="field-toggle">mostrar</button>
                         </div>
+                        <span class="field-erro" id="erro-senha" hidden></span>
                     </div>
 
                     <div class="field-row-between">
                         <label class="checkbox-line">
-                            <input type="checkbox">
+                            <input type="checkbox" id="manter-conectado">
                             Manter conectado
                         </label>
                         <a href="esqueci_senha.html" class="link-quiet">Esqueci minha senha</a>
@@ -73,9 +78,8 @@
 
                     <div class="auth-divider">ou continue com</div>
 
-                    <div class="login-social-row">
-                        <button type="button" class="btn-social"><span class="icon">G</span> Google</button>
-                        <button type="button" class="btn-social"><span class="icon">◆</span> Apple</button>
+                    <div class="login-social-row login-social-row-google">
+                        <div id="google-signin-button"></div>
                     </div>
                 </form>
 
@@ -90,6 +94,17 @@
 
     <script>
 
+        // ------------------------------------------------------------------
+        // Se a pessoa já estiver logada, não faz sentido mostrar a tela
+        // de login de novo.
+        // ------------------------------------------------------------------
+        const usuarioJaLogado = obterUsuarioLogado();
+        if (usuarioJaLogado) {
+            const urlParamsInicial = new URLSearchParams(window.location.search);
+            const retornoInicial = urlParamsInicial.get('retorno');
+            window.location.href = retornoInicial || 'index.html';
+        }
+
         // Se existir um parâmetro "retorno" na URL, repassa ele também
         // pro link de cadastro, para não perder essa informação.
         const urlParamsAtual = new URLSearchParams(window.location.search);
@@ -100,6 +115,25 @@
             linkCadastro.href = `cadastro.html?retorno=${retornoAtual}`;
         }
 
+        // ------------------------------------------------------------------
+        // VALIDAÇÃO DE CAMPOS E ERROS ESPECÍFICOS
+        // ------------------------------------------------------------------
+        function mostrarErroCampo(idGrupo, idErro, mensagem) {
+            document.getElementById(idGrupo).classList.add('is-invalido');
+            const elementoErro = document.getElementById(idErro);
+            elementoErro.textContent = mensagem;
+            elementoErro.hidden = false;
+        }
+
+        function limparErroCampo(idGrupo, idErro) {
+            document.getElementById(idGrupo).classList.remove('is-invalido');
+            document.getElementById(idErro).hidden = true;
+        }
+
+        function limparTodosOsErros() {
+            limparErroCampo('grupo-email', 'erro-email');
+            limparErroCampo('grupo-senha', 'erro-senha');
+        }
 
         // Pega o formulário de login pelo ID que acabamos de adicionar
         const formLogin = document.getElementById('login-form');
@@ -107,8 +141,26 @@
         formLogin.addEventListener('submit', async (evento) => {
             evento.preventDefault();
 
-            const email = document.getElementById('email').value;
+            limparTodosOsErros();
+
+            const email = document.getElementById('email').value.trim();
             const senha = document.getElementById('senha').value;
+            const manterConectado = document.getElementById('manter-conectado').checked;
+
+            // Cobra os campos obrigatórios antes de gastar uma
+            // requisição pro servidor.
+            let temCampoVazio = false;
+            if (!email) {
+                mostrarErroCampo('grupo-email', 'erro-email', 'Digite seu e-mail.');
+                temCampoVazio = true;
+            }
+            if (!senha) {
+                mostrarErroCampo('grupo-senha', 'erro-senha', 'Digite sua senha.');
+                temCampoVazio = true;
+            }
+            if (temCampoVazio) {
+                return;
+            }
 
             try {
                 const resposta = await fetch('http://127.0.0.1:5000/login', {
@@ -122,7 +174,10 @@
                 const dados = await resposta.json();
 
                 if (resposta.ok) {
-                    localStorage.setItem('usuario', JSON.stringify(dados.usuario));
+                    // Guarda em localStorage (sobrevive fechando o navegador)
+                    // só se "Manter conectado" estiver marcado; senão, guarda
+                    // em sessionStorage (some ao fechar a aba/navegador).
+                    salvarUsuarioLogado(dados.usuario, manterConectado);
                     mostrarToast(dados.mensagem, 'sucesso');
 
                     setTimeout(() => {
@@ -137,6 +192,15 @@
                     }, 1500);
 
                 } else {
+                    // Mostra o erro no campo certo, de acordo com o
+                    // "motivo" que o backend devolveu.
+                    if (dados.motivo === 'email_nao_encontrado') {
+                        mostrarErroCampo('grupo-email', 'erro-email', dados.mensagem);
+                    } else if (dados.motivo === 'senha_incorreta') {
+                        mostrarErroCampo('grupo-senha', 'erro-senha', dados.mensagem);
+                    } else if (dados.motivo === 'email_nao_verificado') {
+                        mostrarErroCampo('grupo-email', 'erro-email', dados.mensagem);
+                    }
                     mostrarToast(dados.mensagem, 'erro');
                 }
 
@@ -144,6 +208,65 @@
                 console.error('Erro ao fazer login:', erro);
                 mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
             }
+        });
+
+        // Assim que a pessoa começa a corrigir um campo com erro, tira
+        // a borda vermelha e a mensagem.
+        document.getElementById('email').addEventListener('input', () => limparErroCampo('grupo-email', 'erro-email'));
+        document.getElementById('senha').addEventListener('input', () => limparErroCampo('grupo-senha', 'erro-senha'));
+
+        // ------------------------------------------------------------------
+        // LOGIN COM GOOGLE
+        // A biblioteca do Google (carregada no <head>) desenha o botão
+        // oficial dentro de #google-signin-button. Quando a pessoa
+        // termina de entrar com a conta dela, a função abaixo recebe um
+        // "credential" (um token assinado pelo Google) — mandamos ele
+        // pro nosso back-end, que confere a assinatura antes de confiar
+        // no e-mail/nome de dentro.
+        // ------------------------------------------------------------------
+        async function aoReceberCredencialGoogle(resposta) {
+            try {
+                const resposta_api = await fetch('http://127.0.0.1:5000/login-google', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: resposta.credential })
+                });
+
+                const dados = await resposta_api.json();
+
+                if (resposta_api.ok) {
+                    salvarUsuarioLogado(dados.usuario, true);
+                    mostrarToast(dados.mensagem, 'sucesso');
+
+                    setTimeout(() => {
+                        const paginaRetorno = new URLSearchParams(window.location.search).get('retorno');
+                        window.location.href = paginaRetorno || 'painel.html';
+                    }, 1200);
+                } else {
+                    mostrarToast(dados.mensagem, 'erro');
+                }
+            } catch (erro) {
+                console.error('Erro ao entrar com o Google:', erro);
+                mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
+            }
+        }
+
+        window.addEventListener('load', () => {
+            if (!GOOGLE_CLIENT_ID || typeof google === 'undefined') {
+                document.getElementById('google-signin-button').innerHTML =
+                    '<p class="compra-aviso">Login com Google ainda não está configurado.</p>';
+                return;
+            }
+
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: aoReceberCredencialGoogle,
+            });
+
+            google.accounts.id.renderButton(
+                document.getElementById('google-signin-button'),
+                { theme: 'filled_black', size: 'large', shape: 'pill', width: 320, text: 'continue_with' }
+            );
         });
 
 

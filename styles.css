@@ -882,6 +882,8 @@
     margin-bottom: 20px;
   }
   .btn-auth-primary:hover{ background: var(--green-400); transform: translateY(-1px); }
+  .btn-auth-primary:disabled{ opacity: 0.45; cursor: not-allowed; }
+  .btn-auth-primary:disabled:hover{ background: var(--green-500); transform: none; }
 
   .auth-divider{
     display: flex;
@@ -1224,6 +1226,9 @@
     grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
+  .cadastro-social-row-google { display: flex; justify-content: center; }
+  .google-signin-wrap { position: relative; }
+  .google-signin-bloqueio { position: absolute; inset: 0; cursor: not-allowed; z-index: 2; }
 
   .cadastro-page .btn-social {
     margin-bottom: 0;
@@ -1778,6 +1783,62 @@
     background-color: #ef4444;
 }
 
+/* Fundo escurecido atrás da confirmação central, pra separar ela do
+   resto da página (mesmo princípio de um modal). */
+.toast-confirmacao-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    z-index: 9998;
+}
+.toast-confirmacao-overlay.mostrar { opacity: 1; }
+
+/* Variante do toast usada por mostrarConfirmacao() — em vez de sumir
+   sozinha, mostra a mensagem + dois botões (Cancelar / confirmar),
+   centralizada na tela (funciona igual em desktop e celular, já que
+   usa % da largura da tela em vez de um tamanho fixo). */
+.toast.toast-confirmacao {
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%) scale(0.94);
+    width: min(92vw, 420px);
+    background-color: var(--bg-card);
+    border: 1px solid var(--line);
+    color: var(--text-hi);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 26px 28px;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+.toast.toast-confirmacao.mostrar { transform: translate(-50%, -50%) scale(1); }
+.toast-confirmacao-texto { margin: 0; font-size: 1.05rem; line-height: 1.5; }
+.toast-confirmacao-acoes { display: flex; justify-content: flex-end; gap: 10px; }
+.toast-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+.toast-btn-cancelar {
+    background: transparent;
+    border-color: var(--line);
+    color: var(--text-mid);
+}
+.toast-btn-cancelar:hover { color: var(--text-hi); border-color: var(--text-mid); }
+.toast-btn-confirmar {
+    background: #ef4444;
+    color: #fff;
+}
+.toast-btn-confirmar:hover { background: #dc2626; }
+
 /* ================= PASSWORD RECOVERY ================= */
 
 .recovery-page {
@@ -2068,6 +2129,7 @@
   letter-spacing: 0;
 }
 .login-social-row { display: flex; gap: 10px; }
+.login-social-row-google { justify-content: center; }
 .login-page .btn-social {
   flex: 1;
   height: 55px;
@@ -3173,4 +3235,549 @@ body::after {
     min-width: 130px;
     font-size: 0.85rem;
   }
+}
+
+.field-group.is-invalido .field-input{ border-color: #ef4444; }
+.field-group.is-invalido .field-input:focus{ box-shadow: 0 0 0 3px rgba(239,68,68,0.15); }
+.field-erro{ display: block; color: #ef4444; font-size: 0.78rem; margin-top: 7px; }
+
+/* ================= TRAZIDO DA VERSÃO ANTERIOR DO SITE =================
+   Estilos usados por funcionalidades que já existiam antes da
+   repaginação visual (painel de organizador, compra de ingresso,
+   pagamento, autocomplete de cidade) — portados aqui porque o
+   styles.css novo ainda não tinha essas classes. */
+
+.painel-filtros{
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+.painel-filtros input[type="text"],
+.painel-filtros select{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    color: var(--text-hi);
+    padding: 11px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-family: var(--font-body);
+}
+.painel-filtros input[type="text"]{ flex: 1; min-width: 220px; }
+.painel-filtros input[type="text"]::placeholder{ color: var(--text-low); }
+.painel-filtros input:focus,
+.painel-filtros select:focus{
+    outline: none;
+    border-color: var(--purple-500);
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
+}
+.painel-vazio{ color: var(--text-mid); font-size: 0.92rem; padding: 12px 0; }
+
+/* ---------- MODAL DE CONFIRMAÇÃO ---------- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+}
+
+.modal-overlay[hidden] {
+    display: none;
+}
+
+.modal-box {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 28px;
+    max-width: 380px;
+    width: 100%;
+    box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.6);
+}
+
+.modal-box h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--text-hi);
+    margin-bottom: 10px;
+}
+
+.modal-box p {
+    color: var(--text-mid);
+    font-size: 0.92rem;
+    margin-bottom: 24px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+/* ================= EVENTO — DETALHE E COMPRA (evento.html) ================= */
+
+.evento-hero{ padding: 40px 0 64px; }
+.evento-hero-inner{
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 48px;
+    align-items: start;
+}
+
+#det-titulo{
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 2.6rem;
+    line-height: 1.15;
+    margin: 14px 0 12px;
+}
+.evento-sub{
+    color: var(--text-mid);
+    font-size: 1rem;
+    max-width: 60ch;
+    margin-bottom: 32px;
+}
+
+.evento-facts{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.evento-facts li{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line-soft);
+}
+.evento-facts li:last-child{ border-bottom: none; padding-bottom: 0; }
+.fact-label{
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-low);
+}
+.fact-value{ color: var(--text-hi); font-size: 0.98rem; }
+
+/* card de compra */
+.compra-card{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 26px;
+    position: sticky;
+    top: 90px;
+}
+.ticket-top{ margin-bottom: 16px; }
+.ticket-label{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--text-low);
+    margin-bottom: 10px;
+}
+.ticket-label.is-live::before{
+    content:'';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green-500);
+    box-shadow: 0 0 8px var(--green-glow);
+}
+.ticket-top h3{
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.compra-form{ display: flex; flex-direction: column; gap: 16px; }
+
+#ingressos-lista{ display: flex; flex-direction: column; gap: 10px; }
+.ingresso-opcao{
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    transition: border-color .2s, background .2s;
+}
+.ingresso-opcao.is-selecionada{
+    border-color: var(--purple-500);
+    background: rgba(139,92,246,0.08);
+}
+.ingresso-opcao label{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+.ingresso-opcao input[type="radio"]{ accent-color: var(--purple-500); }
+.opcao-nome{ flex: 1; color: var(--text-hi); font-size: 0.92rem; font-weight: 500; }
+.opcao-preco{ font-family: var(--font-mono); font-size: 0.88rem; color: var(--text-hi); font-weight: 600; white-space: nowrap; }
+.ingresso-opcao.esgotado{ opacity: 0.55; }
+.ingresso-opcao.esgotado label{ cursor: not-allowed; }
+.opcao-esgotado{ font-size: 0.68rem; color: #ef4444; font-family: var(--font-mono); text-transform: uppercase; white-space: nowrap; }
+.ingressos-vazio{ color: var(--text-mid); font-size: 0.88rem; }
+
+.qtd-row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.qtd-row label{ font-size: 0.85rem; color: var(--text-mid); }
+.qtd-row input{
+    width: 80px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--line);
+    color: var(--text-hi);
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.92rem;
+    text-align: center;
+    font-family: var(--font-body);
+}
+.qtd-row input:focus{ outline: none; border-color: var(--purple-500); }
+
+.compra-total{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 14px;
+    border-top: 1px solid var(--line-soft);
+}
+.compra-total .label{ color: var(--text-mid); font-size: 0.85rem; }
+.compra-total .valor{ font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; color: var(--text-hi); }
+
+.btn-full{ width: 100%; }
+.btn:disabled{ opacity: 0.5; cursor: not-allowed; }
+.compra-aviso{
+    font-size: 0.75rem;
+    color: var(--text-low);
+    text-align: center;
+    margin-top: 2px;
+}
+
+/* SOBRE + MAPA */
+.evento-sobre{ padding: 8px 0 80px; }
+.evento-sobre-inner{
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 48px;
+    padding-top: 48px;
+    border-top: 1px solid var(--line-soft);
+}
+.evento-descricao h2{ font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; margin-bottom: 16px; }
+.evento-descricao p{ color: var(--text-mid); line-height: 1.7; }
+.evento-mapa-box h3{ font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; }
+.evento-mapa-box p{ color: var(--text-mid); font-size: 0.9rem; margin-bottom: 14px; line-height: 1.5; }
+.mapa-placeholder{
+    height: 160px;
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--line);
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated));
+}
+
+.evento-nao-encontrado{ padding: 100px 0; text-align: center; }
+.evento-nao-encontrado h2{ font-family: var(--font-display); font-size: 1.8rem; font-weight: 500; margin-bottom: 8px; }
+.evento-nao-encontrado p{ color: var(--text-mid); }
+.evento-nao-encontrado a{ color: var(--purple-400); }
+
+@media (max-width: 900px){
+    .evento-hero-inner, .evento-sobre-inner{ grid-template-columns: 1fr; }
+    .compra-card{ position: static; }
+}
+
+/* ================= PAGAMENTO (pagamento.html) ================= */
+
+.pagamento-layout{
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.metodo-pagamento-tabs{
+    display: flex;
+    gap: 10px;
+    margin: 20px 0 18px;
+}
+.metodo-pagamento-tab{
+    flex: 1;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line);
+    background: var(--bg-card);
+    color: var(--text-mid);
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: border-color .2s, color .2s, background .2s;
+}
+.metodo-pagamento-tab:hover{ color: var(--text-hi); }
+.metodo-pagamento-tab.is-active{
+    border-color: var(--purple-500);
+    background: rgba(139,92,246,0.12);
+    color: var(--text-hi);
+}
+
+.metodo-pagamento-painel.hidden{ display: none; }
+
+.pix-qrcode{
+    display: block;
+    width: 220px;
+    height: 220px;
+    margin: 0 auto 16px;
+    border-radius: var(--radius-sm);
+    background: #fff;
+    padding: 10px;
+}
+.pix-status{ text-align: center; color: var(--text-mid); font-size: 0.88rem; margin-bottom: 16px; }
+.pix-copia-cola-row{ display: flex; gap: 8px; }
+.pix-copia-cola-row input{
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line);
+    background: var(--bg-card);
+    color: var(--text-mid);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+}
+
+.resumo-compra{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 26px;
+    position: sticky;
+    top: 90px;
+}
+.resumo-compra h3{ font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; margin-bottom: 18px; }
+.resumo-linha{
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 0.88rem;
+    color: var(--text-mid);
+}
+.resumo-linha .valor{ color: var(--text-hi); font-weight: 600; }
+.resumo-total{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 16px;
+    margin-top: 4px;
+}
+.resumo-total .label{ color: var(--text-mid); font-size: 0.85rem; }
+.resumo-total .valor{ font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; color: var(--text-hi); }
+
+.compra-sucesso{ text-align: center; padding: 90px 0; }
+.icone-sucesso{
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(34,197,94,0.12);
+    color: var(--green-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 20px;
+}
+.compra-sucesso h2{ font-family: var(--font-display); font-size: 2rem; font-weight: 500; margin-bottom: 10px; }
+.compra-sucesso p{ color: var(--text-mid); margin-bottom: 28px; }
+
+@media (max-width: 900px){
+    .pagamento-layout{ grid-template-columns: 1fr; }
+    .resumo-compra{ position: static; }
+}
+
+/* ================= AUTOCOMPLETE DE CIDADE (criar-evento.html) ================= */
+
+.autocomplete-wrap{ position: relative; }
+
+.autocomplete-lista{
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    max-height: 230px;
+    overflow-y: auto;
+    z-index: 20;
+    box-shadow: 0 16px 40px -12px rgba(0,0,0,0.6);
+}
+
+.autocomplete-item{
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    color: var(--text-hi);
+    cursor: pointer;
+}
+.autocomplete-item:hover,
+.autocomplete-item.is-ativo{
+    background: rgba(139,92,246,0.14);
+}
+.autocomplete-item .uf{
+    color: var(--text-low);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    margin-left: 6px;
+}
+
+.autocomplete-vazio{
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: var(--text-low);
+}
+
+/* ================= CHATBOT "VITOR" (widget flutuante) ================= */
+
+.lv-chatbot-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(150deg, var(--purple-500), var(--purple-700));
+    border: none;
+    box-shadow: 0 8px 24px rgba(139,92,246,0.45);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    z-index: 9997;
+    transition: transform .2s ease;
+}
+.lv-chatbot-fab:hover { transform: scale(1.06); }
+
+.lv-chatbot-painel {
+    position: fixed;
+    bottom: 96px;
+    right: 24px;
+    width: min(360px, calc(100vw - 32px));
+    height: min(520px, calc(100vh - 140px));
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9997;
+}
+.lv-chatbot-painel.hidden { display: none; }
+
+.lv-chatbot-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-elevated);
+    color: var(--text-hi);
+}
+.lv-chatbot-header strong { font-family: var(--font-display); font-size: 1rem; display: block; }
+.lv-chatbot-subtitulo { font-size: 0.72rem; color: var(--text-mid); }
+.lv-chatbot-header button {
+    background: transparent;
+    border: none;
+    color: var(--text-mid);
+    font-size: 1.3rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 2px 6px;
+}
+.lv-chatbot-header button:hover { color: var(--text-hi); }
+
+.lv-chatbot-mensagens {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.lv-chatbot-bolha {
+    max-width: 85%;
+    padding: 9px 13px;
+    border-radius: 14px;
+    font-size: 0.86rem;
+    line-height: 1.45;
+    white-space: pre-wrap;
+}
+.lv-chatbot-bolha-usuario {
+    align-self: flex-end;
+    background: var(--purple-500);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+.lv-chatbot-bolha-assistente {
+    align-self: flex-start;
+    background: var(--bg-elevated);
+    border: 1px solid var(--line);
+    color: var(--text-hi);
+    border-bottom-left-radius: 4px;
+}
+.lv-chatbot-bolha.lv-chatbot-carregando { color: var(--text-low); font-style: italic; }
+
+.lv-chatbot-form {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid var(--line);
+}
+.lv-chatbot-form input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--bg-elevated);
+    color: var(--text-hi);
+    font-size: 0.85rem;
+}
+.lv-chatbot-form input:focus { outline: none; border-color: var(--purple-500); }
+.lv-chatbot-form button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--purple-500);
+    color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+.lv-chatbot-form button:hover { background: var(--purple-400); }
+
+@media (max-width: 480px) {
+    .lv-chatbot-painel { right: 16px; bottom: 88px; }
+    .lv-chatbot-fab { right: 16px; bottom: 16px; }
 }

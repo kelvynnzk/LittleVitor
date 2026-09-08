@@ -13,6 +13,10 @@
 
   <!-- Todo o CSS do site (essa versão nova usa a folha de estilo única styles.css) -->
   <link rel="stylesheet" href="styles.css">
+  <script src="sessao.js"></script>
+  <script src="toast.js"></script>
+  <script src="auth-ui.js"></script>
+  <script src="chatbot.js"></script>
 </head>
 
 <!-- Classe "home-v2" identifica esse layout como a versão nova da home,
@@ -36,7 +40,7 @@
       <!-- Busca rápida no topo + botões de entrar/cadastrar -->
       <div class="home-actions">
         <label class="nav-search"><span>⌕</span><input type="search" placeholder="Buscar eventos..." aria-label="Buscar eventos"></label>
-        <a href="login.html" class="home-login">Entrar</a>
+        <a href="login.html" id="link-entrar" class="home-login">Entrar</a>
         <a href="cadastro.html" class="home-signup">Criar conta</a>
       </div>
     </nav>
@@ -69,7 +73,7 @@
           </div>
 
           <!-- Números de destaque (estáticos, só decorativos por enquanto) -->
-          <div class="hero-stats"><div><strong>2.4k+</strong><span>Eventos ativos</span></div><div><strong>180k</strong><span>Ingressos vendidos</span></div><div><strong>4.9/5</strong><span>Avaliação média</span></div></div>
+          <div class="hero-stats"><div><strong id="stat-eventos-ativos">—</strong><span>Eventos ativos</span></div><div><strong id="stat-ingressos-vendidos">—</strong><span>Ingressos vendidos</span></div><div><strong>4.9/5</strong><span>Avaliação média</span></div></div>
         </div>
 
         <!-- Cartõezinhos flutuantes ilustrativos ao lado do hero.
@@ -109,7 +113,7 @@
           <button class="filter-pill" data-filter="arte">◌ Arte</button>
         </div>
         <!-- Select de ordenação — visual apenas, ainda sem lógica de ordenar de verdade -->
-        <select class="sort-select" aria-label="Ordenar eventos"><option>Relevância</option><option>Mais recentes</option><option>Menor preço</option></select>
+        <select class="sort-select" id="sort-select" aria-label="Ordenar eventos"><option value="relevancia">Relevância</option><option value="recentes">Mais recentes</option><option value="preco">Menor preço</option></select>
       </div>
 
       <!-- Grade de eventos em destaque. Esses 4 cards abaixo (<article
@@ -120,7 +124,7 @@
            4 cards fixos e coloca no lugar os eventos reais vindos do
            banco de dados (função carregarEventosPublicos, no bloco de script mais abaixo). -->
       <div class="event-section" id="event-section-destaque">
-        <div class="home-section-heading"><div><div class="home-eyebrow"><i></i> Selecionados para você</div><h2 class="home-section-title">Em destaque</h2></div></div>
+        <div class="home-section-heading"><div><div class="home-eyebrow"><i></i> Selecionados para você</div><h2 class="home-section-title">Em destaque</h2></div><a href="evento.html" class="home-secondary">Ver todos os eventos →</a></div>
         <div class="image-event-grid">
           <article class="image-event" data-category="musica" data-title="festival noite roxa"><div class="image-event-media"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85" alt="Folhas douradas em um caminho"><span>Destaque</span><button aria-label="Salvar Festival Noite Roxa">♡</button></div><div class="image-event-body"><small>Música</small><h3>Festival Noite Roxa</h3><p>▣ &nbsp;20 Set · 20:00</p><p>⌖ &nbsp;Allianz Parque, São Paulo</p><footer><strong>R$ 180 <small>por pessoa</small></strong><span>42 disp.</span></footer></div></article>
           <article class="image-event" data-category="tecnologia" data-title="summit littletech 2026"><div class="image-event-media"><img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=900&q=85" alt="Cão preto em uma madeira"><span>Destaque</span><button aria-label="Salvar Summit LittleTech 2026">♡</button></div><div class="image-event-body"><small>Tecnologia</small><h3>Summit LittleTech 2026</h3><p>▣ &nbsp;03 Out · 09:00</p><p>⌖ &nbsp;Expo Center, Rio de Janeiro</p><footer><strong>R$ 320 <small>por pessoa</small></strong><span>118 disp.</span></footer></div></article>
@@ -136,16 +140,10 @@
       <div class="event-section">
         <div class="home-section-heading"><div><div class="home-eyebrow"><i></i> Onde você está</div><h2 class="home-section-title">Explore por cidade</h2></div></div>
         <p class="city-subtitle">Eventos ativos agora, organizados por onde você está.</p>
-        <div class="city-grid">
-          <a href="#destaques" class="city-card"><span>São Paulo</span><small>312 eventos</small></a>
-          <a href="#destaques" class="city-card"><span>Rio de Janeiro</span><small>198 eventos</small></a>
-          <a href="#destaques" class="city-card"><span>Belo Horizonte</span><small>74 eventos</small></a>
-          <a href="#destaques" class="city-card"><span>Curitiba</span><small>51 eventos</small></a>
-          <a href="#destaques" class="city-card"><span>Porto Alegre</span><small>46 eventos</small></a>
-          <a href="#destaques" class="city-card"><span>Salvador</span><small>39 eventos</small></a>
-          <a href="#destaques" class="city-card"><span>Recife</span><small>28 eventos</small></a>
-          <a href="#destaques" class="city-card"><span>Florianópolis</span><small>22 eventos</small></a>
+        <div class="city-grid" id="cidades-grid">
+          <!-- cards gerados via JS a partir de /cidades-com-eventos -->
         </div>
+        <p id="cidades-vazio" class="hidden" style="color:var(--text-mid);">Nenhuma cidade com eventos cadastrados ainda.</p>
       </div>
 
       <!-- Banner de call-to-action pra quem quer criar/organizar um evento -->
@@ -209,6 +207,7 @@
       document.querySelectorAll('.image-event-media button').forEach((button) => {
         button.addEventListener('click', (event) => {
           event.preventDefault();               // não deixa o clique navegar/recarregar nada
+          event.stopPropagation();               // não deixa o clique "vazar" pro card e abrir o evento
           button.classList.toggle('saved');       // alterna o estado visual "salvo"
           button.textContent = button.classList.contains('saved') ? '♥' : '♡'; // troca o ícone
         });
@@ -225,6 +224,15 @@
     function montarCardEvento(evento) {
       const article = document.createElement('article');
       article.className = 'image-event';
+      article.style.cursor = 'pointer';
+
+      // Clicar em qualquer parte do card leva pra página de detalhes
+      // desse evento. O botão de "salvar" (♡) tem seu próprio clique
+      // com stopPropagation() (em ligarBotoesSalvar) pra não disparar
+      // essa navegação também.
+      article.addEventListener('click', () => {
+        window.location.href = `evento.html?id=${evento.id}`;
+      });
 
       // data-category e data-title são o que a função filterEvents()
       // usa pra decidir se esse card deve aparecer ou não — por isso
@@ -232,6 +240,7 @@
       // e com o "data-filter" dos botões de categoria.
       article.dataset.category = (evento.categoria || '').toLowerCase();
       article.dataset.title = (evento.titulo || '').toLowerCase();
+      article.dataset.city = (evento.cidade || '').toLowerCase();
 
       // O banco de dados (tabela "eventos") ainda não guarda imagem,
       // preço nem quantidade de vagas do evento — só titulo, categoria,
@@ -257,14 +266,86 @@
     }
 
     // ============================================================
+    // ORDENAÇÃO DOS EVENTOS (select "Relevância / Mais recentes / Menor preço")
+    // ============================================================
+
+    // Guarda os eventos já com os dados reais de venda/preço buscados
+    // (ver enriquecerComVendasEPreco), pra poder reordenar na hora sem
+    // precisar buscar tudo de novo na API a cada troca do select.
+    let eventosCarregados = [];
+    const sortSelect = document.getElementById('sort-select');
+
+    // Pra cada evento, busca os tipos de ingresso dele (rota
+    // /tipos-ingresso/<id>) e calcula: quantos ingressos já foram
+    // vendidos ao todo (usado em "Relevância") e qual o menor preço
+    // entre os tipos (usado em "Menor preço"). Eventos sem nenhum
+    // tipo de ingresso cadastrado ficam com 0 vendidos e preço
+    // "infinito" (vão pro final quando ordenar por menor preço).
+    async function enriquecerComVendasEPreco(eventos) {
+      await Promise.all(eventos.map(async (evento) => {
+        try {
+          const resposta = await fetch(`http://127.0.0.1:5000/tipos-ingresso/${evento.id}`);
+          const dados = await resposta.json();
+          const tipos = dados.tipos_ingresso || [];
+
+          evento._totalVendidos = tipos.reduce((soma, tipo) => soma + (tipo.quantidade_vendida || 0), 0);
+          evento._precoMinimo = tipos.length > 0 ? Math.min(...tipos.map((tipo) => tipo.preco)) : Infinity;
+        } catch (erro) {
+          console.error(`Erro ao buscar ingressos do evento ${evento.id}:`, erro);
+          evento._totalVendidos = 0;
+          evento._precoMinimo = Infinity;
+        }
+      }));
+    }
+
+    // Devolve uma NOVA lista, com os eventos ordenados de acordo com o
+    // critério escolhido no select — não mexe na lista original.
+    function ordenarEventos(eventos, criterio) {
+      const copia = [...eventos];
+
+      if (criterio === 'preco') {
+        // Menor preço primeiro (mais barato → mais caro).
+        copia.sort((a, b) => a._precoMinimo - b._precoMinimo);
+      } else if (criterio === 'recentes') {
+        // Mais recém-criado primeiro (mais novo → mais antigo).
+        copia.sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em));
+      } else {
+        // "Relevância" = mais ingressos vendidos primeiro.
+        copia.sort((a, b) => b._totalVendidos - a._totalVendidos);
+      }
+
+      return copia;
+    }
+
+    // Atualiza os números "Eventos ativos" e "Ingressos vendidos" do
+    // hero com dados reais (a "Avaliação média" ao lado continua fixa,
+    // já que o site não tem sistema de avaliação ainda).
+    function atualizarEstatisticasHero(eventos) {
+      const totalIngressosVendidos = eventos.reduce((soma, evento) => soma + (evento._totalVendidos || 0), 0);
+      document.getElementById('stat-eventos-ativos').textContent = eventos.length.toLocaleString('pt-BR');
+      document.getElementById('stat-ingressos-vendidos').textContent = totalIngressosVendidos.toLocaleString('pt-BR');
+    }
+
+    // Limpa a grade e recria um card pra cada evento, na ordem em que
+    // aparecem na lista recebida — reaproveitada tanto no carregamento
+    // inicial quanto toda vez que a ordenação muda.
+    function construirGridEventos(eventos) {
+      const grid = document.querySelector('#event-section-destaque .image-event-grid');
+      grid.innerHTML = '';
+      eventos.forEach((evento) => grid.appendChild(montarCardEvento(evento)));
+
+      eventCards = [...document.querySelectorAll('.image-event')];
+      ligarBotoesSalvar();
+      filterEvents(document.querySelector('.filter-pill.active').dataset.filter, document.getElementById('hero-search-input').value);
+    }
+
+    // ============================================================
     // CARREGAMENTO DOS EVENTOS REAIS (conexão com o back-end)
     // ============================================================
     // Busca todos os eventos públicos na API (rota GET /eventos, que
     // não exige usuário logado) e substitui os cards de exemplo fixos
     // no HTML pelos eventos reais cadastrados no banco de dados.
     async function carregarEventosPublicos() {
-      // Pega o container onde os cards de "Em destaque" ficam —
-      // é dentro dele que vamos inserir os cards reais.
       const grid = document.querySelector('#event-section-destaque .image-event-grid');
 
       try {
@@ -281,20 +362,18 @@
           grid.innerHTML = '<p>Nenhum evento cadastrado ainda.</p>';
           eventCards = [];
           filterEvents();
+          atualizarEstatisticasHero([]);
           return;
         }
 
-        // Deu certo: apaga os 4 cards de exemplo fixos e coloca no
-        // lugar um card pra cada evento que veio do banco.
-        grid.innerHTML = '';
-        eventos.forEach((evento) => grid.appendChild(montarCardEvento(evento)));
+        // Busca quantos ingressos cada evento já vendeu e o menor
+        // preço entre os tipos dele, pra "Relevância" e "Menor preço"
+        // funcionarem com dados reais.
+        await enriquecerComVendasEPreco(eventos);
 
-        // Atualiza a lista de cards "atuais" da página (pra filtro e
-        // busca funcionarem nos cards novos) e liga o clique do
-        // botão de salvar neles, já que são elementos recém-criados.
-        eventCards = [...document.querySelectorAll('.image-event')];
-        ligarBotoesSalvar();
-        filterEvents();
+        eventosCarregados = eventos;
+        construirGridEventos(ordenarEventos(eventosCarregados, sortSelect.value));
+        atualizarEstatisticasHero(eventosCarregados);
 
       } catch (erro) {
         // Se der erro (por exemplo, o back-end Flask não está rodando),
@@ -309,6 +388,73 @@
         filterEvents();
       }
     }
+
+    // Trocar o critério no select reordena os eventos já carregados,
+    // sem precisar buscar tudo de novo na API.
+    sortSelect.addEventListener('change', () => {
+      if (eventosCarregados.length > 0) {
+        construirGridEventos(ordenarEventos(eventosCarregados, sortSelect.value));
+      }
+    });
+
+    // ============================================================
+    // "EXPLORE POR CIDADE" — busca as cidades que realmente têm
+    // evento cadastrado (com a contagem real) e monta os cards
+    // dinamicamente. Antes eram 8 cidades e números fixos, sempre
+    // iguais, sem relação com os eventos reais.
+    // ============================================================
+    async function carregarCidadesComEventos() {
+      const grid = document.getElementById('cidades-grid');
+      const vazio = document.getElementById('cidades-vazio');
+
+      try {
+        const resposta = await fetch('http://127.0.0.1:5000/cidades-com-eventos');
+        const dados = await resposta.json();
+        const cidades = dados.cidades || [];
+
+        grid.innerHTML = '';
+
+        if (cidades.length === 0) {
+          vazio.classList.remove('hidden');
+          return;
+        }
+        vazio.classList.add('hidden');
+
+        cidades.forEach((c) => {
+          const card = document.createElement('a');
+          card.href = '#destaques';
+          card.className = 'city-card';
+          card.dataset.cidade = c.cidade.toLowerCase();
+          const rotuloEventos = c.total === 1 ? 'evento' : 'eventos';
+          card.innerHTML = `<span>${c.cidade}</span><small>${c.total} ${rotuloEventos}</small>`;
+          grid.appendChild(card);
+        });
+
+      } catch (erro) {
+        console.error('Erro ao carregar cidades com eventos:', erro);
+      }
+    }
+    carregarCidadesComEventos();
+
+    // Clique num card de cidade: filtra os eventos pela cidade
+    // clicada (comparando com o data-city de cada card) e rola até
+    // a seção de eventos.
+    document.getElementById('cidades-grid').addEventListener('click', (evento) => {
+      const card = evento.target.closest('.city-card');
+      if (!card) return;
+
+      evento.preventDefault();
+      const cidade = card.dataset.cidade;
+
+      eventCards.forEach((eventoCard) => {
+        eventoCard.hidden = !eventoCard.dataset.city.includes(cidade);
+      });
+
+      filterButtons.forEach((item) => item.classList.toggle('active', item.dataset.filter === 'todos'));
+      document.getElementById('hero-search-input').value = card.querySelector('span').textContent;
+
+      document.getElementById('destaques').scrollIntoView({ behavior: 'smooth' });
+    });
 
     // ============================================================
     // EVENTOS DE CLIQUE/DIGITAÇÃO DA INTERFACE (filtros e busca)

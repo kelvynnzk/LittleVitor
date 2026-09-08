@@ -4,426 +4,600 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar evento — LittleVitor</title>
-    <link rel="stylesheet" href="LittleVitor2.0/css/style.css">
-    <link rel="stylesheet" href="LittleVitor2.0/css/components.css">
-    <link rel="stylesheet" href="LittleVitor2.0/css/profile.css">
-    <link rel="stylesheet" href="LittleVitor2.0/css/responsive.css">
-    <style>
-        body {
-            position: relative;
-            background:
-                radial-gradient(circle at 8% 18%, rgba(80, 54, 160, 0.28), transparent 34%),
-                radial-gradient(circle at 92% 82%, rgba(24, 122, 105, 0.24), transparent 38%),
-                linear-gradient(135deg, #121022 0%, #0b0a10 48%, #0b1415 100%);
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            pointer-events: none;
-            opacity: 0.22;
-            background-image:
-                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-            background-size: 48px 48px;
-            mask-image: linear-gradient(to bottom, black, transparent 82%);
-        }
-        .navbar,
-        main {
-            position: relative;
-            z-index: 1;
-        }
-        .toast {
-            position: fixed;
-            right: 24px;
-            bottom: 24px;
-            z-index: 9999;
-            max-width: 320px;
-            padding: 14px 20px;
-            border: 1px solid var(--border-strong);
-            border-radius: var(--radius-md);
-            background: var(--bg-elevated);
-            color: var(--text-primary);
-            box-shadow: var(--shadow-lg);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .toast.mostrar {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .toast.erro {
-            border-color: var(--error);
-        }
-        .publicacao-loading {
-            position: fixed;
-            inset: 0;
-            z-index: 10000;
-            display: grid;
-            place-items: center;
-            background: rgba(8, 7, 12, 0.46);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-        .publicacao-loading-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 14px;
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-        .publish-success p {
-            width: min(100%, 420px);
-            margin: 0 auto var(--space-8);
-            text-align: center;
-            line-height: 1.5;
-        }
-        .fx-spin {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.14);
-            border-top-color: #fafafa;
-            animation: spin 0.9s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .toast-notificacao {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            min-width: 290px;
-        }
-        .toast-notificacao .toast-alerta {
-            display: grid;
-            place-items: center;
-            width: 18px;
-            height: 18px;
-            flex: 0 0 18px;
-            border: 2px solid var(--error);
-            border-radius: 50%;
-            color: var(--error);
-            font-size: 12px;
-            font-weight: 700;
-        }
-        .toast-notificacao strong {
-            display: block;
-            margin-bottom: 3px;
-            font-size: 0.88rem;
-        }
-        .toast-notificacao small {
-            display: block;
-            color: var(--text-secondary);
-            font-size: 0.78rem;
-            line-height: 1.35;
-        }
-        @media (max-width: 480px) {
-            .toast {
-                right: 16px;
-                bottom: 16px;
-                left: 16px;
-                max-width: none;
-            }
-        }
-    </style>
+    <title id="titulo-aba">Criar evento — LittleVitor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <script src="toast.js"></script>
+    <script src="sessao.js"></script>
+    <script src="auth-ui.js"></script>
+    <script src="chatbot.js"></script>
 </head>
 
-<body>
-    <header class="navbar">
-        <div class="container navbar-inner">
-            <a href="index.html" class="navbar-logo"><span class="dot"></span> LittleVitor</a>
-            <nav class="navbar-links" aria-label="Navegação principal">
-                <a href="index.html">Explorar</a>
-                <a href="index.html#categorias">Categorias</a>
-                <a href="criar-evento.html" class="active">Criar evento</a>
+<body class="event-wizard-page">
+
+    <header class="home-header">
+        <nav class="home-nav">
+            <a href="index.html" class="home-logo"><span></span>LittleVitor</a>
+            <div class="home-links">
+                <a href="index.html#explorar">Explorar</a>
+                <a href="categorias.html">Categorias</a>
+                <a class="is-active" href="criar-evento.html">Criar evento</a>
                 <a href="painel.html">Dashboard</a>
-            </nav>
-            <a href="login.html" class="btn btn-primary btn-sm">Entrar</a>
-        </div>
+            </div>
+            <div class="home-actions">
+                <label class="nav-search"><span>⌕</span><input type="search" id="nav-search-input" placeholder="Buscar eventos..." aria-label="Buscar eventos"></label>
+                <a href="login.html" id="link-entrar" class="home-login">Entrar</a>
+                <a href="cadastro.html" class="home-signup">Criar conta</a>
+            </div>
+        </nav>
     </header>
 
-    <main class="container section" style="padding-top: var(--space-10);">
-        <span class="eyebrow">Organizador</span>
-        <h1 style="margin-bottom: var(--space-8); font-size: 2.1rem;">Criar novo evento</h1>
-
-        <div class="stepper" aria-label="Etapas da criação do evento">
-            <div class="stepper-step active"><div class="stepper-circle">1</div><span class="stepper-label">Informações</span></div>
-            <div class="stepper-line"></div>
-            <div class="stepper-step"><div class="stepper-circle">2</div><span class="stepper-label">Localização</span></div>
-            <div class="stepper-line"></div>
-            <div class="stepper-step"><div class="stepper-circle">3</div><span class="stepper-label">Ingressos</span></div>
-            <div class="stepper-line"></div>
-            <div class="stepper-step"><div class="stepper-circle">4</div><span class="stepper-label">Revisão</span></div>
-            <div class="stepper-line"></div>
-            <div class="stepper-step"><div class="stepper-circle">5</div><span class="stepper-label">Publicado</span></div>
+    <main>
+        <div class="wrap">
+            <a href="painel.html" class="back-link">&larr; Voltar pro painel</a>
         </div>
 
-        <div class="wizard-shell">
-            <form class="surface-card" action="#" method="post" enctype="multipart/form-data" id="form-evento">
-                <div id="etapa-informacoes">
-                <h3 style="margin-bottom: var(--space-5);">Informações do evento</h3>
+        <section class="form-page">
+            <div class="wrap form-page-inner">
 
-                <label class="upload-box" for="capa">
-                    <input type="file" id="capa" name="capa" accept="image/*" class="sr-only" onchange="mostrarPreview(this)">
-                    <img id="preview-capa" alt="" hidden>
-                    <div class="upload-placeholder" id="upload-placeholder">
-                        <span style="font-size: 2rem; color: var(--text-tertiary);">&#8853;</span>
-                        <span><strong>Clique para enviar</strong> a imagem de capa do evento</span>
-                    </div>
-                </label>
-
-                <div class="field">
-                    <label for="titulo">Nome do evento</label>
-                    <input class="input" type="text" id="titulo" name="titulo" placeholder="Ex: Festival Noite Roxa" required>
+                <div class="section-head">
+                    <span class="eyebrow"><span class="dot"></span> Organizador</span>
+                    <h1 id="titulo-pagina">Criar evento</h1>
+                    <p>Preencha os detalhes abaixo. Você pode editar tudo isso depois de publicar.</p>
                 </div>
 
-                <div class="field">
-                    <label for="descricao">Descrição</label>
-                    <textarea class="textarea" id="descricao" name="descricao" placeholder="Conte para o público o que torna esse evento especial..." required></textarea>
+                <!-- INDICADOR DE ETAPAS -->
+                <div class="wizard-steps">
+                    <div class="wizard-step-indicator is-active" data-etapa="1"><b>1</b> Informações</div>
+                    <div class="wizard-step-indicator" data-etapa="2"><b>2</b> Localização</div>
+                    <div class="wizard-step-indicator" data-etapa="3"><b>3</b> Ingressos</div>
+                    <div class="wizard-step-indicator" data-etapa="4"><b>4</b> Revisão</div>
                 </div>
 
-                <div class="form-grid-2">
-                    <div class="field">
-                        <label for="categoria">Categoria</label>
-                        <select class="select" id="categoria" name="categoria" required>
-                            <option value="">Selecione</option>
-                            <option value="musica">Música</option>
-                            <option value="gastronomia">Gastronomia</option>
-                            <option value="arte">Arte &amp; Cultura</option>
-                            <option value="negocios">Negócios</option>
-                            <option value="esporte">Esporte</option>
-                            <option value="bem-estar">Bem-estar</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label for="capacidade">Capacidade estimada</label>
-                        <input class="input" type="number" id="capacidade" name="capacidade" placeholder="Ex: 500" min="1">
-                    </div>
-                    <div class="field">
-                        <label for="data">Data</label>
-                        <input class="input" type="text" id="data" name="data" placeholder="11/11/1111" inputmode="numeric" maxlength="10" pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}" required>
-                    </div>
-                    <div class="field">
-                        <label for="horario">Horário</label>
-                        <input class="input" type="text" id="horario" name="horario" placeholder="20:30" inputmode="numeric" maxlength="5" pattern="[0-9]{2}:[0-9]{2}" required>
-                    </div>
-                </div>
+                <div class="wizard-layout">
+                    <form class="wizard-form" action="#" method="post" id="form-evento">
 
-                <div class="wizard-nav">
-                    <button type="button" class="btn btn-secondary" id="btn-voltar" disabled>Voltar</button>
-                    <button type="button" class="btn btn-primary" id="btn-continuar">Continuar</button>
-                </div>
+                        <!-- ETAPA 1: INFORMAÇÕES -->
+                        <div class="wizard-panel is-active" id="painel-etapa-1">
+                            <h2>Informações do evento</h2>
 
-                </div>
+                            <div class="form-group">
+                                <label class="form-label">Imagem de capa</label>
+                                <label class="upload-box" for="capa">
+                                    <input type="file" id="capa" name="capa" accept="image/*" onchange="mostrarPreview(this)">
+                                    <img id="preview-capa" class="upload-preview" alt="" hidden>
+                                    <div class="upload-placeholder" id="upload-placeholder">
+                                        <span class="upload-icon">+</span>
+                                        <span>Clique para enviar uma imagem</span>
+                                        <span class="upload-hint">JPG ou PNG · recomendado 1200×630px</span>
+                                    </div>
+                                </label>
+                            </div>
 
-                <div id="etapa-localizacao" hidden>
-                    <h3 style="margin-bottom: var(--space-5);">Onde vai acontecer?</h3>
-                    <div class="field">
-                        <label for="local">Nome do local</label>
-                        <input class="input" type="text" id="local" name="local" placeholder="Ex: Allianz Parque">
-                    </div>
-                    <div class="field">
-                        <label for="endereco">Endereço completo</label>
-                        <input class="input" type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro">
-                    </div>
-                    <div class="form-grid-2">
-                        <div class="field">
-                            <label for="cidade">Cidade</label>
-                            <input class="input" type="text" id="cidade" name="cidade" placeholder="Ex: São Paulo">
+                            <div class="form-group">
+                                <label class="form-label" for="titulo">Nome do evento</label>
+                                <input type="text" id="titulo" name="titulo" placeholder="Ex: Noite Eletrônica no Cais" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="descricao">Descrição</label>
+                                <textarea id="descricao" name="descricao" rows="5"
+                                    placeholder="Conte pra quem for ver o evento o que esperar, line-up, atrações, etc."></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="categoria">Categoria</label>
+                                    <select id="categoria" name="categoria" required>
+                                        <option value="">Selecione</option>
+                                        <option value="musica">Música</option>
+                                        <option value="gastronomia">Gastronomia</option>
+                                        <option value="arte">Arte &amp; Cultura</option>
+                                        <option value="negocios">Negócios</option>
+                                        <option value="esporte">Esporte</option>
+                                        <option value="bem-estar">Bem-estar</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="data">Data</label>
+                                    <input type="date" id="data" name="data" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="horario">Horário</label>
+                                    <input type="time" id="horario" name="horario" required>
+                                </div>
+                            </div>
                         </div>
-                        <div class="field">
-                            <label for="estado">Estado</label>
-                            <input class="input" type="text" id="estado" name="estado" placeholder="Ex: SP" maxlength="2">
+
+                        <!-- ETAPA 2: LOCALIZAÇÃO -->
+                        <div class="wizard-panel" id="painel-etapa-2">
+                            <h2>Onde vai acontecer?</h2>
+
+                            <div class="form-group">
+                                <label class="form-label" for="local">Local</label>
+                                <input type="text" id="local" name="local" placeholder="Ex: Armazém 4 — Cais Mauá">
+                            </div>
+
+                            <div class="form-group autocomplete-wrap">
+                                <label class="form-label" for="cidade">Cidade</label>
+                                <input type="text" id="cidade" name="cidade" placeholder="Comece a digitar sua cidade..."
+                                    autocomplete="off" required>
+                                <div id="cidade-sugestoes" class="autocomplete-lista hidden"></div>
+                            </div>
                         </div>
-                    </div>
-                    <label class="checkbox">
-                        <input type="checkbox" id="evento-online">
-                        <span class="box"></span>
-                        Este é um evento 100% online
-                    </label>
-                    <div class="wizard-nav">
-                        <button type="button" class="btn btn-secondary" id="btn-voltar-local">Voltar</button>
-                        <button type="button" class="btn btn-primary" id="btn-continuar-local">Continuar</button>
-                    </div>
-                </div>
 
-                <div id="etapa-ingressos" hidden>
-                    <h3 style="margin-bottom: var(--space-2);">Tipos de ingresso</h3>
-                    <p style="margin-bottom: var(--space-5); font-size: 0.88rem;">Adicione um ou mais lotes de ingresso para o seu evento.</p>
-                    <div id="lista-ingressos">
-                        <div class="ticket-type-row ingresso-row">
-                            <div class="field"><label>Nome do lote</label><input class="input" type="text" name="ingresso_nome[]" placeholder="Ingresso único" required></div>
-                            <div class="field"><label>Preço (R$)</label><input class="input" type="number" name="ingresso_preco[]" placeholder="0" min="0" step="0.01" required></div>
-                            <div class="field"><label>Quantidade</label><input class="input" type="number" name="ingresso_qtd[]" placeholder="0" min="1" required></div>
-                            <button type="button" class="remove-ticket-btn btn-remover" onclick="removerIngresso(this)" aria-label="Remover tipo de ingresso">&times;</button>
+                        <!-- ETAPA 3: TIPOS DE INGRESSO -->
+                        <div class="wizard-panel" id="painel-etapa-3">
+                            <h2>Tipos de ingresso</h2>
+                            <p style="color:var(--text-mid); font-size:0.88rem; margin-bottom:16px;">
+                                Opcional — deixe em branco se ainda não quiser vender ingressos para este evento.
+                            </p>
+
+                            <div class="form-group">
+                                <div id="lista-ingressos" class="lista-ingressos">
+                                    <div class="ingresso-row">
+                                        <input type="text" name="ingresso_nome[]" placeholder="Nome (ex: Pista)">
+                                        <input type="number" name="ingresso_preco[]" placeholder="Preço" min="0" step="0.01">
+                                        <input type="number" name="ingresso_qtd[]" placeholder="Quantidade" min="1">
+                                        <button type="button" class="btn-remover" onclick="removerIngresso(this)"
+                                            aria-label="Remover tipo de ingresso">&times;</button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-outline btn-add" onclick="adicionarIngresso()">+ Adicionar
+                                    tipo de ingresso</button>
+                            </div>
                         </div>
-                    </div>
-                    <button type="button" class="add-ticket-btn" onclick="adicionarIngresso()">+ Adicionar tipo de ingresso</button>
-                    <div class="wizard-nav">
-                        <button type="button" class="btn btn-secondary" id="btn-voltar-ingresso">Voltar</button>
-                        <button type="button" class="btn btn-primary" id="btn-continuar-ingresso">Continuar</button>
-                    </div>
-                </div>
 
-                <div id="etapa-revisao" hidden>
-                    <h3 style="margin-bottom: var(--space-5);">Revise antes de publicar</h3>
-                    <div class="review-block">
-                        <div class="review-block-head"><strong>Informações</strong><button type="button" class="btn btn-ghost btn-sm" id="editar-informacoes">Editar</button></div>
-                        <div class="review-row"><span>Nome</span><span id="revisao-nome">-</span></div>
-                        <div class="review-row"><span>Categoria</span><span id="revisao-categoria">-</span></div>
-                        <div class="review-row"><span>Data e horário</span><span id="revisao-data">-</span></div>
-                    </div>
-                    <div class="review-block">
-                        <div class="review-block-head"><strong>Localização</strong><button type="button" class="btn btn-ghost btn-sm" id="editar-localizacao">Editar</button></div>
-                        <div class="review-row"><span>Local</span><span id="revisao-local">-</span></div>
-                        <div class="review-row"><span>Endereço</span><span id="revisao-endereco">-</span></div>
-                    </div>
-                    <div class="review-block">
-                        <div class="review-block-head"><strong>Ingressos</strong><button type="button" class="btn btn-ghost btn-sm" id="editar-ingressos">Editar</button></div>
-                        <div id="revisao-ingressos"></div>
-                    </div>
-                    <div class="wizard-nav">
-                        <button type="button" class="btn btn-secondary" id="btn-voltar-revisao">Voltar</button>
-                        <button type="button" class="btn btn-primary" id="btn-publicar">Publicar evento</button>
-                    </div>
-                </div>
-
-                <div id="etapa-publicado" hidden>
-                    <div class="publish-success">
-                        <div class="icon-circle">&#10003;</div>
-                        <h2>Evento publicado com sucesso!</h2>
-                        <p>Seu evento já está disponível para o público na LittleVitor. Acompanhe as vendas em tempo real pelo seu dashboard.</p>
-                        <div class="actions">
-                            <a href="painel.html" class="btn btn-primary btn-lg">Ir para o Dashboard</a>
-                            <a href="index.html" class="btn btn-secondary btn-lg">Ver na plataforma</a>
+                        <!-- ETAPA 4: REVISÃO -->
+                        <div class="wizard-panel" id="painel-etapa-4">
+                            <h2>Revise antes de publicar</h2>
+                            <div class="wizard-review">
+                                <div class="wizard-review-row"><span>Nome</span><strong id="revisao-nome">—</strong></div>
+                                <div class="wizard-review-row"><span>Categoria</span><strong id="revisao-categoria">—</strong></div>
+                                <div class="wizard-review-row"><span>Data e horário</span><strong id="revisao-data">—</strong></div>
+                                <div class="wizard-review-row"><span>Local</span><strong id="revisao-local">—</strong></div>
+                                <div class="wizard-review-row"><span>Tipos de ingresso</span><strong id="revisao-ingressos">—</strong></div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </form>
 
-            <aside class="preview-sticky">
-                <span class="preview-label">PRÉVIA DO SEU EVENTO</span>
-                <div class="preview-card">
-                    <div class="preview-card-media"><img id="preview-evento-imagem" src="https://picsum.photos/seed/newevent/600/375" alt="Prévia da capa do evento"></div>
-                    <div class="preview-card-body">
-                        <span class="badge badge-purple" id="preview-evento-categoria">Música</span>
-                        <h4 id="preview-evento-nome" style="margin-top: var(--space-2);">Nome do seu evento</h4>
-                        <ul><li id="preview-evento-data">▣ Data a definir</li><li id="preview-evento-local">⌖ Local a definir</li></ul>
-                    </div>
+                        <!-- NAVEGAÇÃO DO WIZARD (mesma barra pras 4 etapas) -->
+                        <div class="wizard-actions">
+                            <button type="button" class="btn btn-ghost" id="btn-voltar-etapa" disabled>Voltar</button>
+                            <button type="button" class="btn btn-ghost" id="btn-salvar-rascunho">Salvar rascunho</button>
+                            <button type="button" class="btn btn-primary" id="btn-continuar-etapa">Continuar</button>
+                            <button type="submit" class="btn btn-primary hidden" id="btn-publicar">Publicar evento</button>
+                        </div>
+                    </form>
+
+                    <!-- PRÉVIA AO VIVO -->
+                    <aside class="wizard-preview">
+                        <img class="wizard-preview-image" id="preview-evento-imagem" alt="" style="display:none;">
+                        <div class="wizard-preview-body">
+                            <p class="wizard-preview-label">Prévia do seu evento</p>
+                            <span class="wizard-preview-category" id="preview-evento-categoria">Categoria</span>
+                            <h3 id="preview-evento-nome">Nome do seu evento</h3>
+                            <p id="preview-evento-data">Data a definir</p>
+                            <p id="preview-evento-local">Local a definir</p>
+                        </div>
+                    </aside>
                 </div>
-            </aside>
-        </div>
+
+            </div>
+        </section>
     </main>
 
+    <footer class="site-footer">
+        <div class="wrap footer-inner">
+            <p>LittleVitor<span class="logo-dot">.com</span> — feito para conectar pessoas a experiências reais.</p>
+            <a href="sobre.html">Sobre</a>
+            <p class="footer-meta">&copy; 2026 LittleVitor. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
     <script>
- 
- // Ao carregar a página, verifica se existe um rascunho salvo
-// (isso acontece quando a pessoa foi mandada pro login/cadastro
-// no meio do preenchimento do formulário).
-const rascunhoSalvo = localStorage.getItem('rascunho_evento');
 
-if (rascunhoSalvo) {
-    const rascunho = JSON.parse(rascunhoSalvo);
+        // ------------------------------------------------------------------
+        // MODO EDIÇÃO / CONTINUAR RASCUNHO
+        // ------------------------------------------------------------------
+        const parametros = new URLSearchParams(window.location.search);
+        const idEdicao = parametros.get('id');
+        const modoEdicao = idEdicao !== null;
+        const rascunhoIdParam = parametros.get('rascunho');
 
-    // Preenche cada campo do formulário com o valor salvo.
-    document.getElementById('titulo').value = rascunho.titulo || '';
-    document.getElementById('categoria').value = rascunho.categoria || '';
-    document.getElementById('descricao').value = rascunho.descricao || '';
-    document.getElementById('data').value = formatarDataParaExibicao(rascunho.data || '');
-    document.getElementById('horario').value = rascunho.horario || '';
-    document.getElementById('local').value = rascunho.local || '';
-    document.getElementById('cidade').value = rascunho.cidade || '';
-}
-
-       // Pega o formulário de criação de evento
-const formEvento = document.getElementById('form-evento');
-
-formEvento.addEventListener('submit',async (evento) => {
-    // Impede o envio padrão por enquanto — vamos decidir manualmente
-    // o que fazer, dependendo se tem usuário logado ou não.
-    evento.preventDefault();
-
-    // Verifica se existe um usuário logado
-    const usuarioSalvo = localStorage.getItem('usuario');
-
-   if (usuarioSalvo) {
-    // Converte o texto salvo no localStorage de volta para um
-    // objeto JavaScript, para conseguirmos acessar o campo "id".
-    const usuario = JSON.parse(usuarioSalvo);
-
-    // Monta um objeto com todos os dados que a rota /criar-evento
-    // espera receber — os campos do formulário, mais o id do
-    // usuário logado (que não vem de nenhum input, e sim do
-    // localStorage).
-    const dadosEvento = {
-        titulo: document.getElementById('titulo').value,
-        categoria: document.getElementById('categoria').value,
-        descricao: document.getElementById('descricao').value, 
-        data: converterDataParaISO(document.getElementById('data').value),
-        horario: document.getElementById('horario').value,
-        local: document.getElementById('local').value,
-        cidade: document.getElementById('cidade').value,
-        usuario_id: usuario.id
-    };
-
-    try {
-        // Faz a requisição de verdade para o backend.
-        const resposta = await fetch('http://127.0.0.1:5000/criar-evento', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dadosEvento)
-        });
-
-        const dados = await resposta.json();
-
-        if (resposta.ok) {
-            mostrarToast(dados.mensagem, 'sucesso');
-            localStorage.removeItem('rascunho_evento');
-
-            setTimeout(() => {
-                window.location.href = 'painel.html';
-            }, 1500);
-
-        } else {
-            mostrarToast(dados.mensagem, 'erro');
+        function chaveRascunhos(usuarioId) {
+            return `rascunhos_${usuarioId}`;
+        }
+        function carregarListaRascunhos(usuarioId) {
+            const salvo = localStorage.getItem(chaveRascunhos(usuarioId));
+            return salvo ? JSON.parse(salvo) : [];
+        }
+        function salvarListaRascunhos(usuarioId, lista) {
+            localStorage.setItem(chaveRascunhos(usuarioId), JSON.stringify(lista));
         }
 
-    } catch (erro) {
-        console.error('Erro ao criar evento:', erro);
-        mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
-    }
-} else {
-        // Não está logado: precisamos salvar os dados do formulário
-        // antes de mandar a pessoa pro login.
+        let rascunhoAtualId = rascunhoIdParam;
 
-        // Monta um objeto com os dados dos campos principais.
-        const rascunho = {
-            titulo: document.getElementById('titulo').value,
-            categoria: document.getElementById('categoria').value,
-            descricao: document.getElementById('descricao').value,
-            data: document.getElementById('data').value,
-            horario: document.getElementById('horario').value,
-            local: document.getElementById('local').value,
-            cidade: document.getElementById('cidade').value
+        function preencherFormularioComRascunho(rascunho) {
+            document.getElementById('titulo').value = rascunho.titulo || '';
+            document.getElementById('categoria').value = rascunho.categoria || '';
+            document.getElementById('descricao').value = rascunho.descricao || '';
+            document.getElementById('data').value = rascunho.data || '';
+            document.getElementById('horario').value = rascunho.horario || '';
+            document.getElementById('local').value = rascunho.local || '';
+            document.getElementById('cidade').value = rascunho.cidade || '';
+
+            if (rascunho.ingressos && rascunho.ingressos.length) {
+                const lista = document.getElementById('lista-ingressos');
+                lista.innerHTML = '';
+                rascunho.ingressos.forEach((ingresso) => {
+                    const linha = document.createElement('div');
+                    linha.className = 'ingresso-row';
+                    linha.innerHTML = `
+                        <input type="text" name="ingresso_nome[]" placeholder="Nome (ex: Pista)" value="${ingresso.nome}">
+                        <input type="number" name="ingresso_preco[]" placeholder="Preço" min="0" step="0.01" value="${ingresso.preco}">
+                        <input type="number" name="ingresso_qtd[]" placeholder="Quantidade" min="1" value="${ingresso.quantidade}">
+                        <button type="button" class="btn-remover" onclick="removerIngresso(this)" aria-label="Remover tipo de ingresso">&times;</button>
+                    `;
+                    lista.appendChild(linha);
+                });
+            }
+            atualizarPreviewEvento();
+        }
+
+        async function carregarEventoParaEdicao(id) {
+            try {
+                const resposta = await fetch(`http://127.0.0.1:5000/evento/${id}`);
+                const dados = await resposta.json();
+
+                if (!resposta.ok) {
+                    mostrarToast(dados.mensagem || 'Evento não encontrado.', 'erro');
+                    return;
+                }
+
+                const evento = dados.evento;
+                document.getElementById('titulo').value = evento.titulo || '';
+                document.getElementById('categoria').value = evento.categoria || '';
+                document.getElementById('descricao').value = evento.descricao || '';
+                document.getElementById('data').value = evento.data || '';
+                document.getElementById('horario').value = (evento.horario || '').slice(0, 5);
+                document.getElementById('local').value = evento.local || '';
+                document.getElementById('cidade').value = evento.cidade || '';
+
+                await carregarIngressosParaEdicao(id);
+                atualizarPreviewEvento();
+
+            } catch (erro) {
+                console.error('Erro ao carregar evento:', erro);
+                mostrarToast('Não foi possível carregar os dados do evento.', 'erro');
+            }
+        }
+
+        async function carregarIngressosParaEdicao(eventoId) {
+            try {
+                const resposta = await fetch(`http://127.0.0.1:5000/tipos-ingresso/${eventoId}`);
+                const dados = await resposta.json();
+                const tipos = dados.tipos_ingresso || [];
+
+                if (!tipos.length) {
+                    return;
+                }
+
+                const lista = document.getElementById('lista-ingressos');
+                lista.innerHTML = '';
+
+                tipos.forEach((tipo) => {
+                    const linha = document.createElement('div');
+                    linha.className = 'ingresso-row';
+                    linha.innerHTML = `
+                        <input type="text" name="ingresso_nome[]" placeholder="Nome (ex: Pista)" value="${tipo.nome}">
+                        <input type="number" name="ingresso_preco[]" placeholder="Preço" min="0" step="0.01" value="${tipo.preco}">
+                        <input type="number" name="ingresso_qtd[]" placeholder="Quantidade" min="1" value="${tipo.quantidade_total}">
+                        <button type="button" class="btn-remover" onclick="removerIngresso(this)" aria-label="Remover tipo de ingresso">&times;</button>
+                    `;
+                    lista.appendChild(linha);
+                });
+
+            } catch (erro) {
+                console.error('Erro ao carregar tipos de ingresso:', erro);
+            }
+        }
+
+        function coletarIngressosDoFormulario() {
+            const linhas = document.querySelectorAll('#lista-ingressos .ingresso-row');
+            const ingressos = [];
+
+            linhas.forEach((linha) => {
+                const nome = linha.querySelector('input[name="ingresso_nome[]"]').value.trim();
+                const preco = linha.querySelector('input[name="ingresso_preco[]"]').value;
+                const quantidade = linha.querySelector('input[name="ingresso_qtd[]"]').value;
+
+                if (!nome || !preco || !quantidade) {
+                    return;
+                }
+
+                ingressos.push({ nome: nome, preco: Number(preco), quantidade: Number(quantidade) });
+            });
+
+            return ingressos;
+        }
+
+        // ------------------------------------------------------------------
+        // AUTOCOMPLETE DE CIDADE (só aceita cidades reais do Brasil)
+        // ------------------------------------------------------------------
+        let CIDADES_BRASIL = [];
+
+        const promessaCidades = fetch('cidades-brasil.json')
+            .then((resposta) => resposta.json())
+            .then((dados) => { CIDADES_BRASIL = dados; return dados; })
+            .catch((erro) => {
+                console.error('Erro ao carregar lista de cidades:', erro);
+                return [];
+            });
+
+        const MAPA_ACENTOS = {
+            'á': 'a', 'à': 'a', 'ã': 'a', 'â': 'a', 'ä': 'a',
+            'é': 'e', 'è': 'e', 'ê': 'e', 'ë': 'e',
+            'í': 'i', 'ì': 'i', 'î': 'i', 'ï': 'i',
+            'ó': 'o', 'ò': 'o', 'õ': 'o', 'ô': 'o', 'ö': 'o',
+            'ú': 'u', 'ù': 'u', 'û': 'u', 'ü': 'u',
+            'ç': 'c', 'ñ': 'n'
         };
+        function normalizarTexto(texto) {
+            return texto.toLowerCase().trim().split('').map((letra) => MAPA_ACENTOS[letra] || letra).join('');
+        }
 
-        // Salva esse objeto no localStorage, como texto (JSON).
-        localStorage.setItem('rascunho_evento', JSON.stringify(rascunho));
+        const campoCidade = document.getElementById('cidade');
+        const listaSugestoes = document.getElementById('cidade-sugestoes');
+        let indiceAtivo = -1;
 
-        // Redireciona pro login, informando pra onde voltar depois.
-        window.location.href = 'login.html?retorno=criar-evento.html';
-    }
-});
-       
-       // Preview da imagem de capa
+        function esconderSugestoes() {
+            listaSugestoes.classList.add('hidden');
+            listaSugestoes.innerHTML = '';
+            indiceAtivo = -1;
+        }
+
+        function mostrarSugestoes(termo) {
+            const termoNormalizado = normalizarTexto(termo);
+            if (termoNormalizado.length < 2) {
+                esconderSugestoes();
+                return;
+            }
+
+            const comecaCom = CIDADES_BRASIL.filter((c) => normalizarTexto(c.nome).startsWith(termoNormalizado));
+            const contem = CIDADES_BRASIL.filter((c) => !normalizarTexto(c.nome).startsWith(termoNormalizado) && normalizarTexto(c.nome).includes(termoNormalizado));
+            const resultado = [...comecaCom, ...contem].slice(0, 8);
+
+            listaSugestoes.innerHTML = '';
+            indiceAtivo = -1;
+
+            if (resultado.length === 0) {
+                listaSugestoes.innerHTML = '<div class="autocomplete-vazio">Nenhuma cidade encontrada.</div>';
+                listaSugestoes.classList.remove('hidden');
+                return;
+            }
+
+            resultado.forEach((cidade) => {
+                const item = document.createElement('div');
+                item.className = 'autocomplete-item';
+                item.innerHTML = `${cidade.nome}<span class="uf">${cidade.uf}</span>`;
+                item.addEventListener('click', () => {
+                    campoCidade.value = cidade.nome;
+                    esconderSugestoes();
+                    atualizarPreviewEvento();
+                });
+                listaSugestoes.appendChild(item);
+            });
+
+            listaSugestoes.classList.remove('hidden');
+        }
+
+        campoCidade.addEventListener('input', () => mostrarSugestoes(campoCidade.value));
+
+        campoCidade.addEventListener('keydown', (evento) => {
+            const itens = listaSugestoes.querySelectorAll('.autocomplete-item');
+            if (listaSugestoes.classList.contains('hidden') || itens.length === 0) {
+                return;
+            }
+            if (evento.key === 'ArrowDown') {
+                evento.preventDefault();
+                indiceAtivo = (indiceAtivo + 1) % itens.length;
+            } else if (evento.key === 'ArrowUp') {
+                evento.preventDefault();
+                indiceAtivo = (indiceAtivo - 1 + itens.length) % itens.length;
+            } else if (evento.key === 'Enter' && indiceAtivo !== -1) {
+                evento.preventDefault();
+                itens[indiceAtivo].click();
+                return;
+            } else {
+                return;
+            }
+            itens.forEach((item, i) => item.classList.toggle('is-ativo', i === indiceAtivo));
+        });
+
+        document.addEventListener('click', (evento) => {
+            if (!evento.target.closest('.autocomplete-wrap')) {
+                esconderSugestoes();
+            }
+        });
+
+        function cidadeEhValida(texto) {
+            const normalizado = normalizarTexto(texto);
+            return CIDADES_BRASIL.some((c) => normalizarTexto(c.nome) === normalizado);
+        }
+
+        // ------------------------------------------------------------------
+        // CARREGAMENTO INICIAL (edição / rascunho específico / rascunho
+        // anônimo antigo, vindo de quando a pessoa tentou publicar sem
+        // estar logada)
+        // ------------------------------------------------------------------
+        if (modoEdicao) {
+            const usuarioSalvo = obterUsuarioLogado();
+            if (!usuarioSalvo) {
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('titulo-pagina').textContent = 'Editar evento';
+                document.getElementById('titulo-aba').textContent = 'Editar evento — LittleVitor';
+                document.getElementById('btn-publicar').textContent = 'Salvar alterações';
+                document.getElementById('btn-salvar-rascunho').classList.add('hidden');
+                carregarEventoParaEdicao(idEdicao);
+            }
+        } else if (rascunhoIdParam) {
+            const usuarioSalvo = obterUsuarioLogado();
+            if (!usuarioSalvo) {
+                window.location.href = 'login.html';
+            } else {
+                const usuario = JSON.parse(usuarioSalvo);
+                const rascunhos = carregarListaRascunhos(usuario.id);
+                const rascunho = rascunhos.find((r) => r.id === rascunhoIdParam);
+
+                if (rascunho) {
+                    document.getElementById('titulo-pagina').textContent = 'Continuar rascunho';
+                    preencherFormularioComRascunho(rascunho);
+                } else {
+                    mostrarToast('Esse rascunho não foi encontrado.', 'erro');
+                }
+            }
+        } else {
+            const rascunhoSalvo = localStorage.getItem('rascunho_evento');
+            if (rascunhoSalvo) {
+                preencherFormularioComRascunho(JSON.parse(rascunhoSalvo));
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // "SALVAR RASCUNHO"
+        // ------------------------------------------------------------------
+        document.getElementById('btn-salvar-rascunho').addEventListener('click', () => {
+            const usuarioSalvo = obterUsuarioLogado();
+
+            const dadosRascunho = {
+                titulo: document.getElementById('titulo').value,
+                categoria: document.getElementById('categoria').value,
+                descricao: document.getElementById('descricao').value,
+                data: document.getElementById('data').value,
+                horario: document.getElementById('horario').value,
+                local: document.getElementById('local').value,
+                cidade: document.getElementById('cidade').value,
+                ingressos: coletarIngressosDoFormulario()
+            };
+
+            if (!usuarioSalvo) {
+                localStorage.setItem('rascunho_evento', JSON.stringify(dadosRascunho));
+                window.location.href = 'login.html?retorno=criar-evento.html';
+                return;
+            }
+
+            const usuario = JSON.parse(usuarioSalvo);
+            const rascunhos = carregarListaRascunhos(usuario.id);
+
+            if (rascunhoAtualId) {
+                const indice = rascunhos.findIndex((r) => r.id === rascunhoAtualId);
+                const atualizado = { ...dadosRascunho, id: rascunhoAtualId, salvo_em: new Date().toISOString() };
+                if (indice !== -1) {
+                    rascunhos[indice] = atualizado;
+                } else {
+                    rascunhos.push(atualizado);
+                }
+            } else {
+                rascunhoAtualId = 'rascunho_' + Date.now();
+                rascunhos.push({ ...dadosRascunho, id: rascunhoAtualId, salvo_em: new Date().toISOString() });
+                window.history.replaceState(null, '', `${window.location.pathname}?rascunho=${rascunhoAtualId}`);
+            }
+
+            salvarListaRascunhos(usuario.id, rascunhos);
+            mostrarToast('Rascunho salvo!', 'sucesso');
+        });
+
+        // ------------------------------------------------------------------
+        // ENVIO DO FORMULÁRIO (publicar / salvar alterações)
+        // ------------------------------------------------------------------
+        const formEvento = document.getElementById('form-evento');
+
+        formEvento.addEventListener('submit', async (evento) => {
+            evento.preventDefault();
+
+            await promessaCidades;
+
+            if (!cidadeEhValida(campoCidade.value)) {
+                mostrarToast('Escolha uma cidade válida na lista de sugestões.', 'erro');
+                irParaEtapa(2);
+                campoCidade.focus();
+                return;
+            }
+
+            const usuarioSalvo = obterUsuarioLogado();
+
+            if (!usuarioSalvo) {
+                const rascunho = {
+                    titulo: document.getElementById('titulo').value,
+                    categoria: document.getElementById('categoria').value,
+                    descricao: document.getElementById('descricao').value,
+                    data: document.getElementById('data').value,
+                    horario: document.getElementById('horario').value,
+                    local: document.getElementById('local').value,
+                    cidade: document.getElementById('cidade').value
+                };
+                localStorage.setItem('rascunho_evento', JSON.stringify(rascunho));
+                window.location.href = 'login.html?retorno=criar-evento.html';
+                return;
+            }
+
+            const usuario = JSON.parse(usuarioSalvo);
+
+            const dadosEvento = {
+                titulo: document.getElementById('titulo').value,
+                categoria: document.getElementById('categoria').value,
+                descricao: document.getElementById('descricao').value,
+                data: document.getElementById('data').value,
+                horario: document.getElementById('horario').value,
+                local: document.getElementById('local').value,
+                cidade: document.getElementById('cidade').value,
+                usuario_id: usuario.id,
+                ingressos: coletarIngressosDoFormulario()
+            };
+
+            const url = modoEdicao ? `http://127.0.0.1:5000/evento/${idEdicao}` : 'http://127.0.0.1:5000/criar-evento';
+            const metodo = modoEdicao ? 'PUT' : 'POST';
+
+            try {
+                const resposta = await fetch(url, {
+                    method: metodo,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dadosEvento)
+                });
+
+                const dados = await resposta.json();
+
+                if (resposta.ok) {
+                    localStorage.removeItem('rascunho_evento');
+
+                    if (rascunhoAtualId) {
+                        const rascunhos = carregarListaRascunhos(usuario.id);
+                        const restantes = rascunhos.filter((r) => r.id !== rascunhoAtualId);
+                        salvarListaRascunhos(usuario.id, restantes);
+                    }
+
+                    mostrarToast(dados.mensagem, 'sucesso');
+                    setTimeout(() => { window.location.href = 'painel.html'; }, 1500);
+
+                } else {
+                    mostrarToast(dados.mensagem, 'erro');
+                }
+
+            } catch (erro) {
+                console.error('Erro ao salvar evento:', erro);
+                mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
+            }
+        });
+
+        // Preview da imagem de capa
         function mostrarPreview(input) {
             const preview = document.getElementById('preview-capa');
             const placeholder = document.getElementById('upload-placeholder');
@@ -434,26 +608,25 @@ formEvento.addEventListener('submit',async (evento) => {
                     preview.hidden = false;
                     placeholder.hidden = true;
                     document.getElementById('preview-evento-imagem').src = e.target.result;
+                    document.getElementById('preview-evento-imagem').style.display = 'block';
                 };
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // Adiciona uma nova linha de tipo de ingresso
         function adicionarIngresso() {
             const lista = document.getElementById('lista-ingressos');
             const linha = document.createElement('div');
-            linha.className = 'ticket-type-row ingresso-row';
+            linha.className = 'ingresso-row';
             linha.innerHTML = `
-        <div class="field"><label>Nome do lote</label><input class="input" type="text" name="ingresso_nome[]" placeholder="Ingresso único" required></div>
-        <div class="field"><label>Preço (R$)</label><input class="input" type="number" name="ingresso_preco[]" placeholder="0" min="0" step="0.01" required></div>
-        <div class="field"><label>Quantidade</label><input class="input" type="number" name="ingresso_qtd[]" placeholder="0" min="1" required></div>
-        <button type="button" class="remove-ticket-btn btn-remover" onclick="removerIngresso(this)" aria-label="Remover tipo de ingresso">&times;</button>
-      `;
+                <input type="text" name="ingresso_nome[]" placeholder="Nome (ex: VIP)">
+                <input type="number" name="ingresso_preco[]" placeholder="Preço" min="0" step="0.01">
+                <input type="number" name="ingresso_qtd[]" placeholder="Quantidade" min="1">
+                <button type="button" class="btn-remover" onclick="removerIngresso(this)" aria-label="Remover tipo de ingresso">&times;</button>
+            `;
             lista.appendChild(linha);
         }
 
-        // Remove uma linha de tipo de ingresso (mantém pelo menos uma)
         function removerIngresso(botao) {
             const lista = document.getElementById('lista-ingressos');
             if (lista.children.length > 1) {
@@ -461,220 +634,147 @@ formEvento.addEventListener('submit',async (evento) => {
             }
         }
 
+        // ------------------------------------------------------------------
+        // PRÉVIA AO VIVO
+        // ------------------------------------------------------------------
+        const CORES_CATEGORIA = {
+            musica: ['#a78bfa', 'rgba(139,92,246,0.16)'],
+            gastronomia: ['#ffb454', 'rgba(255,159,67,0.16)'],
+            arte: ['#ff82a8', 'rgba(255,92,138,0.16)'],
+            negocios: ['#72b8ff', 'rgba(77,163,255,0.16)'],
+            esporte: ['#5cf0bc', 'rgba(47,230,166,0.16)'],
+            'bem-estar': ['#70e7df', 'rgba(70,217,208,0.16)']
+        };
+        const NOMES_CATEGORIA = {
+            musica: 'Música', gastronomia: 'Gastronomia', arte: 'Arte & Cultura',
+            negocios: 'Negócios', esporte: 'Esporte', 'bem-estar': 'Bem-estar'
+        };
+        const MESES_ABREV = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+
         function atualizarPreviewEvento() {
             const nome = document.getElementById('titulo').value.trim();
-            const categoria = document.getElementById('categoria');
-            const previewCategoria = document.getElementById('preview-evento-categoria');
+            const categoria = document.getElementById('categoria').value;
             const data = document.getElementById('data').value;
             const horario = document.getElementById('horario').value;
-            const online = document.getElementById('evento-online').checked;
-            const local = online ? 'Evento online' : (document.getElementById('cidade').value.trim() || document.getElementById('local').value.trim());
-            const coresCategorias = {
-                musica: ['#7c5cff', 'rgba(124, 92, 255, 0.16)'],
-                gastronomia: ['#ff9f43', 'rgba(255, 159, 67, 0.16)'],
-                arte: ['#ff5c8a', 'rgba(255, 92, 138, 0.16)'],
-                negocios: ['#4da3ff', 'rgba(77, 163, 255, 0.16)'],
-                esporte: ['#2fe6a6', 'rgba(47, 230, 166, 0.16)'],
-                'bem-estar': ['#46d9d0', 'rgba(70, 217, 208, 0.16)']
-            };
-            const corCategoria = coresCategorias[categoria.value] || coresCategorias.musica;
+            const local = document.getElementById('local').value.trim();
+            const cidade = document.getElementById('cidade').value.trim();
 
             document.getElementById('preview-evento-nome').textContent = nome || 'Nome do seu evento';
-            previewCategoria.textContent = categoria.value
-                ? categoria.options[categoria.selectedIndex].text 
-                : 'Música';
-            previewCategoria.style.color = corCategoria[0];
-            previewCategoria.style.backgroundColor = corCategoria[1];
-            const dataISO = converterDataParaISO(data);
-            document.getElementById('preview-evento-data').textContent = dataISO
-                ? '▣ ' + formatarDataNaPreview(data) + (horario ? ' · ' + horario : '')
-                : '▣ Data a definir';
-            document.getElementById('preview-evento-local').textContent = local
-                ? '⌖ ' + local
-                : '⌖ Local a definir';
+
+            const previewCategoria = document.getElementById('preview-evento-categoria');
+            if (categoria) {
+                previewCategoria.textContent = NOMES_CATEGORIA[categoria];
+                const cor = CORES_CATEGORIA[categoria];
+                previewCategoria.style.color = cor[0];
+                previewCategoria.style.backgroundColor = cor[1];
+            } else {
+                previewCategoria.textContent = 'Categoria';
+                previewCategoria.style.color = '';
+                previewCategoria.style.backgroundColor = '';
+            }
+
+            if (data) {
+                const [ano, mes, dia] = data.split('-');
+                const dataFormatada = `${dia} de ${MESES_ABREV[Number(mes) - 1]}`;
+                document.getElementById('preview-evento-data').textContent = dataFormatada + (horario ? ' · ' + horario : '');
+            } else {
+                document.getElementById('preview-evento-data').textContent = 'Data a definir';
+            }
+
+            const localTexto = [local, cidade].filter(Boolean).join(', ');
+            document.getElementById('preview-evento-local').textContent = localTexto || 'Local a definir';
         }
 
-        ['titulo', 'categoria', 'data', 'horario', 'local', 'cidade', 'evento-online'].forEach((id) => {
+        ['titulo', 'categoria', 'descricao', 'data', 'horario', 'local', 'cidade'].forEach((id) => {
             document.getElementById(id).addEventListener('input', atualizarPreviewEvento);
             document.getElementById(id).addEventListener('change', atualizarPreviewEvento);
         });
 
-        function formatarDataParaExibicao(data) {
-            if (/^\d{4}-\d{2}-\d{2}$/.test(data)) {
-                const partes = data.split('-');
-                return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        // ------------------------------------------------------------------
+        // NAVEGAÇÃO ENTRE ETAPAS
+        // ------------------------------------------------------------------
+        let etapaAtual = 1;
+        const TOTAL_ETAPAS = 4;
+
+        function irParaEtapa(numero) {
+            etapaAtual = numero;
+
+            for (let i = 1; i <= TOTAL_ETAPAS; i++) {
+                document.getElementById(`painel-etapa-${i}`).classList.toggle('is-active', i === numero);
             }
-            return data;
-        }
 
-        function formatarDataNaPreview(data) {
-            const partes = data.split('/');
-            const meses = ['jan.', 'fev.', 'mar.', 'abr.', 'mai.', 'jun.', 'jul.', 'ago.', 'set.', 'out.', 'nov.', 'dez.'];
-            return `${partes[0]} de ${meses[Number(partes[1]) - 1]}`;
-        }
-
-        function converterDataParaISO(data) {
-            const partes = data.split('/');
-            if (partes.length !== 3 || partes[0].length !== 2 || partes[1].length !== 2 || partes[2].length !== 4) {
-                return '';
-            }
-            const dia = Number(partes[0]);
-            const mes = Number(partes[1]);
-            const ano = Number(partes[2]);
-            const dataValida = new Date(ano, mes - 1, dia);
-            if (dataValida.getFullYear() !== ano || dataValida.getMonth() !== mes - 1 || dataValida.getDate() !== dia) {
-                return '';
-            }
-            return `${ano}-${partes[1]}-${partes[0]}`;
-        }
-
-        document.getElementById('data').addEventListener('input', (evento) => {
-            const apenasNumeros = evento.target.value.replace(/\D/g, '').slice(0, 8);
-            evento.target.value = apenasNumeros
-                .replace(/(\d{2})(\d)/, '$1/$2')
-                .replace(/(\d{2}\/\d{2})(\d)/, '$1/$2');
-        });
-
-        document.getElementById('horario').addEventListener('input', (evento) => {
-            const apenasNumeros = evento.target.value.replace(/\D/g, '').slice(0, 4);
-            evento.target.value = apenasNumeros.replace(/(\d{2})(\d)/, '$1:$2');
-        });
-
-        function alternarEtapa(numero) {
-            const etapaInformacoes = document.getElementById('etapa-informacoes');
-            const etapaLocalizacao = document.getElementById('etapa-localizacao');
-            const etapaIngressos = document.getElementById('etapa-ingressos');
-            const etapaRevisao = document.getElementById('etapa-revisao');
-            const etapaPublicado = document.getElementById('etapa-publicado');
-            const etapas = document.querySelectorAll('.stepper-step');
-            const linhas = document.querySelectorAll('.stepper-line');
-
-            etapaInformacoes.hidden = numero !== 1;
-            etapaLocalizacao.hidden = numero !== 2;
-            etapaIngressos.hidden = numero !== 3;
-            etapaRevisao.hidden = numero !== 4;
-            etapaPublicado.hidden = numero !== 5;
-            etapas.forEach((etapa, indice) => {
-                etapa.classList.toggle('active', indice === numero - 1);
-                etapa.classList.toggle('done', indice < numero - 1);
+            document.querySelectorAll('.wizard-step-indicator').forEach((indicador) => {
+                const n = Number(indicador.dataset.etapa);
+                indicador.classList.toggle('is-active', n === numero);
+                indicador.classList.toggle('is-complete', n < numero);
             });
-            linhas.forEach((linha, indice) => linha.classList.toggle('done', indice < numero - 1));
-            if (numero === 4) preencherRevisao();
-            document.getElementById('btn-continuar-ingresso').closest('.wizard-nav').hidden = numero !== 3;
+
+            document.getElementById('btn-voltar-etapa').disabled = numero === 1;
+
+            const ehUltimaEtapa = numero === TOTAL_ETAPAS;
+            document.getElementById('btn-continuar-etapa').classList.toggle('hidden', ehUltimaEtapa);
+            document.getElementById('btn-publicar').classList.toggle('hidden', !ehUltimaEtapa);
+
+            if (numero === TOTAL_ETAPAS) {
+                preencherRevisao();
+            }
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        document.getElementById('btn-continuar').addEventListener('click', () => {
-            const nome = document.getElementById('titulo').value.trim();
-            const descricao = document.getElementById('descricao').value.trim();
+        function validarEtapaAtual() {
+            if (etapaAtual === 1) {
+                const titulo = document.getElementById('titulo').value.trim();
+                const categoria = document.getElementById('categoria').value;
+                const data = document.getElementById('data').value;
+                const horario = document.getElementById('horario').value;
+                if (!titulo || !categoria || !data || !horario) {
+                    mostrarToast('Preencha nome, categoria, data e horário antes de continuar.', 'erro');
+                    return false;
+                }
+            }
+            if (etapaAtual === 2) {
+                if (!campoCidade.value.trim()) {
+                    mostrarToast('Escolha a cidade do evento antes de continuar.', 'erro');
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function preencherRevisao() {
             const categoria = document.getElementById('categoria').value;
             const data = document.getElementById('data').value;
             const horario = document.getElementById('horario').value;
-
-            if (!nome || !descricao || !categoria || !converterDataParaISO(data) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(horario)) {
-                mostrarToastValidacao();
-                return;
-            }
-
-            alternarEtapa(2);
-        });
-        document.getElementById('btn-voltar-local').addEventListener('click', () => alternarEtapa(1));
-        document.getElementById('btn-continuar-local').addEventListener('click', () => {
             const local = document.getElementById('local').value.trim();
             const cidade = document.getElementById('cidade').value.trim();
-            const online = document.getElementById('evento-online').checked;
-            const endereco = document.getElementById('endereco').value.trim();
-            const estado = document.getElementById('estado').value.trim();
-            if (!online && (!local || !endereco || !cidade || !estado)) {
-                mostrarToastValidacao('Preencha a localização', 'Informe o local, endereço, cidade e estado do evento.');
-                return;
-            }
-            alternarEtapa(3);
-        });
-        document.getElementById('evento-online').addEventListener('change', atualizarCamposLocalizacao);
-        document.getElementById('btn-voltar-ingresso').addEventListener('click', () => alternarEtapa(2));
-        document.getElementById('btn-continuar-ingresso').addEventListener('click', () => {
-            const ingressos = [...document.querySelectorAll('#lista-ingressos .ingresso-row')];
-            const preenchidos = ingressos.length > 0 && ingressos.every((linha) => [...linha.querySelectorAll('input')].every((input) => input.value.trim()));
-            if (!preenchidos) {
-                mostrarToast('Preencha os dados dos ingressos.', 'erro');
-                return;
-            }
-            alternarEtapa(4);
-        });
-        document.getElementById('btn-voltar-revisao').addEventListener('click', () => alternarEtapa(3));
-        document.getElementById('editar-informacoes').addEventListener('click', () => alternarEtapa(1));
-        document.getElementById('editar-localizacao').addEventListener('click', () => alternarEtapa(2));
-        document.getElementById('editar-ingressos').addEventListener('click', () => alternarEtapa(3));
-        document.getElementById('btn-publicar').addEventListener('click', () => {
-            const botaoPublicar = document.getElementById('btn-publicar');
-            if (botaoPublicar.disabled) return;
-            botaoPublicar.disabled = true;
 
-            const carregamento = document.createElement('div');
-            carregamento.className = 'publicacao-loading';
-            carregamento.setAttribute('aria-label', 'Publicando evento');
-            carregamento.innerHTML = '<div class="publicacao-loading-content"><span class="fx-spin" aria-hidden="true"></span><span>Publicando evento</span></div>';
-            document.body.appendChild(carregamento);
+            document.getElementById('revisao-nome').textContent = document.getElementById('titulo').value || '—';
+            document.getElementById('revisao-categoria').textContent = categoria ? NOMES_CATEGORIA[categoria] : '—';
+            document.getElementById('revisao-data').textContent = data ? `${data} às ${horario}` : '—';
+            document.getElementById('revisao-local').textContent = [local, cidade].filter(Boolean).join(', ') || '—';
 
-            setTimeout(() => {
-                carregamento.remove();
-                alternarEtapa(5);
-                mostrarToast('Publicado!', 'sucesso');
-            }, 3000);
-        });
-
-        function preencherRevisao() {
-            const categoria = document.getElementById('categoria');
-            const data = document.getElementById('data').value;
-            const horario = document.getElementById('horario').value;
-            const online = document.getElementById('evento-online').checked;
-            document.getElementById('revisao-nome').textContent = document.getElementById('titulo').value || '-';
-            document.getElementById('revisao-categoria').textContent = categoria.options[categoria.selectedIndex]?.text || '-';
-            document.getElementById('revisao-data').textContent = `${formatarDataNaPreview(data)}${horario ? ' às ' + horario : ''}`;
-            document.getElementById('revisao-local').textContent = online ? 'Evento online' : (document.getElementById('local').value || '-');
-            document.getElementById('revisao-endereco').textContent = online ? '-' : (document.getElementById('endereco').value || '-');
-
-            const revisaoIngressos = document.getElementById('revisao-ingressos');
-            revisaoIngressos.innerHTML = '';
-            document.querySelectorAll('#lista-ingressos .ingresso-row').forEach((linha) => {
-                const campos = linha.querySelectorAll('input');
-                const item = document.createElement('div');
-                item.className = 'review-row';
-                item.innerHTML = `<span>${campos[0].value || 'Ingresso'} (${campos[2].value || 0} un.)</span><span>R$ ${campos[1].value || '0'}</span>`;
-                revisaoIngressos.appendChild(item);
-            });
+            const ingressos = coletarIngressosDoFormulario();
+            document.getElementById('revisao-ingressos').textContent = ingressos.length
+                ? ingressos.map((i) => `${i.nome} (${i.quantidade})`).join(', ')
+                : 'Nenhum cadastrado ainda';
         }
 
-        function atualizarCamposLocalizacao() {
-            const online = document.getElementById('evento-online').checked;
-            ['local', 'endereco', 'cidade', 'estado'].forEach((id) => {
-                const campo = document.getElementById(id);
-                campo.disabled = online;
-                campo.required = !online;
-                if (online) campo.value = '';
-            });
-            atualizarPreviewEvento();
-        }
-
-        atualizarCamposLocalizacao();
-
-        function mostrarToastValidacao(titulo = 'Preencha os campos obrigatórios', descricao = 'Nome, descrição e data são necessários para continuar.') {
-            const toast = document.createElement('div');
-            toast.className = 'toast toast-notificacao erro';
-            toast.innerHTML = `<span class="toast-alerta">!</span><div><strong>${titulo}</strong><small>${descricao}</small></div>`;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.classList.add('mostrar'), 10);
-            setTimeout(() => {
-                toast.classList.remove('mostrar');
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
-        }
+        document.getElementById('btn-continuar-etapa').addEventListener('click', () => {
+            if (!validarEtapaAtual()) return;
+            irParaEtapa(Math.min(TOTAL_ETAPAS, etapaAtual + 1));
+        });
+        document.getElementById('btn-voltar-etapa').addEventListener('click', () => {
+            irParaEtapa(Math.max(1, etapaAtual - 1));
+        });
+        document.querySelectorAll('.wizard-step-indicator').forEach((indicador) => {
+            indicador.addEventListener('click', () => irParaEtapa(Number(indicador.dataset.etapa)));
+        });
 
         atualizarPreviewEvento();
     </script>
 
-<script src="particles.js"></script>
+    <script src="particles.js"></script>
 </body>
 
 </html>

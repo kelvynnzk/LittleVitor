@@ -11,20 +11,29 @@
         href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="sessao.js"></script>
+    <script src="auth-ui.js"></script>
+    <script src="toast.js"></script>
+    <script src="chatbot.js"></script>
 </head>
 
 <body>
 
-    <header class="site-header">
-        <div class="wrap header-inner">
-            <a href="index.html" class="logo">LittleVitor<span class="logo-dot">.com</span></a>
-            <nav class="main-nav">
-                <a href="evento.html">Eventos</a>
+    <header class="home-header">
+        <nav class="home-nav">
+            <a href="index.html" class="home-logo"><span></span>LittleVitor</a>
+            <div class="home-links">
+                <a class="is-active" href="index.html#explorar">Explorar</a>
                 <a href="categorias.html">Categorias</a>
-                <a href="sobre.html">Sobre</a>
-            </nav>
-            <a href="login.html" class="btn btn-ghost">Entrar</a>
-        </div>
+                <a href="criar-evento.html">Criar evento</a>
+                <a href="painel.html">Dashboard</a>
+            </div>
+            <div class="home-actions">
+                <label class="nav-search"><span>⌕</span><input type="search" id="nav-search-input" placeholder="Buscar eventos..." aria-label="Buscar eventos"></label>
+                <a href="login.html" id="link-entrar" class="home-login">Entrar</a>
+                <a href="cadastro.html" class="home-signup">Criar conta</a>
+            </div>
+        </nav>
     </header>
 
     <main>
@@ -99,6 +108,11 @@
                                 <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="10">
                             </div>
 
+                            <div class="compra-total">
+                                <span class="label">Total</span>
+                                <span class="valor" id="compra-total-valor">R$ 0,00</span>
+                            </div>
+
                             <button type="submit" class="btn btn-primary btn-full">Comprar ingresso</button>
                             <p class="compra-aviso">Pagamento processado com segurança. Você recebe o ingresso por
                                 e-mail.</p>
@@ -141,9 +155,10 @@
 
     </main>
 
-    <footer id="sobre" class="site-footer">
+    <footer class="site-footer">
         <div class="wrap footer-inner">
             <p>LittleVitor<span class="logo-dot">.com</span> — feito para conectar pessoas a experiências reais.</p>
+            <a href="sobre.html">Sobre</a>
             <p class="footer-meta">&copy; 2026 LittleVitor. Todos os direitos reservados.</p>
         </div>
     </footer>
@@ -335,12 +350,11 @@
                     'Chegue com alguns minutos de antecedência'
                 ],
                 endereco: `${evento.local}<br>${evento.cidade}`,
-                // Sem preço real cadastrado ainda — "preco: null" faz
-                // formatarPreco() mostrar "Consulte o valor" no lugar
-                // de um número inventado.
-                ingressos: [
-                    { nome: 'Ingresso', preco: null }
-                ]
+                // Preenchido de verdade em enriquecerListaComIngressosReais()
+                // logo depois do carregamento — até lá fica vazio, o que
+                // faz formatarPreco() mostrar "Consulte o valor".
+                ingressos: [],
+                _totalVendidos: 0
             };
         }
 
@@ -358,6 +372,7 @@
                 const eventosApi = dados.eventos || [];
 
                 EVENTOS = eventosApi.map((evento, indice) => mapearEventoApiParaView(evento, indice));
+                await enriquecerListaComIngressosReais(EVENTOS);
 
             } catch (erro) {
                 console.error('Não foi possível conectar ao back-end, usando eventos de exemplo:', erro);
@@ -365,22 +380,49 @@
             }
         }
 
+        // Busca, pra cada evento, os tipos de ingresso reais (rota
+        // /tipos-ingresso/<id>) — usado tanto pra mostrar o preço real
+        // "A partir de R$X" na lista quanto pra ordenar por
+        // popularidade (total de ingressos já vendidos).
+        async function enriquecerListaComIngressosReais(eventos) {
+            await Promise.all(eventos.map(async (ev) => {
+                try {
+                    const resposta = await fetch(`http://127.0.0.1:5000/tipos-ingresso/${ev.id}`);
+                    const dados = await resposta.json();
+                    const tipos = dados.tipos_ingresso || [];
+
+                    ev.ingressos = tipos.map((tipo) => ({ nome: tipo.nome, preco: tipo.preco }));
+                    ev._totalVendidos = tipos.reduce((soma, tipo) => soma + (tipo.quantidade_vendida || 0), 0);
+                } catch (erro) {
+                    console.error(`Erro ao buscar ingressos do evento ${ev.id}:`, erro);
+                }
+            }));
+        }
+
         // ============================================================
         // RENDERIZAÇÃO DA LISTA DE EVENTOS (evento.html sem ?id)
         // ============================================================
-        function renderLista() {
+        function renderLista(termoBusca = '') {
             const grid = document.getElementById('eventos-grid');
             const vazio = document.getElementById('eventos-vazio');
 
             grid.innerHTML = '';
 
-            if (!EVENTOS.length) {
+            // Do mais famoso (mais ingressos vendidos) pro menos vendido.
+            const eventosOrdenados = [...EVENTOS].sort((a, b) => (b._totalVendidos || 0) - (a._totalVendidos || 0));
+
+            const termo = termoBusca.trim().toLowerCase();
+            const eventosFiltrados = termo
+                ? eventosOrdenados.filter(ev => ev.titulo.toLowerCase().includes(termo))
+                : eventosOrdenados;
+
+            if (!eventosFiltrados.length) {
                 vazio.classList.remove('hidden');
                 return;
             }
             vazio.classList.add('hidden');
 
-            EVENTOS.forEach(ev => {
+            eventosFiltrados.forEach(ev => {
                 // Preço mínimo entre os ingressos, ignorando os que
                 // ainda não têm valor definido (preco: null).
                 const precosConhecidos = ev.ingressos.map(i => i.preco).filter(p => p !== null && p !== undefined);
@@ -425,16 +467,6 @@
             document.getElementById('det-onde').textContent = ev.onde;
             document.getElementById('det-organizador').textContent = ev.organizador;
 
-            document.getElementById('ingressos-lista').innerHTML = ev.ingressos.map((ing, i) => `
-                <div class="ingresso-opcao">
-                    <label>
-                        <input type="radio" name="tipo_ingresso" value="${ing.nome.toLowerCase()}" ${i === 0 ? 'checked' : ''}>
-                        <span class="opcao-nome">${ing.nome}</span>
-                        <span class="opcao-preco">${formatarPreco(ing.preco)}</span>
-                    </label>
-                </div>
-            `).join('');
-
             document.getElementById('det-descricao').innerHTML =
                 ev.descricao.map(p => `<p>${p}</p>`).join('');
 
@@ -443,6 +475,101 @@
 
             document.getElementById('det-endereco').innerHTML = ev.endereco;
         }
+
+        // ============================================================
+        // TIPOS DE INGRESSO REAIS E CÁLCULO DO TOTAL
+        // (substituem os ingressos mockados que existiam antes)
+        // ============================================================
+
+        // Guarda o tipo de ingresso escolhido no momento (objeto vindo
+        // do backend, com id/nome/preco/disponivel).
+        let tipoSelecionado = null;
+
+        async function carregarIngressos(eventoId) {
+            const lista = document.getElementById('ingressos-lista');
+            try {
+                const resposta = await fetch(`http://127.0.0.1:5000/tipos-ingresso/${eventoId}`);
+                const dados = await resposta.json();
+                renderIngressos(dados.tipos_ingresso || []);
+            } catch (erro) {
+                console.error('Erro ao carregar tipos de ingresso:', erro);
+                lista.innerHTML = '<p class="ingressos-vazio">Não foi possível carregar os ingressos deste evento.</p>';
+            }
+        }
+
+        function renderIngressos(tipos) {
+            const lista = document.getElementById('ingressos-lista');
+            const botaoComprar = document.querySelector('.compra-form button[type="submit"]');
+
+            lista.innerHTML = '';
+            tipoSelecionado = null;
+
+            if (!tipos.length) {
+                lista.innerHTML = '<p class="ingressos-vazio">Nenhum ingresso disponível para este evento ainda.</p>';
+                botaoComprar.disabled = true;
+                atualizarTotal();
+                return;
+            }
+
+            tipos.forEach((tipo) => {
+                const esgotado = tipo.disponivel <= 0;
+
+                const opcao = document.createElement('div');
+                opcao.className = 'ingresso-opcao' + (esgotado ? ' esgotado' : '');
+                opcao.innerHTML = `
+                    <label>
+                        <input type="radio" name="tipo_ingresso" value="${tipo.id}" ${esgotado ? 'disabled' : ''} ${(!esgotado && tipoSelecionado === null) ? 'checked' : ''}>
+                        <span class="opcao-nome">${tipo.nome}</span>
+                        ${esgotado
+                            ? '<span class="opcao-esgotado">Esgotado</span>'
+                            : `<span class="opcao-preco">${formatarPreco(tipo.preco)}</span>`}
+                    </label>
+                `;
+                lista.appendChild(opcao);
+
+                if (!esgotado && tipoSelecionado === null) {
+                    tipoSelecionado = tipo;
+                    opcao.classList.add('is-selecionada');
+                }
+
+                const radio = opcao.querySelector('input');
+                radio.addEventListener('change', () => {
+                    document.querySelectorAll('.ingresso-opcao').forEach(el => el.classList.remove('is-selecionada'));
+                    opcao.classList.add('is-selecionada');
+                    tipoSelecionado = tipo;
+                    ajustarLimiteQuantidade();
+                    atualizarTotal();
+                });
+            });
+
+            botaoComprar.disabled = tipoSelecionado === null;
+            ajustarLimiteQuantidade();
+            atualizarTotal();
+        }
+
+        function ajustarLimiteQuantidade() {
+            const inputQtd = document.getElementById('quantidade');
+            if (!tipoSelecionado) return;
+            const limite = Math.max(1, Math.min(10, tipoSelecionado.disponivel));
+            inputQtd.max = limite;
+            if (Number(inputQtd.value) > limite) {
+                inputQtd.value = limite;
+            }
+        }
+
+        function atualizarTotal() {
+            const totalValorEl = document.getElementById('compra-total-valor');
+            const inputQtd = document.getElementById('quantidade');
+
+            if (!tipoSelecionado) {
+                totalValorEl.textContent = formatarPreco(0);
+                return;
+            }
+            const quantidade = Number(inputQtd.value) || 1;
+            totalValorEl.textContent = formatarPreco(tipoSelecionado.preco * quantidade);
+        }
+
+        document.getElementById('quantidade').addEventListener('input', atualizarTotal);
 
         // ============================================================
         // CONTROLE DE QUAL "VISTA" (lista / detalhe / não encontrado)
@@ -469,7 +596,12 @@
 
             if (!id) {
                 mostrarView('lista');
-                renderLista();
+                const termoBusca = params.get('busca') || '';
+                const campoBusca = document.getElementById('nav-search-input');
+                if (campoBusca && termoBusca) {
+                    campoBusca.value = termoBusca;
+                }
+                renderLista(termoBusca);
                 return;
             }
 
@@ -482,18 +614,74 @@
 
             mostrarView('detalhe');
             renderDetalhe(evento);
+
+            // Só depois de mostrar os dados básicos do evento é que
+            // buscamos os tipos de ingresso (são duas requisições
+            // diferentes ao backend).
+            await carregarIngressos(evento.id);
+
+            // Se a pessoa tentou comprar um ingresso, foi mandada pro
+            // login (por não estar logada) e acabou de voltar já logada,
+            // vamos direto pra tela de pagamento com a escolha que ela
+            // já tinha feito.
+            continuarCompraPendente(evento.id);
         }
 
         document.addEventListener('DOMContentLoaded', init);
 
-        // Placeholder de envio do formulário de compra, até o back-end
-        // ter uma rota de verdade pra processar compra de ingresso.
-        document.addEventListener('submit', function (e) {
-            if (e.target.matches('.compra-form')) {
-                e.preventDefault();
-                alert('Compra simulada! Quando o back-end tiver uma rota de compra, isso vai enviar o pedido pra sua API.');
+        // ============================================================
+        // ENVIO DO FORMULÁRIO DE COMPRA
+        // Não fecha a compra aqui — só valida a escolha (tipo de
+        // ingresso + quantidade) e encaminha pra tela de pagamento
+        // (pagamento.html), que é quem realmente cobra o pagamento
+        // (cartão ou Pix, via Mercado Pago).
+        // ============================================================
+        document.addEventListener('submit', function (evento) {
+            if (!evento.target.matches('.compra-form')) return;
+            evento.preventDefault();
+
+            if (!tipoSelecionado) {
+                mostrarToast('Escolha um tipo de ingresso antes de continuar.', 'erro');
+                return;
+            }
+
+            const params = new URLSearchParams(window.location.search);
+            const eventoId = params.get('id');
+            const quantidade = Number(document.getElementById('quantidade').value) || 1;
+
+            const destino = `pagamento.html?evento_id=${eventoId}&tipo_ingresso_id=${tipoSelecionado.id}&quantidade=${quantidade}`;
+
+            const usuarioSalvo = obterUsuarioLogado();
+
+            if (usuarioSalvo) {
+                window.location.href = destino;
+            } else {
+                // Não logado: salva a intenção de compra e manda pro
+                // login, pra voltar exatamente aqui depois.
+                localStorage.setItem('intencao_compra', JSON.stringify({
+                    evento_id: eventoId,
+                    tipo_ingresso_id: tipoSelecionado.id,
+                    quantidade: quantidade
+                }));
+                window.location.href = `login.html?retorno=${encodeURIComponent('evento.html?id=' + eventoId)}`;
             }
         });
+
+        // Verifica se existe uma compra pendente (salva antes de mandar
+        // a pessoa pro login) pra ESTE evento específico, e — se a
+        // pessoa já está logada agora — já continua direto pro pagamento.
+        function continuarCompraPendente(eventoIdAtual) {
+            const usuarioSalvo = obterUsuarioLogado();
+            const intencaoSalva = localStorage.getItem('intencao_compra');
+
+            if (!usuarioSalvo || !intencaoSalva) return;
+
+            const intencao = JSON.parse(intencaoSalva);
+            if (String(intencao.evento_id) !== String(eventoIdAtual)) return;
+
+            localStorage.removeItem('intencao_compra');
+            window.location.href = `pagamento.html?evento_id=${intencao.evento_id}&tipo_ingresso_id=${intencao.tipo_ingresso_id}&quantidade=${intencao.quantidade}`;
+        }
     </script>
 
 <script src="particles.js"></script>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre — LittleVitor.com</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="sessao.js"></script>
+    <script src="toast.js"></script>
+    <script src="auth-ui.js"></script>
+    <script src="chatbot.js"></script>
+</head>
+
+<body>
+
+    <header class="home-header">
+        <nav class="home-nav">
+            <a href="index.html" class="home-logo"><span></span>LittleVitor</a>
+            <div class="home-links">
+                <a href="index.html#explorar">Explorar</a>
+                <a href="categorias.html">Categorias</a>
+                <a href="criar-evento.html">Criar evento</a>
+                <a href="painel.html">Dashboard</a>
+            </div>
+            <div class="home-actions">
+                <label class="nav-search"><span>⌕</span><input type="search" id="nav-search-input" placeholder="Buscar eventos..." aria-label="Buscar eventos"></label>
+                <a href="login.html" id="link-entrar" class="home-login">Entrar</a>
+                <a href="cadastro.html" class="home-signup">Criar conta</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="form-page">
+            <div class="wrap form-page-inner">
+
+                <div class="section-head">
+                    <span class="eyebrow"><span class="dot"></span> Quem somos</span>
+                    <h1>Sobre o LittleVitor</h1>
+                    <p>Conectando pessoas a experiências reais, uma cidade de cada vez.</p>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:20px; color:var(--text-mid); font-size:0.95rem; line-height:1.7;">
+                    <p>
+                        O LittleVitor nasceu com um objetivo simples: facilitar o encontro entre quem organiza
+                        eventos incríveis e quem está procurando a próxima experiência que vale a pena contar —
+                        shows, festas, workshops, encontros de negócios e muito mais.
+                    </p>
+                    <p>
+                        Do lado de quem organiza, oferecemos as ferramentas pra publicar um evento, gerenciar
+                        tipos de ingresso e acompanhar as vendas em tempo real, tudo num painel simples. Do lado
+                        de quem participa, uma agenda sempre atualizada, com compra de ingresso rápida e
+                        confirmação direto no e-mail.
+                    </p>
+                    <p>
+                        Este é um projeto em constante evolução — construído aos poucos, com cuidado, pensando em
+                        como conectar pessoas de verdade às experiências que elas procuram.
+                    </p>
+                </div>
+
+                <div class="form-actions" style="margin-top:32px;">
+                    <a href="evento.html" class="btn btn-primary">Ver agenda de eventos</a>
+                    <a href="criar-evento.html" class="btn btn-ghost">Criar meu evento</a>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap footer-inner">
+            <p>LittleVitor<span class="logo-dot">.com</span> — feito para conectar pessoas a experiências reais.</p>
+            <p class="footer-meta">&copy; 2026 LittleVitor. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="particles.js"></script>
+</body>
+
+</html>
