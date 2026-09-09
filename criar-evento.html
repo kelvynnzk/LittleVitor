@@ -524,6 +524,16 @@
         formEvento.addEventListener('submit', async (evento) => {
             evento.preventDefault();
 
+            // Segunda trava (além dos indicadores de etapa já bloquearem
+            // pular pra frente sem validar) — garante que ninguém consegue
+            // publicar com as etapas 1 e 2 incompletas.
+            for (let etapa = 1; etapa <= 2; etapa++) {
+                if (!validarEtapa(etapa)) {
+                    irParaEtapa(etapa);
+                    return;
+                }
+            }
+
             await promessaCidades;
 
             if (!cidadeEhValida(campoCidade.value)) {
@@ -723,8 +733,13 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function validarEtapaAtual() {
-            if (etapaAtual === 1) {
+        // Valida uma etapa específica (não necessariamente a atual) —
+        // usada tanto pelo botão "Continuar" (valida a etapa em que a
+        // pessoa está) quanto pelos indicadores de etapa clicáveis no
+        // topo (que precisam validar TODAS as etapas anteriores antes
+        // de deixar pular direto pra uma etapa mais à frente).
+        function validarEtapa(numero) {
+            if (numero === 1) {
                 const titulo = document.getElementById('titulo').value.trim();
                 const categoria = document.getElementById('categoria').value;
                 const data = document.getElementById('data').value;
@@ -734,13 +749,17 @@
                     return false;
                 }
             }
-            if (etapaAtual === 2) {
+            if (numero === 2) {
                 if (!campoCidade.value.trim()) {
                     mostrarToast('Escolha a cidade do evento antes de continuar.', 'erro');
                     return false;
                 }
             }
             return true;
+        }
+
+        function validarEtapaAtual() {
+            return validarEtapa(etapaAtual);
         }
 
         function preencherRevisao() {
@@ -769,7 +788,23 @@
             irParaEtapa(Math.max(1, etapaAtual - 1));
         });
         document.querySelectorAll('.wizard-step-indicator').forEach((indicador) => {
-            indicador.addEventListener('click', () => irParaEtapa(Number(indicador.dataset.etapa)));
+            indicador.addEventListener('click', () => {
+                const alvo = Number(indicador.dataset.etapa);
+
+                // Voltar pra uma etapa anterior (ou clicar na atual) é
+                // sempre permitido — o problema é só pular PRA FRENTE
+                // sem ter preenchido o que já devia ter sido validado.
+                if (alvo > etapaAtual) {
+                    for (let etapa = etapaAtual; etapa < alvo; etapa++) {
+                        if (!validarEtapa(etapa)) {
+                            irParaEtapa(etapa);
+                            return;
+                        }
+                    }
+                }
+
+                irParaEtapa(alvo);
+            });
         });
 
         atualizarPreviewEvento();
