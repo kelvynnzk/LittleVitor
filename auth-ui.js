@@ -85,6 +85,45 @@ function atualizarBotaoEntrar() {
     }
 }
 
+// Em telas pequenas, a barra de navegação normal (Explorar,
+// Categorias, Criar evento, Dashboard) fica escondida — sem isso, não
+// haveria como acessar essas páginas pelo celular. Em vez de duplicar
+// esses links numa lista separada, essa função move o próprio
+// elemento ".home-links" de cada página (já com o link certo marcado
+// como atual) pra dentro do menu "Meu perfil", que nessa largura de
+// tela passa a se chamar só "Menu" e funciona como o menu principal
+// do site inteiro. Em telas grandes, devolve tudo pro lugar de sempre.
+function ativarMenuResponsivo() {
+    const linksNav = document.querySelector('.home-links');
+    const trigger = document.getElementById('user-menu-trigger');
+    const dropdown = document.getElementById('user-menu-dropdown');
+
+    if (!linksNav || !trigger || !dropdown) {
+        return;
+    }
+
+    // Marcador invisível que guarda o lugar original de ".home-links"
+    // na barra de navegação, pra devolver ele lá quando a tela voltar
+    // a ficar grande.
+    const posicaoOriginal = document.createComment('posicao-home-links');
+    linksNav.after(posicaoOriginal);
+
+    const telaPequena = window.matchMedia('(max-width: 900px)');
+
+    function aplicar(ehTelaPequena) {
+        if (ehTelaPequena) {
+            dropdown.insertBefore(linksNav, dropdown.firstChild);
+            trigger.textContent = 'Menu';
+        } else {
+            posicaoOriginal.after(linksNav);
+            trigger.textContent = 'Meu perfil';
+        }
+    }
+
+    aplicar(telaPequena.matches);
+    telaPequena.addEventListener('change', (evento) => aplicar(evento.matches));
+}
+
 // Liga a busca do menu (o campo com id "nav-search-input") em todas
 // as páginas que não têm sua própria grade de eventos pra filtrar —
 // pressionar Enter manda direto pra eventos.html já com o termo
@@ -110,5 +149,6 @@ function ligarBuscaDoMenu() {
 // <body> (onde está o elemento que estamos procurando) existir.
 document.addEventListener('DOMContentLoaded', () => {
     atualizarBotaoEntrar();
+    ativarMenuResponsivo();
     ligarBuscaDoMenu();
 });

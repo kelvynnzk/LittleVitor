@@ -3845,3 +3845,28 @@ body::after {
     border-top: 1px solid var(--line);
 }
 .user-menu-item-sair:hover { background: rgba(239,68,68,0.12); color: #f87171; }
+
+/* Em telas pequenas, auth-ui.js move a navegação principal (".home-links")
+   pra dentro deste dropdown — aqui ela troca de barra horizontal pra
+   lista vertical, com a mesma cara dos outros itens do menu. */
+@media (max-width: 900px) {
+    .user-menu-dropdown .home-links {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        gap: 0;
+        border-bottom: 1px solid var(--line);
+    }
+    .user-menu-dropdown .home-links a {
+        height: auto;
+        padding: 12px 16px;
+        border-bottom: none;
+        color: var(--text-mid);
+    }
+    .user-menu-dropdown .home-links a:hover,
+    .user-menu-dropdown .home-links a.is-active {
+        background: rgba(255,255,255,0.06);
+        color: var(--text-hi);
+        border-color: transparent;
+    }
+}
