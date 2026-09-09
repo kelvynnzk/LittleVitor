@@ -180,7 +180,7 @@
 
             try {
                 //faz a req para o back end
-                const resposta = await fetch('caboose.proxy.rlwy.net:17850', {
+                const resposta = await fetch('http://127.0.0.1:5000/cadastro', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
