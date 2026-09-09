@@ -271,6 +271,20 @@
                 document.getElementById('local').value = evento.local || '';
                 document.getElementById('cidade').value = evento.cidade || '';
 
+                // Se o evento já tem uma foto de capa salva, mostra
+                // ela nos dois lugares de preview (a caixa de upload
+                // e a prévia ao vivo) — do jeito que mostrarPreview()
+                // deixaria se a pessoa tivesse acabado de escolher
+                // esse arquivo agora.
+                if (evento.imagem) {
+                    const urlImagem = `http://127.0.0.1:5000/uploads/eventos/${evento.imagem}`;
+                    document.getElementById('preview-capa').src = urlImagem;
+                    document.getElementById('preview-capa').hidden = false;
+                    document.getElementById('upload-placeholder').hidden = true;
+                    document.getElementById('preview-evento-imagem').src = urlImagem;
+                    document.getElementById('preview-evento-imagem').style.display = 'block';
+                }
+
                 await carregarIngressosParaEdicao(id);
                 atualizarPreviewEvento();
 
@@ -562,17 +576,29 @@
 
             const usuario = JSON.parse(usuarioSalvo);
 
-            const dadosEvento = {
-                titulo: document.getElementById('titulo').value,
-                categoria: document.getElementById('categoria').value,
-                descricao: document.getElementById('descricao').value,
-                data: document.getElementById('data').value,
-                horario: document.getElementById('horario').value,
-                local: document.getElementById('local').value,
-                cidade: document.getElementById('cidade').value,
-                usuario_id: usuario.id,
-                ingressos: coletarIngressosDoFormulario()
-            };
+            // Usamos FormData (em vez de JSON) porque agora dá pra
+            // mandar a imagem de capa junto com o resto dos campos,
+            // na mesma requisição. O navegador cuida sozinho do
+            // "Content-Type: multipart/form-data" certo — por isso
+            // não passamos esse cabeçalho manualmente aqui embaixo.
+            const formData = new FormData();
+            formData.append('titulo', document.getElementById('titulo').value);
+            formData.append('categoria', document.getElementById('categoria').value);
+            formData.append('descricao', document.getElementById('descricao').value);
+            formData.append('data', document.getElementById('data').value);
+            formData.append('horario', document.getElementById('horario').value);
+            formData.append('local', document.getElementById('local').value);
+            formData.append('cidade', document.getElementById('cidade').value);
+            formData.append('usuario_id', usuario.id);
+            formData.append('ingressos', JSON.stringify(coletarIngressosDoFormulario()));
+
+            // A imagem só vai junto se a pessoa realmente escolheu um
+            // arquivo novo — na edição, se ela não mexer nesse campo,
+            // o back-end mantém a foto que o evento já tinha.
+            const arquivoCapa = document.getElementById('capa').files[0];
+            if (arquivoCapa) {
+                formData.append('capa', arquivoCapa);
+            }
 
             const url = modoEdicao ? `http://127.0.0.1:5000/evento/${idEdicao}` : 'http://127.0.0.1:5000/criar-evento';
             const metodo = modoEdicao ? 'PUT' : 'POST';
@@ -580,8 +606,7 @@
             try {
                 const resposta = await fetch(url, {
                     method: metodo,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dadosEvento)
+                    body: formData
                 });
 
                 const dados = await resposta.json();

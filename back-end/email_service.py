@@ -7,7 +7,7 @@ from email_config import EMAIL_REMETENTE, SENHA_APP
 # Live Server) — usado pra montar o link "Ver no painel" nos e-mails.
 # Se um dia você passar a abrir o site de outro jeito (outra porta,
 # um domínio de verdade, etc.), só precisa trocar essa linha.
-URL_BASE_SITE = "http://127.0.0.1:5500/LittleVitor"
+URL_BASE_SITE = "http://127.0.0.1:5501"
 
 
 def _envolver_html(subtitulo, conteudo_html):
@@ -104,6 +104,50 @@ def enviar_email_boas_vindas(destinatario, nome, token):
     mensagem.add_alternative(_envolver_html("Confirme sua conta", conteudo), subtype="html")
 
     return _enviar(mensagem, destinatario, "confirmação de cadastro")
+
+
+def enviar_email_redefinicao_senha(destinatario, nome, token):
+    """
+    Manda o e-mail de redefinição de senha, com um link que expira em
+    30 minutos — depois disso a pessoa precisa pedir um novo na tela
+    "Esqueci minha senha".
+    """
+    link_redefinicao = f"{URL_BASE_SITE}/redefinir-senha.html?token={token}"
+
+    mensagem = EmailMessage()
+    mensagem["Subject"] = "Redefinir sua senha — LittleVitor.com"
+    mensagem["From"] = EMAIL_REMETENTE or "littlevitor@exemplo.com"
+    mensagem["To"] = destinatario
+
+    mensagem.set_content(
+        f"Olá, {nome}!\n\n"
+        f"Recebemos um pedido para redefinir a senha da sua conta. "
+        f"Clique no link abaixo para criar uma nova senha (ele expira em 30 minutos).\n\n"
+        f"{link_redefinicao}\n\n"
+        f"Se você não pediu isso, pode ignorar este e-mail — sua senha continua a mesma.\n\n"
+        f"LittleVitor.com"
+    )
+
+    conteudo = f"""\
+      <h2 style="font-size:18px; margin:0 0 12px; color:#f0eef5;">Olá, {nome}!</h2>
+      <p style="color:#c9c4d6; font-size:14px; line-height:1.6; margin:0 0 20px;">
+        Recebemos um pedido para redefinir a senha da sua conta. Clique
+        no botão abaixo para criar uma nova senha. Esse link expira em
+        <strong>30 minutos</strong>.
+      </p>
+      <a href="{link_redefinicao}"
+         style="display:inline-block; background:#8b5cf6; color:#fff; font-weight:bold;
+                text-decoration:none; padding:12px 22px; border-radius:8px; font-size:14px;">
+        Criar nova senha
+      </a>
+      <p style="color:#726c82; font-size:12px; margin-top:28px;">
+        Se você não pediu essa redefinição, pode ignorar este e-mail —
+        sua senha continua a mesma.
+      </p>
+    """
+    mensagem.add_alternative(_envolver_html("Redefinição de senha", conteudo), subtype="html")
+
+    return _enviar(mensagem, destinatario, "redefinição de senha")
 
 
 def enviar_email_evento_criado(destinatario, nome_organizador, evento):

@@ -5,3 +5,4 @@ back-end/email_config.py
 back-end/mp_config.py
 back-end/gemini_config.py
 .vscode/
+back-end/uploads/

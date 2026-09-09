@@ -1,8 +1,12 @@
 from test_conect import get_connection
 
-def criar_eventos(titulo, categoria, descricao, data, horario, local, cidade, usuario_id):
+def criar_eventos(titulo, categoria, descricao, data, horario, local, cidade, usuario_id, imagem=None):
     """ Recebe os dados do evento (vindos do formulário) e salva no banco,
     associando o evento ao usuário que o criou.
+
+    "imagem" é só o nome do arquivo já salvo em back-end/uploads/eventos
+    (ver salvar_imagem_evento() em api.py) — pode vir None, caso o
+    organizador não tenha enviado nenhuma foto de capa.
 
     Retorna o id do evento recém-criado (um número, portanto "truthy")
     em caso de sucesso, ou False se der errado — quem chamar essa
@@ -19,10 +23,10 @@ def criar_eventos(titulo, categoria, descricao, data, horario, local, cidade, us
 
     try:
         query = """
-            INSERT INTO eventos (titulo, categoria, descricao, data, horario, local, cidade, usuario_id)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO eventos (titulo, categoria, descricao, data, horario, local, cidade, usuario_id, imagem)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(query, (titulo, categoria, descricao, data, horario, local, cidade, usuario_id))
+        cursor.execute(query, (titulo, categoria, descricao, data, horario, local, cidade, usuario_id, imagem))
         conexao.commit()
 
         # lastrowid é o id que o MySQL acabou de gerar pro AUTO_INCREMENT
@@ -213,12 +217,17 @@ def buscar_evento_por_id(evento_id):
         conexao.close()
 
 
-def atualizar_evento(evento_id, titulo, categoria, descricao, data, horario, local, cidade, usuario_id):
+def atualizar_evento(evento_id, titulo, categoria, descricao, data, horario, local, cidade, usuario_id, imagem=None):
     """
     Atualiza os dados de um evento já existente.
     O "usuario_id" entra também no WHERE, não só o "evento_id" —
     isso garante que um usuário só consiga editar eventos que ele
     mesmo criou, mesmo que tente forjar o id de um evento de outra pessoa.
+
+    "imagem" segue o mesmo formato de criar_eventos() — quem chama
+    essa função decide o valor: se o organizador não enviou uma foto
+    nova na edição, deve passar a imagem que o evento já tinha antes
+    (senão essa função apaga a foto existente).
     """
 
     conexao = get_connection()
@@ -233,10 +242,10 @@ def atualizar_evento(evento_id, titulo, categoria, descricao, data, horario, loc
         query = """
             UPDATE eventos
             SET titulo = %s, categoria = %s, descricao = %s, data = %s,
-                horario = %s, local = %s, cidade = %s
+                horario = %s, local = %s, cidade = %s, imagem = %s
             WHERE id = %s AND usuario_id = %s
         """
-        cursor.execute(query, (titulo, categoria, descricao, data, horario, local, cidade, evento_id, usuario_id))
+        cursor.execute(query, (titulo, categoria, descricao, data, horario, local, cidade, imagem, evento_id, usuario_id))
         conexao.commit()
 
         # rowcount é 0 quando o id não existe ou não pertence a esse usuário.

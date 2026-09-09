@@ -3337,6 +3337,15 @@ body::after {
 /* ================= EVENTO — DETALHE E COMPRA (evento.html) ================= */
 
 .evento-hero{ padding: 40px 0 64px; }
+.evento-hero-banner{
+    display: block;
+    width: 100%;
+    max-height: 360px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    margin-bottom: 32px;
+}
 .evento-hero-inner{
     display: grid;
     grid-template-columns: 1.6fr 1fr;

@@ -68,6 +68,9 @@
 
             <!-- CABEÇALHO DO EVENTO -->
             <section class="evento-hero">
+                <div class="wrap">
+                    <img id="det-imagem-capa" class="evento-hero-banner" alt="" hidden>
+                </div>
                 <div class="wrap evento-hero-inner">
                     <div>
                         <span id="det-tag" class="tag tag-musica">Música</span>
@@ -333,8 +336,9 @@
                 id: evento.id,
                 titulo: evento.titulo,
                 categoria: evento.categoria,
+                imagem: evento.imagem || null,
                 tagClass: categoriaParaClasse(evento.categoria),
-                thumbClass: THUMB_CLASSES[indice % THUMB_CLASSES.length], // alterna a cor de fundo do card
+                thumbClass: THUMB_CLASSES[indice % THUMB_CLASSES.length], // alterna a cor de fundo do card (fallback quando não há foto)
                 dataBadge: formatarDataBadge(evento.data),
                 quando: formatarQuando(evento.data, evento.horario),
                 onde: `${evento.local}, ${evento.cidade}`,
@@ -430,10 +434,18 @@
                 const precoMin = precosConhecidos.length ? Math.min(...precosConhecidos) : null;
                 const textoPreco = precoMin !== null ? `A partir de ${formatarPreco(precoMin)}` : 'Consulte o valor';
 
+                // Se o evento tem uma foto de capa de verdade, ela cobre
+                // o thumb inteiro por cima do gradiente; sem foto, fica
+                // só o gradiente colorido (ev.thumbClass) como fallback.
+                const imagemHtml = ev.imagem
+                    ? `<img src="http://127.0.0.1:5000/uploads/eventos/${ev.imagem}" alt="${ev.titulo}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">`
+                    : '';
+
                 const card = document.createElement('article');
                 card.className = 'event-card';
                 card.innerHTML = `
                     <div class="event-thumb ${ev.thumbClass}">
+                        ${imagemHtml}
                         <div class="event-date-badge">
                             <span class="day">${ev.dataBadge.dia}</span>${ev.dataBadge.mes}
                         </div>
@@ -464,6 +476,19 @@
 
             document.getElementById('det-titulo').textContent = ev.titulo;
             document.getElementById('det-sub').textContent = ev.sub;
+
+            // Só mostra o banner de foto se o evento realmente tiver
+            // uma imagem de capa salva — sem foto, o elemento continua
+            // escondido (hidden), e o layout fica igual a antes.
+            const imagemCapa = document.getElementById('det-imagem-capa');
+            if (ev.imagem) {
+                imagemCapa.src = `http://127.0.0.1:5000/uploads/eventos/${ev.imagem}`;
+                imagemCapa.alt = ev.titulo;
+                imagemCapa.hidden = false;
+            } else {
+                imagemCapa.hidden = true;
+            }
+
             document.getElementById('det-quando').textContent = ev.quando;
             document.getElementById('det-onde').textContent = ev.onde;
             document.getElementById('det-organizador').textContent = ev.organizador;

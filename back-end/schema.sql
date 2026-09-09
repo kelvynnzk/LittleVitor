@@ -14,8 +14,8 @@
 --   3. Pronto — as 4 tabelas já ficam criadas com a estrutura atual.
 --
 -- Os arquivos schema_compras.sql, schema_verificacao_email.sql,
--- schema_pagamentos.sql e schema_perfil.sql continuam no projeto só
--- como histórico de
+-- schema_pagamentos.sql, schema_perfil.sql, schema_redefinir_senha.sql
+-- e schema_imagem_evento.sql continuam no projeto só como histórico de
 -- como o banco foi evoluindo (eram rodados um a um, com ALTER
 -- TABLE, conforme cada funcionalidade nova era criada) — quem está
 -- começando do zero não precisa rodar nenhum deles, só este arquivo.
@@ -31,6 +31,8 @@ CREATE TABLE usuarios (
   token_verificacao VARCHAR(64) DEFAULT NULL,
   telefone VARCHAR(20) DEFAULT NULL,
   cidade VARCHAR(100) DEFAULT NULL,
+  token_redefinicao_senha VARCHAR(64) DEFAULT NULL,
+  token_redefinicao_expira DATETIME DEFAULT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -46,6 +48,7 @@ CREATE TABLE eventos (
   cidade VARCHAR(100) DEFAULT NULL,
   usuario_id INT NOT NULL,
   criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  imagem VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (id),
   KEY usuario_id (usuario_id),
   CONSTRAINT eventos_ibfk_1 FOREIGN KEY (usuario_id) REFERENCES usuarios (id)

@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,0..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="/img/littlevitor-favicon-32.png">
+    <script src="toast.js"></script>
 </head>
 
 <body class="recovery-page">
@@ -72,15 +73,36 @@
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
 
-        function enviarLink() {
+        // Chama a API de verdade — usada tanto no envio inicial quanto
+        // no "Reenviar e-mail". A resposta é sempre a mesma mensagem
+        // de sucesso (o back-end não revela se o e-mail existe ou
+        // não), então aqui só precisamos tratar erro de conexão.
+        async function solicitarLinkRedefinicao(email) {
+            const resposta = await fetch('http://127.0.0.1:5000/esqueci-senha', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            return resposta.ok;
+        }
+
+        async function enviarLink() {
             submitButton.disabled = true;
             submitButton.textContent = 'Enviando...';
 
-            setTimeout(() => {
-                sentEmail.textContent = emailInput.value.trim();
+            const email = emailInput.value.trim();
+
+            try {
+                await solicitarLinkRedefinicao(email);
+                sentEmail.textContent = email;
                 formView.hidden = true;
                 successView.hidden = false;
-            }, 700);
+            } catch (erro) {
+                console.error('Erro ao solicitar redefinição de senha:', erro);
+                mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Enviar link de recuperação';
+            }
         }
 
         form.addEventListener('submit', (event) => {
@@ -95,9 +117,18 @@
             if (valido) enviarLink();
         });
 
-        resendButton.addEventListener('click', () => {
+        resendButton.addEventListener('click', async () => {
             resendButton.disabled = true;
-            resendButton.textContent = 'E-mail reenviado';
+            resendButton.textContent = 'Reenviando...';
+
+            try {
+                await solicitarLinkRedefinicao(sentEmail.textContent);
+                resendButton.textContent = 'E-mail reenviado';
+            } catch (erro) {
+                console.error('Erro ao reenviar e-mail:', erro);
+                resendButton.textContent = 'Erro ao reenviar';
+            }
+
             setTimeout(() => {
                 resendButton.disabled = false;
                 resendButton.textContent = 'Reenviar e-mail';

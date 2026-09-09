@@ -242,17 +242,23 @@
       article.dataset.title = (evento.titulo || '').toLowerCase();
       article.dataset.city = (evento.cidade || '').toLowerCase();
 
-      // O banco de dados (tabela "eventos") ainda não guarda imagem,
-      // preço nem quantidade de vagas do evento — só titulo, categoria,
-      // descricao, data, horario, local e cidade. Por isso:
-      // - usamos uma foto de placeholder (picsum.photos), com uma
-      //   "seed" fixa baseada no id do evento, pra sempre vir a MESMA
-      //   foto pro mesmo evento (em vez de mudar a cada recarregamento);
-      // - não mostramos o rodapé de preço/disponibilidade que existia
-      //   nos cards de exemplo, já que não temos esse dado ainda.
+      // Usa a foto de capa de verdade, enviada pelo organizador ao
+      // criar o evento, quando ela existe. Eventos antigos (criados
+      // antes dessa funcionalidade existir) ou sem foto ainda caem
+      // num placeholder (picsum.photos) com "seed" fixa no id do
+      // evento, só pra não deixar o card sem imagem nenhuma.
+      //
+      // O banco de dados (tabela "eventos") também ainda não guarda
+      // preço nem quantidade de vagas — por isso não mostramos o
+      // rodapé de preço/disponibilidade que existia nos cards de
+      // exemplo.
+      const urlImagem = evento.imagem
+        ? `http://127.0.0.1:5000/uploads/eventos/${evento.imagem}`
+        : `https://picsum.photos/seed/evento${evento.id}/900/600`;
+
       article.innerHTML = `
         <div class="image-event-media">
-          <img src="https://picsum.photos/seed/evento${evento.id}/900/600" alt="${evento.titulo}">
+          <img src="${urlImagem}" alt="${evento.titulo}">
           <button aria-label="Salvar ${evento.titulo}">♡</button>
         </div>
         <div class="image-event-body">

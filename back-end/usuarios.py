@@ -262,11 +262,13 @@ def login(email,senha):
    return {"sucesso": False, "motivo": "email_nao_verificado", "usuario": None}
 
  # Deu tudo certo — mas antes de devolver o usuário, tiramos o hash
- # da senha do dicionário. O front-end não precisa (e não deveria)
+ # da senha e os tokens internos (verificação de e-mail, redefinição
+ # de senha) do dicionário. O front-end não precisa (e não deveria)
  # receber isso: ele só vai guardar esse dicionário no localStorage,
- # e não faz sentido guardar o hash da senha lá.
+ # e não faz sentido guardar segredos internos lá.
  print(f"Bem-vindo, {usuario['nome']}!")
- usuario_sem_senha = {chave: valor for chave, valor in usuario.items() if chave != "senha_hash"}
+ campos_internos = {"senha_hash", "token_verificacao", "token_redefinicao_senha", "token_redefinicao_expira"}
+ usuario_sem_senha = {chave: valor for chave, valor in usuario.items() if chave not in campos_internos}
  return {"sucesso": True, "motivo": None, "usuario": usuario_sem_senha}
 
 def login_com_google(email, nome):
@@ -321,6 +323,120 @@ def login_com_google(email, nome):
  except Exception as e:
    print(f"Erro no login com Google: {e}")
    return None
+
+ finally:
+   cursor.close()
+   conexao.close()
+
+
+def solicitar_redefinicao_senha(email):
+ """
+ Gera um token de redefinição de senha (válido por 30 minutos) para
+ a conta com esse e-mail — chamada pela tela "Esqueci minha senha".
+
+ Devolve (token, nome) se existir uma conta com esse e-mail, ou None
+ se não existir. Quem chama essa função decide o que fazer com isso:
+ por segurança, a rota da API sempre mostra a mesma mensagem de
+ sucesso pro front-end, pra não revelar quais e-mails têm conta
+ cadastrada — só manda o e-mail de verdade se o token vier preenchido.
+ """
+ conexao = get_connection()
+ if conexao is None:
+   print("Não foi possível conectar ao banco.")
+   return None
+
+ cursor = conexao.cursor(dictionary=True)
+
+ try:
+   cursor.execute("SELECT id, nome FROM usuarios WHERE email = %s", (email,))
+   usuario = cursor.fetchone()
+
+   if usuario is None:
+     return None
+
+   token = secrets.token_urlsafe(32)
+
+   query = """
+     UPDATE usuarios
+     SET token_redefinicao_senha = %s,
+         token_redefinicao_expira = DATE_ADD(NOW(), INTERVAL 30 MINUTE)
+     WHERE id = %s
+   """
+   cursor.execute(query, (token, usuario["id"]))
+   conexao.commit()
+
+   return token, usuario["nome"]
+
+ except Exception as e:
+   print(f"Erro ao solicitar redefinição de senha: {e}")
+   return None
+
+ finally:
+   cursor.close()
+   conexao.close()
+
+
+def verificar_token_redefinicao(token):
+ """
+ Confere se um token de redefinição de senha existe e ainda não
+ expirou — usada assim que a página redefinir-senha.html carrega,
+ pra decidir se mostra o formulário de nova senha ou um aviso de
+ link inválido/expirado, e de novo na hora de salvar a nova senha.
+ """
+ conexao = get_connection()
+ if conexao is None:
+   print("Não foi possível conectar ao banco.")
+   return None
+
+ cursor = conexao.cursor(dictionary=True)
+
+ try:
+   query = """
+     SELECT id, nome FROM usuarios
+     WHERE token_redefinicao_senha = %s AND token_redefinicao_expira > NOW()
+   """
+   cursor.execute(query, (token,))
+   return cursor.fetchone()
+
+ finally:
+   cursor.close()
+   conexao.close()
+
+
+def redefinir_senha(token, nova_senha):
+ """
+ Troca a senha da conta dona desse token de redefinição, desde que
+ ele ainda seja válido (existente e não expirado). Apaga o token
+ depois de usado, pra não poder ser reaproveitado num link antigo.
+
+ Devolve True se trocou a senha, False se o token era
+ inválido/expirado ou se algo deu errado.
+ """
+ usuario = verificar_token_redefinicao(token)
+ if usuario is None:
+   return False
+
+ conexao = get_connection()
+ if conexao is None:
+   print("Não foi possível conectar ao banco.")
+   return False
+
+ cursor = conexao.cursor()
+
+ try:
+   senha_hash = generate_password_hash(nova_senha)
+   query = """
+     UPDATE usuarios
+     SET senha_hash = %s, token_redefinicao_senha = NULL, token_redefinicao_expira = NULL
+     WHERE id = %s
+   """
+   cursor.execute(query, (senha_hash, usuario["id"]))
+   conexao.commit()
+   return True
+
+ except Exception as e:
+   print(f"Erro ao redefinir senha: {e}")
+   return False
 
  finally:
    cursor.close()

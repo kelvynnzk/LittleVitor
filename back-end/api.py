@@ -3,15 +3,23 @@
 # "request" permite acessar os dados que o frontend vai enviar.
 # "jsonify" transforma dados Python em formato JSON, que é o que
 # o JavaScript do frontend consegue entender.
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 
 # CORS libera a comunicação entre o frontend (rodando num endereço)
 # e esse backend (rodando em outro endereço/porta).
 
 from flask_cors import CORS
 
+# Usados para salvar a imagem de capa de um evento com um nome de
+# arquivo único (evita duas fotos diferentes sobrescreverem uma à
+# outra) e para transformar a lista de ingressos (mandada como texto
+# JSON dentro do formulário) de volta numa lista Python.
+import os
+import secrets
+import json
+
 # Importa as funções que já construímos e testamos.
-from usuarios import cadastro, login, buscar_usuario_por_id, confirmar_email, login_com_google, buscar_perfil_usuario, atualizar_perfil
+from usuarios import cadastro, login, buscar_usuario_por_id, confirmar_email, login_com_google, buscar_perfil_usuario, atualizar_perfil, solicitar_redefinicao_senha, verificar_token_redefinicao, redefinir_senha
 
 # Bibliotecas do Google usadas só pra verificar se um "ID token" de
 # login com Google é mesmo autêntico (assinado por eles) antes de
@@ -22,7 +30,7 @@ from google_config import GOOGLE_CLIENT_ID
 from eventos import criar_eventos, listar_eventos_usuario, listar_todos_eventos, buscar_evento_por_id, atualizar_evento, deletar_evento, listar_cidades_com_eventos
 from compras import criar_tipo_ingresso, remover_tipos_ingresso_evento, listar_tipos_ingresso, listar_compras_usuario, estatisticas_organizador, buscar_evento_destaque, listar_vendas_por_evento
 from ingresso_pdf import gerar_pdf_ingresso
-from email_service import enviar_email_confirmacao, enviar_email_boas_vindas, enviar_email_evento_criado
+from email_service import enviar_email_confirmacao, enviar_email_boas_vindas, enviar_email_evento_criado, enviar_email_redefinicao_senha
 from validacao_email import dominio_aceita_email
 from pagamentos import pagar_com_cartao, pagar_com_pix, consultar_status_pix
 from chatbot import responder_chat
@@ -33,6 +41,46 @@ app = Flask(__name__)
 CORS(app)
 # Ativa o CORS pra essa aplicação inteira, liberando requisições
 # vindas de outros endereços (como o frontend).
+
+
+# Pasta onde as imagens de capa dos eventos ficam salvas de verdade,
+# em disco (fora do repositório git — ver .gitignore). Criada
+# automaticamente na primeira vez que o servidor sobe.
+PASTA_UPLOADS_EVENTOS = os.path.join(os.path.dirname(__file__), "uploads", "eventos")
+os.makedirs(PASTA_UPLOADS_EVENTOS, exist_ok=True)
+
+EXTENSOES_IMAGEM_PERMITIDAS = {"png", "jpg", "jpeg", "webp", "gif"}
+
+
+def salvar_imagem_evento(arquivo):
+    """
+    Salva o arquivo de imagem de capa enviado no formulário de
+    criar/editar evento, com um nome gerado aleatoriamente (pra dois
+    eventos nunca acabarem com o mesmo nome de arquivo e um
+    sobrescrever a foto do outro).
+
+    Devolve só o NOME do arquivo salvo (o que fica guardado na coluna
+    "imagem" da tabela eventos) — a URL completa pra exibir a foto é
+    montada no front-end a partir desse nome. Devolve None se o
+    arquivo não tiver uma extensão de imagem permitida.
+    """
+    if "." not in arquivo.filename:
+        return None
+
+    extensao = arquivo.filename.rsplit(".", 1)[-1].lower()
+    if extensao not in EXTENSOES_IMAGEM_PERMITIDAS:
+        return None
+
+    nome_arquivo = f"{secrets.token_hex(16)}.{extensao}"
+    arquivo.save(os.path.join(PASTA_UPLOADS_EVENTOS, nome_arquivo))
+    return nome_arquivo
+
+
+# Rota que serve as imagens de capa salvas em PASTA_UPLOADS_EVENTOS —
+# é o endereço que vai dentro do <img src="..."> no front-end.
+@app.route("/uploads/eventos/<path:nome_arquivo>")
+def rota_imagem_evento(nome_arquivo):
+    return send_from_directory(PASTA_UPLOADS_EVENTOS, nome_arquivo)
 
 
 # @app.route define um "endereço" (rota) que o Flask vai responder.
@@ -123,6 +171,68 @@ def rota_login():
     return jsonify({"mensagem": mensagem, "motivo": resultado["motivo"]}), 401
 
 
+# Rota que inicia a redefinição de senha — chamada pela tela
+# "Esqueci minha senha". Sempre devolve a mesma mensagem de sucesso,
+# exista ou não uma conta com esse e-mail, pra não revelar pra quem
+# está tentando adivinhar quais e-mails têm conta cadastrada.
+@app.route("/esqueci-senha", methods=["POST"])
+def rota_esqueci_senha():
+
+    dados = request.json
+    email = dados.get("email")
+
+    resultado = solicitar_redefinicao_senha(email)
+
+    if resultado:
+        token, nome = resultado
+        try:
+            enviar_email_redefinicao_senha(email, nome, token)
+        except Exception as e:
+            print(f"Erro ao enviar e-mail de redefinição de senha: {e}")
+
+    return jsonify({
+        "mensagem": "Se existir uma conta com esse e-mail, enviamos um link de redefinição."
+    })
+
+
+# Rota que confere se um token de redefinição ainda é válido — chamada
+# assim que redefinir-senha.html carrega, pra decidir se mostra o
+# formulário de nova senha ou um aviso de link inválido/expirado.
+@app.route("/verificar-token-redefinicao", methods=["POST"])
+def rota_verificar_token_redefinicao():
+
+    dados = request.json
+    token = dados.get("token")
+
+    usuario = verificar_token_redefinicao(token)
+
+    if usuario:
+        return jsonify({"valido": True})
+    else:
+        return jsonify({"valido": False, "mensagem": "Esse link é inválido ou já expirou."}), 400
+
+
+# Rota que efetivamente troca a senha, a partir do token recebido por
+# e-mail — chamada quando a pessoa envia o formulário em
+# redefinir-senha.html.
+@app.route("/redefinir-senha", methods=["POST"])
+def rota_redefinir_senha():
+
+    dados = request.json
+    token = dados.get("token")
+    nova_senha = dados.get("nova_senha")
+
+    if not nova_senha or len(nova_senha) < 8:
+        return jsonify({"mensagem": "A senha precisa ter pelo menos 8 caracteres."}), 400
+
+    sucesso = redefinir_senha(token, nova_senha)
+
+    if sucesso:
+        return jsonify({"mensagem": "Senha redefinida com sucesso! Já pode entrar com a nova senha."})
+    else:
+        return jsonify({"mensagem": "Esse link é inválido ou já expirou. Solicite um novo."}), 400
+
+
 # Rota de login (e cadastro automático, se for a primeira vez) via
 # conta do Google. O front-end manda um "ID token" — um comprovante
 # assinado digitalmente pelo próprio Google — em vez de e-mail/senha.
@@ -191,17 +301,19 @@ def rota_atualizar_perfil(usuario_id):
 
 # Define a rota "/criar-evento", que só aceita requisições POST
 # (porque estamos ENVIANDO dados para serem salvos, não buscando).
+#
+# Repare que agora essa rota recebe "multipart/form-data" (request.form
+# + request.files), não mais JSON puro — é o formato necessário pra
+# mandar um arquivo (a imagem de capa) junto com o resto dos campos
+# do formulário na mesma requisição.
 @app.route("/criar-evento", methods=["POST"])
 def rota_criar_evento():
 
-    # Pega o corpo da requisição (que vem em JSON do frontend)
-    # e transforma automaticamente num dicionário Python.
-    dados = request.json
+    # Com multipart/form-data, os campos de texto vêm em request.form
+    # (não request.json). Usamos .get() pelo mesmo motivo de sempre:
+    # se o campo não vier, devolve None em vez de quebrar.
+    dados = request.form
 
-    # Extrai cada campo específico do dicionário recebido.
-    # Usamos .get() em vez de dados["titulo"] porque, se o campo
-    # não vier por algum motivo, .get() retorna None em vez de
-    # quebrar o programa com erro.
     titulo = dados.get("titulo")
     categoria = dados.get("categoria")
     descricao = dados.get("descricao")
@@ -216,17 +328,25 @@ def rota_criar_evento():
     # daqui a pouco, pegando do localStorage).
     usuario_id = dados.get("usuario_id")
 
-
+    # A imagem de capa é opcional — só tenta salvar se a pessoa
+    # realmente escolheu um arquivo no formulário.
+    imagem = None
+    arquivo_capa = request.files.get("capa")
+    if arquivo_capa and arquivo_capa.filename:
+        imagem = salvar_imagem_evento(arquivo_capa)
 
      # Chama a função que já testamos e validamos, passando todos
     # os dados extraídos acima, na mesma ordem que a função espera.
     # Agora ela devolve o id do evento criado (ou False se der errado).
-    evento_id = criar_eventos(titulo, categoria, descricao, data, horario, local, cidade, usuario_id)
+    evento_id = criar_eventos(titulo, categoria, descricao, data, horario, local, cidade, usuario_id, imagem)
 
     if evento_id:
         # Cadastra cada tipo de ingresso enviado junto com o formulário
-        # (a lista de "Pista", "VIP", etc.), já vinculado a esse evento.
-        ingressos = dados.get("ingressos", [])
+        # (a lista de "Pista", "VIP", etc.) — como agora o corpo da
+        # requisição é form-data (só aceita texto), a lista vem como
+        # uma string JSON dentro do campo "ingressos", e precisamos
+        # decodificar ela de volta pra uma lista Python antes de usar.
+        ingressos = json.loads(dados.get("ingressos") or "[]")
         for ingresso in ingressos:
             criar_tipo_ingresso(evento_id, ingresso.get("nome"), ingresso.get("preco"), ingresso.get("quantidade"))
 
@@ -296,10 +416,13 @@ def rota_buscar_evento(evento_id):
 
 # Rota que atualiza um evento existente. Usa PUT (e não POST) porque
 # estamos SUBSTITUINDO os dados de um recurso que já existe.
+#
+# Assim como "/criar-evento", recebe multipart/form-data em vez de
+# JSON, pra poder receber uma imagem de capa nova junto com o resto.
 @app.route("/evento/<int:evento_id>", methods=["PUT"])
 def rota_atualizar_evento(evento_id):
 
-    dados = request.json
+    dados = request.form
 
     titulo = dados.get("titulo")
     categoria = dados.get("categoria")
@@ -315,7 +438,17 @@ def rota_atualizar_evento(evento_id):
     # evento consegue editá-lo.
     usuario_id = dados.get("usuario_id")
 
-    sucesso = atualizar_evento(evento_id, titulo, categoria, descricao, data, horario, local, cidade, usuario_id)
+    # A foto de capa é opcional na edição: se a pessoa não escolheu
+    # um arquivo novo, mantemos a imagem que o evento já tinha (senão
+    # editar um evento sem mexer na foto apagaria a foto existente).
+    arquivo_capa = request.files.get("capa")
+    if arquivo_capa and arquivo_capa.filename:
+        imagem = salvar_imagem_evento(arquivo_capa)
+    else:
+        evento_atual = buscar_evento_por_id(evento_id)
+        imagem = evento_atual.get("imagem") if evento_atual else None
+
+    sucesso = atualizar_evento(evento_id, titulo, categoria, descricao, data, horario, local, cidade, usuario_id, imagem)
 
     if sucesso:
         # Assim como em "/criar-evento", recriamos os tipos de ingresso
@@ -330,7 +463,7 @@ def rota_atualizar_evento(evento_id):
         conseguiu_remover = remover_tipos_ingresso_evento(evento_id)
 
         if conseguiu_remover:
-            ingressos = dados.get("ingressos", [])
+            ingressos = json.loads(dados.get("ingressos") or "[]")
             for ingresso in ingressos:
                 criar_tipo_ingresso(evento_id, ingresso.get("nome"), ingresso.get("preco"), ingresso.get("quantidade"))
             return jsonify({"mensagem": "Evento atualizado com sucesso!"})
