@@ -54,7 +54,17 @@ def _enviar(mensagem, destinatario, rotulo):
         return False
 
     try:
-        with smtplib.SMTP("smtp.gmail.com", 587) as servidor:
+        # timeout=10 é essencial em produção: sem ele, se a rede do
+        # host bloquear a porta SMTP (comum em provedores de
+        # hospedagem, por causa de spam), essa conexão trava
+        # indefinidamente — e como isso roda dentro de uma requisição
+        # HTTP, o worker do servidor inteiro trava junto, até ser
+        # matado à força (WORKER TIMEOUT) depois de 30s, derrubando a
+        # resposta inteira (ex: um cadastro que na verdade tinha dado
+        # certo). Com o timeout, a falha de conexão vira uma exceção
+        # normal, capturada pelo except abaixo, e o resto da
+        # requisição segue normalmente.
+        with smtplib.SMTP("smtp.gmail.com", 587, timeout=10) as servidor:
             servidor.starttls()
             servidor.login(EMAIL_REMETENTE, SENHA_APP)
             servidor.send_message(mensagem)
