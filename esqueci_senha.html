@@ -78,7 +78,7 @@
         // de sucesso (o back-end não revela se o e-mail existe ou
         // não), então aqui só precisamos tratar erro de conexão.
         async function solicitarLinkRedefinicao(email) {
-            const resposta = await fetch('http://127.0.0.1:5000/esqueci-senha', {
+            const resposta = await fetch('/esqueci-senha', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email })

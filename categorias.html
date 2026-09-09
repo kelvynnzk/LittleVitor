@@ -298,7 +298,7 @@
 
         async function carregarCategoriasReais() {
             try {
-                const resposta = await fetch('http://127.0.0.1:5000/eventos');
+                const resposta = await fetch('/eventos');
                 const dados = await resposta.json();
                 const eventos = dados.eventos || [];
 

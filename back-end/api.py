@@ -3,7 +3,7 @@
 # "request" permite acessar os dados que o frontend vai enviar.
 # "jsonify" transforma dados Python em formato JSON, que é o que
 # o JavaScript do frontend consegue entender.
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, abort
 
 # CORS libera a comunicação entre o frontend (rodando num endereço)
 # e esse backend (rodando em outro endereço/porta).
@@ -37,10 +37,48 @@ from chatbot import responder_chat
 # Cria a aplicação Flask. "__name__" aqui tem o mesmo papel que
 # vimos antes — ajuda o Flask a saber onde ele está localizado
 # no projeto, pra encontrar arquivos relacionados se precisar.
-app = Flask(__name__)
+# static_folder=None desliga o servidor de arquivos estáticos padrão
+# do Flask (que só serviria uma pasta "static/") — em vez disso, as
+# rotas logo abaixo servem o site inteiro (a pasta raiz do projeto,
+# um nível acima de back-end/) manualmente, com mais controle sobre
+# o que pode e o que não pode ser acessado.
+app = Flask(__name__, static_folder=None)
 CORS(app)
 # Ativa o CORS pra essa aplicação inteira, liberando requisições
-# vindas de outros endereços (como o frontend).
+# vindas de outros endereços — hoje isso não é mais necessário pro
+# próprio site (front e back agora vivem na mesma origem, já que o
+# Flask passou a servir as duas coisas), mas não faz mal nenhum
+# deixar ligado, e outras origens (ex: testes) podem precisar.
+
+
+# Pasta onde ficam os arquivos do site (HTML, CSS, JS, imagens) — um
+# nível acima de back-end/, na raiz do projeto. O Flask serve esses
+# arquivos diretamente, então o mesmo servidor atende tanto a API
+# (rotas como /cadastro, /eventos) quanto as páginas do site.
+PASTA_FRONTEND = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+
+@app.route("/")
+def rota_pagina_inicial():
+    return send_from_directory(PASTA_FRONTEND, "index.html")
+
+
+# Serve qualquer outro arquivo do front-end pelo caminho pedido (ex:
+# /criar-evento.html, /styles.css, /img/logo.svg). Fica por último
+# entre as rotas porque é a mais "genérica" — o Flask sempre prioriza
+# rotas mais específicas (como /cadastro ou /evento/<id>) antes de
+# cair aqui.
+#
+# Nunca serve nada de dentro de back-end/ (onde ficam o código Python
+# e os arquivos de configuração com senhas/tokens) nem arquivos
+# escondidos (que começam com "."), mesmo que alguém tente pedir um
+# caminho assim na URL.
+@app.route("/<path:caminho>")
+def rota_arquivos_do_site(caminho):
+    partes = caminho.split("/")
+    if partes[0] == "back-end" or any(parte.startswith(".") for parte in partes):
+        abort(404)
+    return send_from_directory(PASTA_FRONTEND, caminho)
 
 
 # Pasta onde as imagens de capa dos eventos ficam salvas de verdade,

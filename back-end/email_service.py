@@ -1,13 +1,22 @@
+import os
 import smtplib
 from email.message import EmailMessage
 
-from email_config import EMAIL_REMETENTE, SENHA_APP
+# email_config.py é um arquivo local (fora do Git — ver .gitignore).
+# Numa hospedagem de verdade (Railway) ele não existe no deploy, então
+# caímos pras variáveis de ambiente EMAIL_REMETENTE/SENHA_APP.
+try:
+    from email_config import EMAIL_REMETENTE, SENHA_APP
+except ImportError:
+    EMAIL_REMETENTE = os.environ.get("EMAIL_REMETENTE")
+    SENHA_APP = os.environ.get("SENHA_APP")
 
-# Endereço base de onde o site é servido no seu navegador (VS Code
-# Live Server) — usado pra montar o link "Ver no painel" nos e-mails.
-# Se um dia você passar a abrir o site de outro jeito (outra porta,
-# um domínio de verdade, etc.), só precisa trocar essa linha.
-URL_BASE_SITE = "http://127.0.0.1:5501"
+# Endereço base de onde o site é servido — usado pra montar os links
+# (confirmar e-mail, redefinir senha, ver painel) dentro dos e-mails.
+# Local, é o próprio Flask (agora ele serve o site inteiro, não só a
+# API). Hospedado, vem da variável de ambiente URL_BASE_SITE, com o
+# domínio de verdade (ex: https://littlevitor.up.railway.app).
+URL_BASE_SITE = os.environ.get("URL_BASE_SITE", "http://127.0.0.1:5000")
 
 
 def _envolver_html(subtitulo, conteudo_html):

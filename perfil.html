@@ -189,7 +189,7 @@
 
         async function carregarPerfil() {
             try {
-                const resposta = await fetch(`http://127.0.0.1:5000/usuario/${usuarioLocal.id}`);
+                const resposta = await fetch(`/usuario/${usuarioLocal.id}`);
                 const dados = await resposta.json();
 
                 if (!resposta.ok) {
@@ -226,7 +226,7 @@
             }
 
             try {
-                const resposta = await fetch(`http://127.0.0.1:5000/usuario/${usuarioLocal.id}`, {
+                const resposta = await fetch(`/usuario/${usuarioLocal.id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nome, email, telefone, cidade })
@@ -256,7 +256,7 @@
         async function carregarEventosCriados() {
             const container = document.getElementById('lista-eventos-criados');
             try {
-                const resposta = await fetch(`http://127.0.0.1:5000/meus-eventos?usuario_id=${usuarioLocal.id}`);
+                const resposta = await fetch(`/meus-eventos?usuario_id=${usuarioLocal.id}`);
                 const dados = await resposta.json();
                 const eventos = dados.eventos || [];
 
@@ -294,7 +294,7 @@
         async function carregarMeusIngressos() {
             const container = document.getElementById('lista-meus-ingressos');
             try {
-                const resposta = await fetch(`http://127.0.0.1:5000/minhas-compras?usuario_id=${usuarioLocal.id}`);
+                const resposta = await fetch(`/minhas-compras?usuario_id=${usuarioLocal.id}`);
                 const dados = await resposta.json();
                 const compras = dados.compras || [];
 

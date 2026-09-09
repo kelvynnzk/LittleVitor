@@ -2424,7 +2424,7 @@
 .nav-search { display: flex; align-items: center; gap: 7px; width: 205px; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.08); border-radius: 999px; background: rgba(36,33,47,0.8); color: #79748c; }
 .nav-search input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--text-hi); font: .72rem var(--font-body); }
 .home-login { color: #b8b3c7; }
-.home-signup { padding: 9px 17px; border-radius: 999px; background: var(--home-mint); color: #06130f; font-weight: 700; box-shadow: 0 8px 22px rgba(47,224,167,0.22); }
+.home-signup { padding: 9px 17px; border-radius: 999px; background: var(--home-mint, #2fe0a7); color: #06130f; font-weight: 700; box-shadow: 0 8px 22px rgba(47,224,167,0.22); }
 .home-wrap { width: min(1180px, calc(100% - 64px)); margin: 0 auto; }
 .home-eyebrow { display: flex; align-items: center; gap: 6px; color: #9778ff; font: 600 .68rem var(--font-body); }
 .home-eyebrow i { width: 7px; height: 7px; border-radius: 50%; background: var(--home-mint); box-shadow: 0 0 8px rgba(47,224,167,.7); }

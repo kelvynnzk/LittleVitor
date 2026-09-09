@@ -254,7 +254,7 @@
 
         async function carregarEventoParaEdicao(id) {
             try {
-                const resposta = await fetch(`http://127.0.0.1:5000/evento/${id}`);
+                const resposta = await fetch(`/evento/${id}`);
                 const dados = await resposta.json();
 
                 if (!resposta.ok) {
@@ -277,7 +277,7 @@
                 // deixaria se a pessoa tivesse acabado de escolher
                 // esse arquivo agora.
                 if (evento.imagem) {
-                    const urlImagem = `http://127.0.0.1:5000/uploads/eventos/${evento.imagem}`;
+                    const urlImagem = `/uploads/eventos/${evento.imagem}`;
                     document.getElementById('preview-capa').src = urlImagem;
                     document.getElementById('preview-capa').hidden = false;
                     document.getElementById('upload-placeholder').hidden = true;
@@ -296,7 +296,7 @@
 
         async function carregarIngressosParaEdicao(eventoId) {
             try {
-                const resposta = await fetch(`http://127.0.0.1:5000/tipos-ingresso/${eventoId}`);
+                const resposta = await fetch(`/tipos-ingresso/${eventoId}`);
                 const dados = await resposta.json();
                 const tipos = dados.tipos_ingresso || [];
 
@@ -600,7 +600,7 @@
                 formData.append('capa', arquivoCapa);
             }
 
-            const url = modoEdicao ? `http://127.0.0.1:5000/evento/${idEdicao}` : 'http://127.0.0.1:5000/criar-evento';
+            const url = modoEdicao ? `/evento/${idEdicao}` : '/criar-evento';
             const metodo = modoEdicao ? 'PUT' : 'POST';
 
             try {

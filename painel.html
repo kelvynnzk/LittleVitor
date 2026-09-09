@@ -203,8 +203,8 @@ async function carregarEventos() {
         // Busca os eventos e as vendas de cada um ao mesmo tempo
         // (duas rotas diferentes), em vez de uma depois da outra.
         const [respostaEventos, respostaVendas] = await Promise.all([
-            fetch(`http://127.0.0.1:5000/meus-eventos?usuario_id=${usuario.id}`),
-            fetch(`http://127.0.0.1:5000/vendas-por-evento?usuario_id=${usuario.id}`)
+            fetch(`/meus-eventos?usuario_id=${usuario.id}`),
+            fetch(`/vendas-por-evento?usuario_id=${usuario.id}`)
         ]);
 
         const dadosEventos = await respostaEventos.json();
@@ -325,7 +325,7 @@ async function carregarEstatisticas() {
     const usuario = JSON.parse(usuarioSalvo);
 
     try {
-        const resposta = await fetch(`http://127.0.0.1:5000/painel-stats?usuario_id=${usuario.id}`);
+        const resposta = await fetch(`/painel-stats?usuario_id=${usuario.id}`);
         const stats = await resposta.json();
 
         document.getElementById('stat-eventos-ativos').textContent = stats.eventos_ativos;
@@ -471,7 +471,7 @@ listaEventosContainer.addEventListener('click', async (evento) => {
     }
 
     try {
-        const resposta = await fetch(`http://127.0.0.1:5000/evento/${eventoId}?usuario_id=${usuario.id}`, {
+        const resposta = await fetch(`/evento/${eventoId}?usuario_id=${usuario.id}`, {
             method: 'DELETE'
         });
         const dados = await resposta.json();

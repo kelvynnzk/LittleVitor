@@ -1,7 +1,15 @@
 from google import genai
 from google.genai import types
 
-from gemini_config import GEMINI_API_KEY
+# gemini_config.py é um arquivo local (fora do Git — ver .gitignore).
+# Numa hospedagem de verdade (Railway) ele não existe no deploy, então
+# caímos pra variável de ambiente GEMINI_API_KEY.
+try:
+    from gemini_config import GEMINI_API_KEY
+except ImportError:
+    import os
+    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+
 from eventos import listar_todos_eventos
 
 # Modelo rápido e gratuito do Gemini — bom o suficiente pra conversar

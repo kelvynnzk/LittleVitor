@@ -253,7 +253,7 @@
       // rodapé de preço/disponibilidade que existia nos cards de
       // exemplo.
       const urlImagem = evento.imagem
-        ? `http://127.0.0.1:5000/uploads/eventos/${evento.imagem}`
+        ? `/uploads/eventos/${evento.imagem}`
         : `https://picsum.photos/seed/evento${evento.id}/900/600`;
 
       article.innerHTML = `
@@ -290,7 +290,7 @@
     async function enriquecerComVendasEPreco(eventos) {
       await Promise.all(eventos.map(async (evento) => {
         try {
-          const resposta = await fetch(`http://127.0.0.1:5000/tipos-ingresso/${evento.id}`);
+          const resposta = await fetch(`/tipos-ingresso/${evento.id}`);
           const dados = await resposta.json();
           const tipos = dados.tipos_ingresso || [];
 
@@ -355,9 +355,10 @@
       const grid = document.querySelector('#event-section-destaque .image-event-grid');
 
       try {
-        // Chamada de verdade pro back-end Flask, que precisa estar
-        // rodando em http://127.0.0.1:5000 (ver api.py).
-        const resposta = await fetch('http://127.0.0.1:5000/eventos');
+        // Chamada de verdade pro back-end Flask — como ele agora serve
+        // essas próprias páginas (ver api.py), o caminho é relativo:
+        // sempre bate na mesma origem que serviu este HTML.
+        const resposta = await fetch('/eventos');
         const dados = await resposta.json();
         const eventos = dados.eventos || [];
 
@@ -414,7 +415,7 @@
       const vazio = document.getElementById('cidades-vazio');
 
       try {
-        const resposta = await fetch('http://127.0.0.1:5000/cidades-com-eventos');
+        const resposta = await fetch('/cidades-com-eventos');
         const dados = await resposta.json();
         const cidades = dados.cidades || [];
 

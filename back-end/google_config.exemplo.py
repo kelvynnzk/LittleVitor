@@ -7,7 +7,9 @@
 # 3. Clique em "Criar credenciais" -> "ID do cliente OAuth".
 #    - Tipo de aplicativo: "Aplicativo da Web"
 #    - Em "Origens JavaScript autorizadas", adicione o endereço onde
-#      o site roda (ex: http://127.0.0.1:5500)
+#      o site roda (local: http://127.0.0.1:5000 — o próprio Flask
+#      serve o site agora; hospedado: o domínio real, ex:
+#      https://littlevitor.up.railway.app)
 # 4. Copie o "ID do cliente" gerado (termina com
 #    ".apps.googleusercontent.com") e cole abaixo.
 #

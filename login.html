@@ -164,7 +164,7 @@
             }
 
             try {
-                const resposta = await fetch('http://127.0.0.1:5000/login', {
+                const resposta = await fetch('/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -227,7 +227,7 @@
         // ------------------------------------------------------------------
         async function aoReceberCredencialGoogle(resposta) {
             try {
-                const resposta_api = await fetch('http://127.0.0.1:5000/login-google', {
+                const resposta_api = await fetch('/login-google', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ token: resposta.credential })

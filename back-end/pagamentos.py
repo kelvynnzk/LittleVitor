@@ -1,6 +1,16 @@
 import mercadopago
 
-from mp_config import MP_ACCESS_TOKEN
+# mp_config.py é um arquivo local (fora do Git — ver .gitignore), só
+# existe na sua própria máquina. Numa hospedagem de verdade (Railway),
+# esse arquivo não vai junto no deploy — por isso, se o import falhar,
+# caímos pra variável de ambiente MP_ACCESS_TOKEN, que é como o
+# Railway entrega esse token sem ele nunca aparecer no código.
+try:
+    from mp_config import MP_ACCESS_TOKEN
+except ImportError:
+    import os
+    MP_ACCESS_TOKEN = os.environ.get("MP_ACCESS_TOKEN")
+
 from compras import buscar_tipo_ingresso_por_id, registrar_compra
 from eventos import buscar_evento_por_id
 from ingresso_pdf import gerar_pdf_ingresso
