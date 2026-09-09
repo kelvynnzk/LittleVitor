@@ -23,10 +23,10 @@ def get_connection():
     """
     try:
         conexao = mysql.connector.connect(
-            host="caboose.proxy.rlwy.net",   # o banco está rodando na própria máquina
+             host="localhost",   # o banco está rodando na própria máquina
             user="root",        # usuário padrão do MySQL no XAMPP
-            password="bx0jc9jeqhvq3qf80p8djprzyca21jyw",        # senha vazia é o padrão do XAMPP
-            database="railway",   # nome do banco que você já criou
+            password="",        # senha vazia é o padrão do XAMPP
+            database="teste",   # nome do banco que você já criou
             client_flags=[ClientFlag.FOUND_ROWS]
         )
         # Se chegou até aqui sem erro, a conexão deu certo.
