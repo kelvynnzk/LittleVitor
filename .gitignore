@@ -4,5 +4,6 @@ __pycache__/
 back-end/email_config.py
 back-end/mp_config.py
 back-end/gemini_config.py
+back-end/sendgrid_config.py
 .vscode/
 back-end/uploads/

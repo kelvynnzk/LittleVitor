@@ -1,15 +1,28 @@
 import os
-import smtplib
+import base64
+import requests
 from email.message import EmailMessage
 
 # email_config.py é um arquivo local (fora do Git — ver .gitignore).
 # Numa hospedagem de verdade (Railway) ele não existe no deploy, então
-# caímos pras variáveis de ambiente EMAIL_REMETENTE/SENHA_APP.
+# caímos pra variável de ambiente EMAIL_REMETENTE.
 try:
-    from email_config import EMAIL_REMETENTE, SENHA_APP
+    from email_config import EMAIL_REMETENTE
 except ImportError:
     EMAIL_REMETENTE = os.environ.get("EMAIL_REMETENTE")
-    SENHA_APP = os.environ.get("SENHA_APP")
+
+# sendgrid_config.py segue o mesmo padrão (local, fora do Git — ver
+# sendgrid_config.exemplo.py pro passo a passo). Usamos a API HTTP do
+# SendGrid pra mandar e-mail, em vez de SMTP direto (era o que esse
+# arquivo fazia antes) — provedores de hospedagem como o Railway
+# costumam bloquear conexão de saída na porta SMTP crua (prática
+# comum contra spam), mas nunca bloqueiam HTTPS, que é o que a API
+# usa. Testado e confirmado: SMTP dava "Network is unreachable" no
+# Railway; a API HTTP não tem esse problema.
+try:
+    from sendgrid_config import SENDGRID_API_KEY
+except ImportError:
+    SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 
 # Endereço base de onde o site é servido — usado pra montar os links
 # (confirmar e-mail, redefinir senha, ver painel) dentro dos e-mails.
@@ -41,33 +54,65 @@ def _envolver_html(subtitulo, conteudo_html):
 
 def _enviar(mensagem, destinatario, rotulo):
     """
-    Faz a parte repetida de todo envio: confere se a conta remetente
-    está configurada e, se estiver, manda o e-mail de verdade pelo
-    Gmail. Usada pelas três funções de e-mail do site, pra não
+    Faz a parte repetida de todo envio: confere se está configurado
+    e, se estiver, manda o e-mail de verdade pela API HTTP do
+    SendGrid. Usada pelas quatro funções de e-mail do site, pra não
     repetir esse bloco em cada uma.
+
+    Quem chama essa função já monta o e-mail como um EmailMessage
+    (texto simples + versão HTML + anexo opcional, usando a
+    biblioteca padrão do Python) — aqui a gente só traduz esse objeto
+    pro formato que a API do SendGrid espera.
     """
-    if not EMAIL_REMETENTE or not SENHA_APP:
+    if not EMAIL_REMETENTE or not SENDGRID_API_KEY:
         print(
-            f"[e-mail] EMAIL_REMETENTE/SENHA_APP não configurados em "
-            f"email_config.py — pulei o envio do e-mail de {rotulo}."
+            f"[e-mail] EMAIL_REMETENTE/SENDGRID_API_KEY não configurados — "
+            f"pulei o envio do e-mail de {rotulo}."
         )
         return False
 
+    corpo_texto = mensagem.get_body(preferencelist=("plain",))
+    corpo_html = mensagem.get_body(preferencelist=("html",))
+
+    conteudo = []
+    if corpo_texto:
+        conteudo.append({"type": "text/plain", "value": corpo_texto.get_content()})
+    if corpo_html:
+        conteudo.append({"type": "text/html", "value": corpo_html.get_content()})
+
+    payload = {
+        "personalizations": [{"to": [{"email": destinatario}]}],
+        "from": {"email": EMAIL_REMETENTE},
+        "subject": mensagem["Subject"],
+        "content": conteudo,
+    }
+
+    anexos = [
+        {
+            "content": base64.b64encode(parte.get_content()).decode("ascii"),
+            "filename": parte.get_filename() or "anexo",
+            "type": parte.get_content_type(),
+            "disposition": "attachment",
+        }
+        for parte in mensagem.iter_attachments()
+    ]
+    if anexos:
+        payload["attachments"] = anexos
+
     try:
-        # timeout=10 é essencial em produção: sem ele, se a rede do
-        # host bloquear a porta SMTP (comum em provedores de
-        # hospedagem, por causa de spam), essa conexão trava
-        # indefinidamente — e como isso roda dentro de uma requisição
-        # HTTP, o worker do servidor inteiro trava junto, até ser
-        # matado à força (WORKER TIMEOUT) depois de 30s, derrubando a
-        # resposta inteira (ex: um cadastro que na verdade tinha dado
-        # certo). Com o timeout, a falha de conexão vira uma exceção
-        # normal, capturada pelo except abaixo, e o resto da
-        # requisição segue normalmente.
-        with smtplib.SMTP("smtp.gmail.com", 587, timeout=10) as servidor:
-            servidor.starttls()
-            servidor.login(EMAIL_REMETENTE, SENHA_APP)
-            servidor.send_message(mensagem)
+        # timeout=10: mesmo cuidado que já tínhamos com o SMTP — não
+        # deixar essa chamada travar o worker do servidor indefinidamente
+        # se a API demorar a responder.
+        resposta = requests.post(
+            "https://api.sendgrid.com/v3/mail/send",
+            headers={
+                "Authorization": f"Bearer {SENDGRID_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            json=payload,
+            timeout=10,
+        )
+        resposta.raise_for_status()
 
         print(f"[e-mail] {rotulo.capitalize()} enviado(a) para {destinatario}.")
         return True
