@@ -4,53 +4,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Perfil</title>
+    <title>Meu perfil — LittleVitor.com</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="toast.js"></script>
+    <script src="sessao.js"></script>
+    <script src="auth-ui.js"></script>
+    <script src="chatbot.js"></script>
 </head>
 
 <body>
-    <header class="site-header profile-header">
-        <div class="header-inner wrap">
-            <div class="logo">LittleVitor</div>
-            <nav class="main-nav" aria-label="Navegação principal">
-                <a href="#">Explorar</a>
-                <a href="#">Categorias</a>
-                <a href="#">Criar evento</a>
-                <a href="#">Dashboard</a>
-            </nav>
-            <div class="header-actions">
-                <button class="btn-login">Entrar</button>
-                <button class="btn-create-account">Criar conta</button>
+    <header class="home-header">
+        <nav class="home-nav">
+            <a href="index.html" class="home-logo"><span></span>LittleVitor</a>
+            <div class="home-links">
+                <a href="index.html#explorar">Explorar</a>
+                <a href="categorias.html">Categorias</a>
+                <a href="criar-evento.html">Criar evento</a>
+                <a href="painel.html">Dashboard</a>
             </div>
-        </div>
+            <div class="home-actions">
+                <label class="nav-search"><span>⌕</span><input type="search" id="nav-search-input" placeholder="Buscar eventos..." aria-label="Buscar eventos"></label>
+                <a href="login.html" id="link-entrar" class="home-login">Entrar</a>
+                <a href="cadastro.html" class="home-signup">Criar conta</a>
+            </div>
+        </nav>
     </header>
 
     <main class="profile-shell wrap">
         <section class="profile-summary">
             <div class="profile-summary-main">
-                <div class="profile-avatar">KV</div>
+                <div class="profile-avatar" id="perfil-avatar">--</div>
                 <div class="profile-summary-copy">
-                    <h1>Visiante</h1>
-                    <p>Faça login para ver seu perfil completo</p>
+                    <h1 id="perfil-nome">Carregando…</h1>
+                    <p id="perfil-email"></p>
                 </div>
             </div>
 
             <div class="profile-summary-stats" aria-label="Estatísticas do perfil">
                 <div>
-                    <strong>0</strong>
-                    <span>Favoritos</span>
+                    <strong id="perfil-stat-criados">—</strong>
+                    <span>Eventos criados</span>
                 </div>
                 <div>
-                    <strong>0</strong>
-                    <span>Criados</span>
-                </div>
-                <div>
-                    <strong>3</strong>
-                    <span>Ingressos</span>
+                    <strong id="perfil-stat-ingressos">—</strong>
+                    <span>Ingressos comprados</span>
                 </div>
             </div>
         </section>
@@ -60,10 +61,6 @@
                 <button class="sidebar-item active" type="button" data-tab="info">
                     <span class="sidebar-icon">◔</span>
                     <span>Informações</span>
-                </button>
-                <button class="sidebar-item" type="button" data-tab="favoritos">
-                    <span class="sidebar-icon">♡</span>
-                    <span>Favoritos</span>
                 </button>
                 <button class="sidebar-item" type="button" data-tab="criados">
                     <span class="sidebar-icon">＋</span>
@@ -77,11 +74,10 @@
                     <span class="sidebar-icon">⚙</span>
                     <span>Configurações</span>
                 </button>
-
-                <button class="sidebar-logout" type="button">↪ Sair da conta</button>
             </aside>
 
             <section class="profile-content-panel">
+                <!-- ---------- INFORMAÇÕES (dados reais do banco) ---------- -->
                 <div class="profile-panel active" data-panel="info">
                     <div class="profile-form-card">
                         <h2>Informações pessoais</h2>
@@ -89,192 +85,256 @@
                         <div class="form-grid two-columns">
                             <div class="field-group">
                                 <label for="nome-completo">Nome completo</label>
-                                <input id="nome-completo" type="text" value="">
+                                <input id="nome-completo" type="text">
                             </div>
                             <div class="field-group">
                                 <label for="email">E-mail</label>
-                                <input id="email" type="email" value="">
+                                <input id="email" type="email">
                             </div>
                         </div>
 
                         <div class="form-grid two-columns">
                             <div class="field-group">
                                 <label for="telefone">Telefone</label>
-                                <input id="telefone" type="tel" value="(00) 00000-0000">
+                                <input id="telefone" type="tel" placeholder="(00) 00000-0000">
                             </div>
                             <div class="field-group">
                                 <label for="cidade">Cidade</label>
-                                <input id="cidade" type="text" value="">
+                                <input id="cidade" type="text" placeholder="Sua cidade">
                             </div>
                         </div>
 
-                        <button class="submit-button" type="button">Salvar alterações</button>
+                        <button class="submit-button" type="button" id="btn-salvar-info">Salvar alterações</button>
                     </div>
                 </div>
 
-                <div class="profile-panel" data-panel="favoritos">
-                    <div class="profile-form-card">
-                        <h2>Favoritos</h2>
-                        <div class="list-card">
-                            <div class="list-row">
-                                <div>
-                                    <strong>Festival Noite Roxa</strong>
-                                    <span>20 Set · São Paulo</span>
-                                </div>
-                                <button class="mini-button">Ver</button>
-                            </div>
-                            <div class="list-row">
-                                <div>
-                                    <strong>Summit LittleTech 2026</strong>
-                                    <span>03 Out · Rio</span>
-                                </div>
-                                <button class="mini-button">Ver</button>
-                            </div>
-                            <div class="list-row">
-                                <div>
-                                    <strong>Feira Gastronômica Urbana</strong>
-                                    <span>12 Set · SP</span>
-                                </div>
-                                <button class="mini-button">Ver</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                <!-- ---------- EVENTOS CRIADOS (lista real via /meus-eventos) ---------- -->
                 <div class="profile-panel" data-panel="criados">
                     <div class="profile-form-card">
                         <h2>Eventos criados</h2>
-                        <div class="list-card">
-                            <div class="list-row">
-                                <div>
-                                    <strong>Meetup de Criativos</strong>
-                                    <span>22 Out · Curitiba</span>
-                                </div>
-                                <button class="mini-button">Editar</button>
-                            </div>
-                            <div class="list-row">
-                                <div>
-                                    <strong>After Dark</strong>
-                                    <span>04 Nov · Belo Horizonte</span>
-                                </div>
-                                <button class="mini-button">Editar</button>
-                            </div>
+                        <div class="list-card" id="lista-eventos-criados">
+                            <p class="compra-aviso">Carregando…</p>
                         </div>
                     </div>
                 </div>
 
+                <!-- ---------- MEUS INGRESSOS (lista real via /minhas-compras) ---------- -->
                 <div class="profile-panel" data-panel="ingressos">
                     <div class="profile-form-card">
                         <h2>Meus ingressos</h2>
-                        <div class="list-card">
-                            <div class="list-row">
-                                <div>
-                                    <strong>Ingresso VIP · Festival</strong>
-                                    <span>Código: LV-2048</span>
-                                </div>
-                                <button class="mini-button">Detalhes</button>
-                            </div>
-                            <div class="list-row">
-                                <div>
-                                    <strong>Ingresso Geral · Tech Summit</strong>
-                                    <span>Código: LV-1184</span>
-                                </div>
-                                <button class="mini-button">Detalhes</button>
-                            </div>
+                        <div class="list-card" id="lista-meus-ingressos">
+                            <p class="compra-aviso">Carregando…</p>
                         </div>
                     </div>
                 </div>
 
+                <!-- ---------- CONFIGURAÇÕES ---------- -->
                 <div class="profile-panel" data-panel="configuracoes">
-                    <div class="profile-form-card compact-card">
-                        <h2>Informações pessoais</h2>
-
-                        <div class="form-grid two-columns">
-                            <div class="field-group">
-                                <label for="config-nome-completo">Nome completo</label>
-                                <input id="config-nome-completo" type="text" value="">
-                            </div>
-                            <div class="field-group">
-                                <label for="config-email">E-mail</label>
-                                <input id="config-email" type="email" value="">
-                            </div>
-                        </div>
-
-                        <div class="form-grid two-columns">
-                            <div class="field-group">
-                                <label for="config-telefone">Telefone</label>
-                                <input id="config-telefone" type="tel" value="(00) 00000-0000">
-                            </div>
-                            <div class="field-group">
-                                <label for="config-cidade">Cidade</label>
-                                <input id="config-cidade" type="text" value="">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="profile-settings-card">
-                        <h2>Preferências de notificação</h2>
-
-                        <div class="notification-row">
-                            <div class="notification-text">
-                                <strong>Notificações por e-mail</strong>
-                                <span>Receba novidades sobre seus eventos favoritos</span>
-                            </div>
-                            <label class="switch-toggle">
-                                <input type="checkbox" checked>
-                                <span class="switch-slider"></span>
-                            </label>
-                        </div>
-
-                        <div class="notification-row">
-                            <div class="notification-text">
-                                <strong>Lembretes de eventos</strong>
-                                <span>Avisos 24h antes de um evento comprado</span>
-                            </div>
-                            <label class="switch-toggle">
-                                <input type="checkbox" checked>
-                                <span class="switch-slider"></span>
-                            </label>
-                        </div>
-
-                        <div class="notification-row">
-                            <div class="notification-text">
-                                <strong>Ofertas e promoções</strong>
-                                <span>Descontos exclusivos de organizadores parceiros</span>
-                            </div>
-                            <label class="switch-toggle">
-                                <input type="checkbox">
-                                <span class="switch-slider"></span>
-                            </label>
-                        </div>
-                    </div>
-
                     <div class="profile-danger-card">
                         <h3>Zona de risco</h3>
                         <p>Excluir sua conta é uma ação permanente e não pode ser desfeita.</p>
-                        <button class="danger-button" type="button">Excluir minha conta</button>
+                        <button class="danger-button" type="button" id="btn-excluir-conta">Excluir minha conta</button>
                     </div>
                 </div>
             </section>
         </div>
     </main>
 
+    <footer class="site-footer">
+        <div class="wrap footer-inner">
+            <p>LittleVitor<span class="logo-dot">.com</span> — feito para conectar pessoas a experiências reais.</p>
+            <a href="sobre.html">Sobre</a>
+            <p class="footer-meta">&copy; 2026 LittleVitor. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
     <script>
+        // ------------------------------------------------------------------
+        // EXIGE LOGIN — igual painel.html/pagamento.html: essa página só
+        // faz sentido pra quem está logado.
+        // ------------------------------------------------------------------
+        const usuarioSalvo = obterUsuarioLogado();
+        if (!usuarioSalvo) {
+            window.location.href = `login.html?retorno=${encodeURIComponent('perfil.html')}`;
+        }
+        const usuarioLocal = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+
+        // ------------------------------------------------------------------
+        // ABAS DA BARRA LATERAL
+        // ------------------------------------------------------------------
         const sidebarButtons = document.querySelectorAll('.sidebar-item');
         const panels = document.querySelectorAll('.profile-panel');
 
         sidebarButtons.forEach((button) => {
             button.addEventListener('click', () => {
                 const tab = button.dataset.tab;
-
                 sidebarButtons.forEach((item) => item.classList.remove('active'));
                 button.classList.add('active');
-
                 panels.forEach((panel) => {
                     panel.classList.toggle('active', panel.dataset.panel === tab);
                 });
             });
         });
+
+        // ------------------------------------------------------------------
+        // CARREGA OS DADOS REAIS DE PERFIL (nome, e-mail, telefone, cidade)
+        // ------------------------------------------------------------------
+        function iniciais(nome) {
+            const partes = (nome || '').trim().split(/\s+/).filter(Boolean);
+            if (partes.length === 0) return '--';
+            if (partes.length === 1) return partes[0].slice(0, 2).toUpperCase();
+            return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
+        }
+
+        async function carregarPerfil() {
+            try {
+                const resposta = await fetch(`http://127.0.0.1:5000/usuario/${usuarioLocal.id}`);
+                const dados = await resposta.json();
+
+                if (!resposta.ok) {
+                    mostrarToast(dados.mensagem || 'Não foi possível carregar seu perfil.', 'erro');
+                    return;
+                }
+
+                const usuario = dados.usuario;
+
+                document.getElementById('perfil-avatar').textContent = iniciais(usuario.nome);
+                document.getElementById('perfil-nome').textContent = usuario.nome;
+                document.getElementById('perfil-email').textContent = usuario.email;
+
+                document.getElementById('nome-completo').value = usuario.nome || '';
+                document.getElementById('email').value = usuario.email || '';
+                document.getElementById('telefone').value = usuario.telefone || '';
+                document.getElementById('cidade').value = usuario.cidade || '';
+
+            } catch (erro) {
+                console.error('Erro ao carregar perfil:', erro);
+                mostrarToast('Não foi possível conectar ao servidor.', 'erro');
+            }
+        }
+
+        document.getElementById('btn-salvar-info').addEventListener('click', async () => {
+            const nome = document.getElementById('nome-completo').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const cidade = document.getElementById('cidade').value.trim();
+
+            if (!nome || !email) {
+                mostrarToast('Nome e e-mail não podem ficar em branco.', 'erro');
+                return;
+            }
+
+            try {
+                const resposta = await fetch(`http://127.0.0.1:5000/usuario/${usuarioLocal.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, email, telefone, cidade })
+                });
+                const dados = await resposta.json();
+
+                if (resposta.ok) {
+                    mostrarToast(dados.mensagem, 'sucesso');
+                    // Atualiza também o nome/e-mail guardados no navegador,
+                    // já que outras páginas (ex: menu "Meu perfil") usam isso.
+                    salvarUsuarioLogado(dados.usuario, !!localStorage.getItem('usuario'));
+                    document.getElementById('perfil-avatar').textContent = iniciais(dados.usuario.nome);
+                    document.getElementById('perfil-nome').textContent = dados.usuario.nome;
+                    document.getElementById('perfil-email').textContent = dados.usuario.email;
+                } else {
+                    mostrarToast(dados.mensagem, 'erro');
+                }
+            } catch (erro) {
+                console.error('Erro ao salvar perfil:', erro);
+                mostrarToast('Não foi possível conectar ao servidor.', 'erro');
+            }
+        });
+
+        // ------------------------------------------------------------------
+        // EVENTOS CRIADOS — lista real (mesma rota que painel.html usa)
+        // ------------------------------------------------------------------
+        async function carregarEventosCriados() {
+            const container = document.getElementById('lista-eventos-criados');
+            try {
+                const resposta = await fetch(`http://127.0.0.1:5000/meus-eventos?usuario_id=${usuarioLocal.id}`);
+                const dados = await resposta.json();
+                const eventos = dados.eventos || [];
+
+                document.getElementById('perfil-stat-criados').textContent = eventos.length;
+
+                if (eventos.length === 0) {
+                    container.innerHTML = '<p class="compra-aviso">Você ainda não criou nenhum evento.</p>';
+                    return;
+                }
+
+                container.innerHTML = eventos.map((evento) => `
+                    <div class="list-row">
+                        <div>
+                            <strong>${evento.titulo}</strong>
+                            <span>${evento.data} · ${evento.local || ''}, ${evento.cidade || ''}</span>
+                        </div>
+                        <a href="criar-evento.html?id=${evento.id}" class="mini-button">Editar</a>
+                    </div>
+                `).join('');
+
+            } catch (erro) {
+                console.error('Erro ao carregar eventos criados:', erro);
+                container.innerHTML = '<p class="compra-aviso">Não foi possível carregar seus eventos.</p>';
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // MEUS INGRESSOS — lista real (rota /minhas-compras, já existia
+        // no back-end mas ainda não tinha nenhuma tela usando ela)
+        // ------------------------------------------------------------------
+        function formatarPreco(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        async function carregarMeusIngressos() {
+            const container = document.getElementById('lista-meus-ingressos');
+            try {
+                const resposta = await fetch(`http://127.0.0.1:5000/minhas-compras?usuario_id=${usuarioLocal.id}`);
+                const dados = await resposta.json();
+                const compras = dados.compras || [];
+
+                document.getElementById('perfil-stat-ingressos').textContent = compras.reduce((soma, c) => soma + c.quantidade, 0);
+
+                if (compras.length === 0) {
+                    container.innerHTML = '<p class="compra-aviso">Você ainda não comprou nenhum ingresso.</p>';
+                    return;
+                }
+
+                container.innerHTML = compras.map((compra) => `
+                    <div class="list-row">
+                        <div>
+                            <strong>${compra.evento_titulo}</strong>
+                            <span>${compra.tipo_ingresso_nome} × ${compra.quantidade} — ${formatarPreco(compra.valor_total)}</span>
+                        </div>
+                        <a href="evento.html?id=${compra.evento_id}" class="mini-button">Ver evento</a>
+                    </div>
+                `).join('');
+
+            } catch (erro) {
+                console.error('Erro ao carregar ingressos:', erro);
+                container.innerHTML = '<p class="compra-aviso">Não foi possível carregar seus ingressos.</p>';
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // "EXCLUIR MINHA CONTA" — ainda não existe essa função no back-end
+        // (apagar uma conta com eventos/compras reais associados exige uma
+        // lógica cuidadosa de cascata). Por enquanto avisamos com honestidade
+        // em vez de fingir que funciona.
+        // ------------------------------------------------------------------
+        document.getElementById('btn-excluir-conta').addEventListener('click', () => {
+            mostrarToast('Essa função ainda não está disponível. Fale com o suporte se precisar excluir sua conta.', 'erro');
+        });
+
+        if (usuarioLocal) {
+            carregarPerfil();
+            carregarEventosCriados();
+            carregarMeusIngressos();
+        }
     </script>
 <script src="particles.js"></script>
 </body>

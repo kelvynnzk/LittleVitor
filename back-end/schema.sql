@@ -2,8 +2,8 @@
 -- SCHEMA COMPLETO DO BANCO — LittleVitor
 -- ============================================================
 -- Esse arquivo cria as 4 tabelas do zero, já com todas as colunas
--- que o projeto usa hoje (login, verificação de e-mail, eventos,
--- ingressos e pagamentos reais via Mercado Pago).
+-- que o projeto usa hoje (login, verificação de e-mail, perfil,
+-- eventos, ingressos e pagamentos reais via Mercado Pago).
 --
 -- Como usar (quem estiver clonando o projeto pela primeira vez):
 --   1. Crie um banco vazio no seu MySQL/XAMPP (ex: "teste", o mesmo
@@ -13,8 +13,9 @@
 --         mysql -u root teste < schema.sql
 --   3. Pronto — as 4 tabelas já ficam criadas com a estrutura atual.
 --
--- Os arquivos schema_compras.sql, schema_verificacao_email.sql e
--- schema_pagamentos.sql continuam no projeto só como histórico de
+-- Os arquivos schema_compras.sql, schema_verificacao_email.sql,
+-- schema_pagamentos.sql e schema_perfil.sql continuam no projeto só
+-- como histórico de
 -- como o banco foi evoluindo (eram rodados um a um, com ALTER
 -- TABLE, conforme cada funcionalidade nova era criada) — quem está
 -- começando do zero não precisa rodar nenhum deles, só este arquivo.
@@ -28,6 +29,8 @@ CREATE TABLE usuarios (
   criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   email_verificado TINYINT(1) NOT NULL DEFAULT 0,
   token_verificacao VARCHAR(64) DEFAULT NULL,
+  telefone VARCHAR(20) DEFAULT NULL,
+  cidade VARCHAR(100) DEFAULT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

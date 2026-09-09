@@ -11,7 +11,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 # Importa as funções que já construímos e testamos.
-from usuarios import cadastro, login, buscar_usuario_por_id, confirmar_email, login_com_google
+from usuarios import cadastro, login, buscar_usuario_por_id, confirmar_email, login_com_google, buscar_perfil_usuario, atualizar_perfil
 
 # Bibliotecas do Google usadas só pra verificar se um "ID token" de
 # login com Google é mesmo autêntico (assinado por eles) antes de
@@ -152,6 +152,41 @@ def rota_login_google():
         return jsonify({"mensagem": "Não foi possível entrar com o Google. Tente novamente."}), 400
 
     return jsonify({"mensagem": "Login realizado com sucesso!", "usuario": usuario})
+
+
+# Rota que busca os dados completos de perfil de um usuário — usada
+# pela tela "Meu perfil" pra preencher o formulário com dados reais.
+@app.route("/usuario/<int:usuario_id>", methods=["GET"])
+def rota_buscar_perfil(usuario_id):
+
+    usuario = buscar_perfil_usuario(usuario_id)
+
+    if usuario is None:
+        return jsonify({"mensagem": "Usuário não encontrado."}), 404
+
+    return jsonify({"usuario": usuario})
+
+
+# Rota que salva as alterações feitas na tela "Meu perfil".
+@app.route("/usuario/<int:usuario_id>", methods=["PUT"])
+def rota_atualizar_perfil(usuario_id):
+
+    dados = request.json
+    nome = dados.get("nome")
+    email = dados.get("email")
+    telefone = dados.get("telefone")
+    cidade = dados.get("cidade")
+
+    if not nome or not email:
+        return jsonify({"mensagem": "Nome e e-mail são obrigatórios."}), 400
+
+    sucesso = atualizar_perfil(usuario_id, nome, email, telefone, cidade)
+
+    if not sucesso:
+        return jsonify({"mensagem": "Não foi possível salvar — esse e-mail já pode estar em uso por outra conta."}), 400
+
+    usuario_atualizado = buscar_perfil_usuario(usuario_id)
+    return jsonify({"mensagem": "Perfil atualizado com sucesso!", "usuario": usuario_atualizado})
 
 
 # Define a rota "/criar-evento", que só aceita requisições POST

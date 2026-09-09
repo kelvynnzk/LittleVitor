@@ -1,5 +1,52 @@
-// Verifica se tem usuário logado e, se tiver, troca o link/botão
-// de "Entrar" pelo nome do usuário, direcionando pro painel.
+// Monta o botão redondo "Meu perfil" + o menu suspenso (Meu perfil /
+// Sair) logo depois do elemento de referência passado. Reaproveitado
+// tanto aqui (páginas públicas, via atualizarBotaoEntrar) quanto
+// direto em painel.html/pagamento.html (páginas sempre logadas, que
+// não passam pelo fluxo de "Entrar" -> vira nome -> vira esse menu).
+function criarMenuPerfil(referencia) {
+    if (document.getElementById('user-menu-trigger')) {
+        return; // já existe — evita duplicar se a função rodar de novo
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'user-menu';
+    wrapper.innerHTML = `
+        <button type="button" class="user-menu-trigger" id="user-menu-trigger">Meu perfil</button>
+        <div class="user-menu-dropdown hidden" id="user-menu-dropdown">
+            <a href="perfil.html" class="user-menu-item">Meu perfil</a>
+            <button type="button" class="user-menu-item user-menu-item-sair" id="user-menu-sair">Sair</button>
+        </div>
+    `;
+    referencia.insertAdjacentElement('afterend', wrapper);
+
+    const trigger = wrapper.querySelector('#user-menu-trigger');
+    const dropdown = wrapper.querySelector('#user-menu-dropdown');
+
+    trigger.addEventListener('click', (evento) => {
+        evento.stopPropagation();
+        dropdown.classList.toggle('hidden');
+    });
+
+    // Clicar em qualquer outro lugar da página fecha o menu.
+    document.addEventListener('click', (evento) => {
+        if (!wrapper.contains(evento.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
+
+    wrapper.querySelector('#user-menu-sair').addEventListener('click', async (evento) => {
+        evento.preventDefault();
+        dropdown.classList.add('hidden');
+        const confirmou = await mostrarConfirmacao('Tem certeza que deseja sair da sua conta?', 'Sair');
+        if (confirmou) {
+            removerUsuarioLogado();
+            window.location.href = 'index.html';
+        }
+    });
+}
+
+// Verifica se tem usuário logado e, se tiver, esconde o link
+// "Entrar" (e "Criar conta") e coloca o menu "Meu perfil" no lugar.
 // Reaproveitado em todas as páginas que têm esse botão visível.
 function atualizarBotaoEntrar() {
 
@@ -13,9 +60,7 @@ function atualizarBotaoEntrar() {
     }
 
     if (usuarioSalvo) {
-        const usuario = JSON.parse(usuarioSalvo);
-        linkEntrar.textContent = usuario.nome;
-        linkEntrar.href = 'painel.html';
+        linkEntrar.hidden = true;
 
         // Esconde o link de "Criar conta" (só existe na home) — não
         // faz sentido oferecer criar conta pra quem já está logado.
@@ -24,26 +69,7 @@ function atualizarBotaoEntrar() {
             linkCriarConta.hidden = true;
         }
 
-        // Acrescenta um link "Sair" logo depois do nome, com
-        // confirmação antes de encerrar a sessão. Só cria uma vez,
-        // mesmo se essa função rodar de novo.
-        if (!document.getElementById('link-sair')) {
-            const linkSair = document.createElement('a');
-            linkSair.id = 'link-sair';
-            linkSair.href = '#';
-            linkSair.className = linkEntrar.className;
-            linkSair.style.marginLeft = '8px';
-            linkSair.textContent = 'Sair';
-            linkSair.addEventListener('click', async (evento) => {
-                evento.preventDefault();
-                const confirmou = await mostrarConfirmacao('Tem certeza que deseja sair da sua conta?', 'Sair');
-                if (confirmou) {
-                    removerUsuarioLogado();
-                    window.location.href = 'index.html';
-                }
-            });
-            linkEntrar.insertAdjacentElement('afterend', linkSair);
-        }
+        criarMenuPerfil(linkEntrar);
     }
 }
 

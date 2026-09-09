@@ -140,6 +140,64 @@ def buscar_usuario_por_id(usuario_id):
 
  return usuario
 
+
+def buscar_perfil_usuario(usuario_id):
+ """
+ Busca os dados completos de perfil de um usuário (nome, e-mail,
+ telefone, cidade e desde quando a conta existe) — usada pela tela
+ "Meu perfil", pra preencher o formulário com os dados reais salvos
+ no banco, em vez de valores fixos/inventados.
+ """
+ conexao = get_connection()
+ if conexao is None:
+   print("Não foi possível conectar ao banco.")
+   return None
+
+ cursor = conexao.cursor(dictionary=True)
+ query = "SELECT id, nome, email, telefone, cidade, criado_em FROM usuarios WHERE id = %s"
+ cursor.execute(query, (usuario_id,))
+ usuario = cursor.fetchone()
+ cursor.close()
+ conexao.close()
+
+ if usuario and usuario.get("criado_em"):
+   usuario["criado_em"] = str(usuario["criado_em"])
+
+ return usuario
+
+
+def atualizar_perfil(usuario_id, nome, email, telefone, cidade):
+ """
+ Atualiza os dados de perfil de um usuário — chamada quando a
+ pessoa clica em "Salvar alterações" na tela "Meu perfil".
+ Devolve True se atualizou, False se deu algum problema (ex: e-mail
+ já usado por outra conta, já que a coluna é UNIQUE).
+ """
+ conexao = get_connection()
+ if conexao is None:
+   print("Não foi possível conectar ao banco.")
+   return False
+
+ cursor = conexao.cursor()
+
+ try:
+   query = """
+     UPDATE usuarios
+     SET nome = %s, email = %s, telefone = %s, cidade = %s
+     WHERE id = %s
+   """
+   cursor.execute(query, (nome, email, telefone, cidade, usuario_id))
+   conexao.commit()
+   return True
+
+ except Exception as e:
+   print(f"Erro ao atualizar perfil: {e}")
+   return False
+
+ finally:
+   cursor.close()
+   conexao.close()
+
 # ============================================================
 # BLOCO DE TESTE (temporário, só para verificar se o cadastro funciona)
 # ============================================================

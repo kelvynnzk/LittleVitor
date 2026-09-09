@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu perfil - LittleVitor</title>
+    <title>Meus eventos - LittleVitor</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -31,7 +31,13 @@
             <div class="home-actions">
                 <label class="nav-search"><span>⌕</span><input type="search" id="nav-search-input" placeholder="Buscar eventos..." aria-label="Buscar eventos"></label>
                 <span id="usuario-logado" class="painel-user"></span>
-                <a href="index.html" id="btn-sair" class="home-login">Sair</a>
+                <div class="user-menu">
+                    <button type="button" class="user-menu-trigger" id="user-menu-trigger">Meu perfil</button>
+                    <div class="user-menu-dropdown hidden" id="user-menu-dropdown">
+                        <a href="perfil.html" class="user-menu-item">Meu perfil</a>
+                        <button type="button" class="user-menu-item user-menu-item-sair" id="user-menu-sair">Sair</button>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
@@ -145,16 +151,29 @@
             }
         });
 
-        // Configura o botão "Sair"
-        const btnSair = document.getElementById('btn-sair');
-        btnSair.addEventListener('click', async (evento) => {
+        // Configura o menu "Meu perfil" (abre/fecha o dropdown e o botão "Sair")
+        const userMenuTrigger = document.getElementById('user-menu-trigger');
+        const userMenuDropdown = document.getElementById('user-menu-dropdown');
+
+        userMenuTrigger.addEventListener('click', (evento) => {
+            evento.stopPropagation();
+            userMenuDropdown.classList.toggle('hidden');
+        });
+        document.addEventListener('click', (evento) => {
+            if (!evento.target.closest('.user-menu')) {
+                userMenuDropdown.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('user-menu-sair').addEventListener('click', async (evento) => {
             evento.preventDefault();
+            userMenuDropdown.classList.add('hidden');
             const confirmou = await mostrarConfirmacao('Tem certeza que deseja sair da sua conta?', 'Sair');
             if (!confirmou) {
                 return;
             }
             removerUsuarioLogado();
-            window.location.href = btnSair.href;
+            window.location.href = 'index.html';
         });
 
 

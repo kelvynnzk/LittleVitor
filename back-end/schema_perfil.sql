@@ -1,0 +1,3 @@
+ALTER TABLE usuarios
+  ADD COLUMN telefone VARCHAR(20) NULL,
+  ADD COLUMN cidade VARCHAR(100) NULL;
