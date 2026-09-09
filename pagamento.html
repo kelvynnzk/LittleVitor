@@ -31,6 +31,7 @@
                 <a href="painel.html">Dashboard</a>
             </div>
             <div class="home-actions">
+                <span id="usuario-logado" class="painel-user"></span>
                 <div class="user-menu">
                     <button type="button" class="user-menu-trigger" id="user-menu-trigger">Meu perfil</button>
                     <div class="user-menu-dropdown hidden" id="user-menu-dropdown">
@@ -193,6 +194,10 @@
         }
 
         const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+
+        if (usuario) {
+            document.getElementById('usuario-logado').textContent = `Olá, ${usuario.nome}!`;
+        }
 
         // Botão "Sair"
         // "intencao_compra" também é limpa aqui, pelo mesmo motivo de

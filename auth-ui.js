@@ -3,9 +3,20 @@
 // tanto aqui (páginas públicas, via atualizarBotaoEntrar) quanto
 // direto em painel.html/pagamento.html (páginas sempre logadas, que
 // não passam pelo fluxo de "Entrar" -> vira nome -> vira esse menu).
-function criarMenuPerfil(referencia) {
+function criarMenuPerfil(referencia, nome) {
     if (document.getElementById('user-menu-trigger')) {
         return; // já existe — evita duplicar se a função rodar de novo
+    }
+
+    // Saudação "Olá, Nome!" ao lado do menu — mesmo texto/estilo que
+    // painel.html já usava, agora em todas as páginas.
+    if (nome && !document.getElementById('user-menu-saudacao')) {
+        const saudacao = document.createElement('span');
+        saudacao.id = 'user-menu-saudacao';
+        saudacao.className = 'painel-user';
+        saudacao.textContent = `Olá, ${nome}!`;
+        referencia.insertAdjacentElement('afterend', saudacao);
+        referencia = saudacao;
     }
 
     const wrapper = document.createElement('div');
@@ -60,6 +71,7 @@ function atualizarBotaoEntrar() {
     }
 
     if (usuarioSalvo) {
+        const usuario = JSON.parse(usuarioSalvo);
         linkEntrar.hidden = true;
 
         // Esconde o link de "Criar conta" (só existe na home) — não
@@ -69,7 +81,7 @@ function atualizarBotaoEntrar() {
             linkCriarConta.hidden = true;
         }
 
-        criarMenuPerfil(linkEntrar);
+        criarMenuPerfil(linkEntrar, usuario.nome);
     }
 }
 

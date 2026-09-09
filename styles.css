@@ -2551,6 +2551,7 @@
   .home-nav { padding: 0 18px; }
   .home-actions { gap: 10px; }
   .nav-search { display: none; }
+  .painel-user { display: none; }
   .home-wrap { width: min(100% - 36px, 1180px); }
   .home-hero { padding-top: 48px; }
   .hero-copy h1 { font-size: 2.7rem; }
