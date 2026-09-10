@@ -188,7 +188,7 @@
                         if (paginaRetorno) {
                             window.location.href = paginaRetorno;
                         } else {
-                            window.location.href = 'painel.html';
+                            window.location.href = 'index.html';
                         }
                     }, 1500);
 
@@ -241,7 +241,7 @@
 
                     setTimeout(() => {
                         const paginaRetorno = new URLSearchParams(window.location.search).get('retorno');
-                        window.location.href = paginaRetorno || 'painel.html';
+                        window.location.href = paginaRetorno || 'index.html';
                     }, 1200);
                 } else {
                     mostrarToast(dados.mensagem, 'erro');
