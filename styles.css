@@ -2336,11 +2336,11 @@
 .cat-row-toggle { color: var(--purple-400); font-size: 0.78rem; cursor: pointer; margin-top: 16px; }
 .cat-row-toggle:hover { color: var(--text-hi); }
 .cat-row-toggle .chevron { margin-left: 5px; }
-.cat-event-list { display: grid; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line-soft); }
-.cat-event-item { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 0.74rem; }
-.ce-date { color: var(--purple-400); font: 0.66rem var(--font-mono); }
-.ce-name { color: var(--text-mid); }
-.ce-place { color: var(--text-low); text-align: right; }
+/* Grade de cards de evento (mesmo componente do index) dentro de uma
+   linha de categoria — a coluna disponível aqui é mais estreita que a
+   seção inteira do index, então usa largura fluida em vez do
+   repeat(4,1fr) fixo de .image-event-grid. */
+.image-event-grid.cat-event-grid { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line-soft); grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
 
 .cat-cta-banner {
   display: flex;
@@ -2375,8 +2375,7 @@
   .cat-row { grid-template-columns: 1fr; }
   .cat-row-visual { min-height: 92px; }
   .cat-row-icon { font-size: 1.7rem; }
-  .cat-event-item { grid-template-columns: 58px 1fr; }
-  .ce-place { display: none; }
+  .image-event-grid.cat-event-grid { grid-template-columns: 1fr; }
   .cat-cta-banner { align-items: flex-start; flex-direction: column; padding: 24px; }
   .cat-cta-banner-actions { width: 100%; }
   .cat-cta-banner-actions button { flex: 1; }

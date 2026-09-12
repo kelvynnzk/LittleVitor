@@ -190,18 +190,32 @@
                 ? `<span>próximo em <strong>${formatarDataCurta(proximo.data)}</strong></span>`
                 : '';
 
+            // Mesmo card de evento usado no index (foto de capa, categoria,
+            // título, data/local) — em vez de só o nome dentro de uma
+            // lista de texto, os eventos aparecem aqui do jeito "normal".
             const listaEventosHtml = `
-                <div class="cat-event-list">
+                <div class="image-event-grid cat-event-grid">
                     ${eventos
                         .slice()
                         .sort((a, b) => a.data.localeCompare(b.data))
-                        .map((evento) => `
-                            <div class="cat-event-item cat-event-item-link" data-evento-id="${evento.id}">
-                                <span class="ce-date">${formatarDataCurta(evento.data)}</span>
-                                <span class="ce-name">${evento.titulo}</span>
-                                <span class="ce-place">${evento.local}, ${evento.cidade}</span>
-                            </div>
-                        `)
+                        .map((evento) => {
+                            const urlImagem = evento.imagem
+                                ? `/uploads/eventos/${evento.imagem}`
+                                : `https://picsum.photos/seed/evento${evento.id}/900/600`;
+                            return `
+                                <article class="image-event cat-event-card" data-evento-id="${evento.id}">
+                                    <div class="image-event-media">
+                                        <img src="${urlImagem}" alt="${evento.titulo}">
+                                    </div>
+                                    <div class="image-event-body">
+                                        <small>${evento.categoria}</small>
+                                        <h3>${evento.titulo}</h3>
+                                        <p>▣ &nbsp;${evento.data} · ${evento.horario || ''}</p>
+                                        <p>⌖ &nbsp;${evento.local}, ${evento.cidade}</p>
+                                    </div>
+                                </article>
+                            `;
+                        })
                         .join('')}
                 </div>`;
 
@@ -236,11 +250,11 @@
                 </div>
             `;
 
-            // Clicar num evento real da lista leva direto pra página dele.
-            row.querySelectorAll('.cat-event-item-link').forEach((item) => {
-                item.style.cursor = 'pointer';
-                item.addEventListener('click', () => {
-                    window.location.href = `evento.html?id=${item.dataset.eventoId}`;
+            // Clicar num card de evento leva direto pra página dele.
+            row.querySelectorAll('.cat-event-card').forEach((card) => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', () => {
+                    window.location.href = `evento.html?id=${card.dataset.eventoId}`;
                 });
             });
 
