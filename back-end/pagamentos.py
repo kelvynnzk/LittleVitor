@@ -79,6 +79,36 @@ def _finalizar_compra_aprovada(tipo_ingresso_id, usuario_id, quantidade, nome_ti
     return resultado
 
 
+def confirmar_ingresso_gratuito(tipo_ingresso_id, usuario_id, quantidade, nome_titular, email_titular):
+    """
+    Registra um ingresso GRATUITO (tipo de ingresso com preço 0) sem
+    passar pelo Mercado Pago — o Card Payment Brick não aceita uma
+    cobrança de R$ 0 (fica preso no esqueleto de carregamento pra
+    sempre) e não faz sentido gerar um Pix de valor zero.
+
+    O preço é conferido aqui no servidor (nunca confiando em nada que
+    viesse do navegador) antes de liberar, pra ninguém conseguir
+    "pular" o pagamento de um ingresso pago só chamando essa rota.
+    """
+    if not tipo_ingresso_id or not usuario_id or not quantidade or quantidade < 1:
+        return {"sucesso": False, "mensagem": "Dados da compra incompletos."}
+
+    tipo = buscar_tipo_ingresso_por_id(tipo_ingresso_id)
+    if tipo is None:
+        return {"sucesso": False, "mensagem": "Tipo de ingresso não encontrado."}
+
+    if tipo["preco"] != 0:
+        return {"sucesso": False, "mensagem": "Esse ingresso não é gratuito."}
+
+    if tipo["disponivel"] < quantidade:
+        return {"sucesso": False, "mensagem": f"Restam apenas {tipo['disponivel']} ingresso(s) desse tipo."}
+
+    return _finalizar_compra_aprovada(
+        tipo_ingresso_id, usuario_id, quantidade, nome_titular, email_titular,
+        mp_payment_id=None, forma_pagamento="gratis"
+    )
+
+
 def pagar_com_cartao(form_data, tipo_ingresso_id, usuario_id, quantidade, nome_titular, email_titular):
     """
     Recebe o "formData" que o Card Payment Brick (SDK do Mercado

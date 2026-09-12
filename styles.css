@@ -677,6 +677,10 @@
     .testi-grid{ grid-template-columns: repeat(2,1fr); }
     .city-grid{ grid-template-columns: repeat(2,1fr); }
     .nav-links{ display:none; }
+    /* No celular os cards ficam bem próximos uns dos outros — uma
+       borda mais forte (em vez da quase invisível de 8% de opacidade)
+       marca onde cada evento começa e termina. */
+    .event-card{ border: 1px solid rgba(255,255,255,.22); box-shadow: 0 8px 20px -12px rgba(0,0,0,.6); }
   }
 
   /* ================= AUTH PAGES ================= */
@@ -2561,6 +2565,10 @@
   .category-strip { grid-template-columns: repeat(2, 1fr); }
   .image-event-grid { grid-template-columns: 1fr; }
   .image-event-media { height: 220px; }
+  /* Em coluna única no celular os cards ficam colados uns nos
+     outros — uma borda mais forte (em vez da quase invisível de
+     7% de opacidade) marca onde cada evento começa e termina. */
+  .image-event { border: 1px solid rgba(255,255,255,.22); box-shadow: 0 8px 20px -12px rgba(0,0,0,.6); }
   .sort-select { width: 100%; }
   .organizer-banner .home-primary { align-self: flex-start; }
   .organizer-banner-centered { padding: 40px 22px; }

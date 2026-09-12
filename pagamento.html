@@ -69,50 +69,60 @@
                                 required>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label" for="email_titular">E-mail para envio do ingresso</label>
-                            <input type="email" id="email_titular" name="email_titular"
-                                placeholder="voce@exemplo.com" required>
-                        </div>
-
-                        <!-- Alternar entre as duas formas de pagamento -->
-                        <div class="metodo-pagamento-tabs" role="tablist">
-                            <button type="button" class="metodo-pagamento-tab is-active" data-metodo="cartao">💳
-                                Cartão de crédito</button>
-                            <button type="button" class="metodo-pagamento-tab" data-metodo="pix">🔳 Pix</button>
-                        </div>
-
-                        <!-- ---------- PAINEL: CARTÃO DE CRÉDITO ---------- -->
-                        <div id="painel-cartao" class="metodo-pagamento-painel">
-                            <!-- O Mercado Pago desenha aqui o próprio formulário seguro do
-                                 cartão (número, validade, CVV, parcelas...). O número do
-                                 cartão nunca passa pelo nosso servidor — só um token gerado
-                                 pelo SDK deles, direto no seu navegador. -->
-                            <div id="cardPaymentBrick_container"></div>
-                        </div>
-
-                        <!-- ---------- PAINEL: PIX ---------- -->
-                        <div id="painel-pix" class="metodo-pagamento-painel hidden">
-                            <div id="pix-inicio">
-                                <div class="form-group">
-                                    <label class="form-label" for="cpf_titular">CPF do titular</label>
-                                    <input type="text" id="cpf_titular" name="cpf_titular" placeholder="000.000.000-00"
-                                        inputmode="numeric" maxlength="14" required>
-                                </div>
-                                <p class="compra-aviso" style="margin-bottom:14px;">Clique no botão abaixo pra gerar
-                                    um QR Code Pix real, no valor exato do pedido.</p>
-                                <button type="button" class="btn btn-primary btn-full" id="btn-gerar-pix">Gerar
-                                    Pix</button>
+                        <!-- ---------- MÉTODOS DE PAGAMENTO (ingressos pagos) ---------- -->
+                        <div id="metodos-pagos">
+                            <!-- Alternar entre as duas formas de pagamento -->
+                            <div class="metodo-pagamento-tabs" role="tablist">
+                                <button type="button" class="metodo-pagamento-tab is-active" data-metodo="cartao">💳
+                                    Cartão de crédito</button>
+                                <button type="button" class="metodo-pagamento-tab" data-metodo="pix">🔳 Pix</button>
                             </div>
 
-                            <div id="pix-qrcode-area" class="hidden">
-                                <img id="pix-qrcode-img" alt="QR Code Pix" class="pix-qrcode">
-                                <p class="pix-status" id="pix-status">Aguardando pagamento…</p>
-                                <div class="pix-copia-cola-row">
-                                    <input type="text" id="pix-copia-cola" readonly>
-                                    <button type="button" class="btn btn-secondary" id="btn-copiar-pix">Copiar</button>
+                            <!-- ---------- PAINEL: CARTÃO DE CRÉDITO ---------- -->
+                            <div id="painel-cartao" class="metodo-pagamento-painel">
+                                <!-- O Mercado Pago desenha aqui o próprio formulário seguro do
+                                     cartão (número, validade, CVV, parcelas, e-mail...). O
+                                     número do cartão nunca passa pelo nosso servidor — só um
+                                     token gerado pelo SDK deles, direto no seu navegador. -->
+                                <div id="cardPaymentBrick_container"></div>
+                            </div>
+
+                            <!-- ---------- PAINEL: PIX ---------- -->
+                            <div id="painel-pix" class="metodo-pagamento-painel hidden">
+                                <div id="pix-inicio">
+                                    <div class="form-group">
+                                        <label class="form-label" for="cpf_titular">CPF do titular</label>
+                                        <input type="text" id="cpf_titular" name="cpf_titular" placeholder="000.000.000-00"
+                                            inputmode="numeric" maxlength="14" required>
+                                    </div>
+                                    <p class="compra-aviso" style="margin-bottom:14px;">Clique no botão abaixo pra gerar
+                                        um QR Code Pix real, no valor exato do pedido.</p>
+                                    <button type="button" class="btn btn-primary btn-full" id="btn-gerar-pix">Gerar
+                                        Pix</button>
+                                </div>
+
+                                <div id="pix-qrcode-area" class="hidden">
+                                    <img id="pix-qrcode-img" alt="QR Code Pix" class="pix-qrcode">
+                                    <p class="pix-status" id="pix-status">Aguardando pagamento…</p>
+                                    <div class="pix-copia-cola-row">
+                                        <input type="text" id="pix-copia-cola" readonly>
+                                        <button type="button" class="btn btn-secondary" id="btn-copiar-pix">Copiar</button>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- ---------- PAINEL: INGRESSO GRATUITO ----------
+                             O Card Payment Brick do Mercado Pago não aceita
+                             cobrança de R$ 0 (fica travado carregando pra
+                             sempre) e não faria sentido gerar um Pix de
+                             valor zero — pra esses casos, pulamos o
+                             pagamento e só confirmamos a inscrição direto. -->
+                        <div id="painel-gratis" class="metodo-pagamento-painel hidden">
+                            <p class="compra-aviso" style="margin-bottom:14px;">Esse ingresso é gratuito — não é
+                                necessário pagamento, só confirmar sua inscrição.</p>
+                            <button type="button" class="btn btn-primary btn-full" id="btn-confirmar-gratis">Confirmar
+                                inscrição</button>
                         </div>
 
                     </div>
@@ -293,11 +303,12 @@
                 document.getElementById('resumo-unitario').textContent = formatarPreco(tipoEscolhido.preco);
                 document.getElementById('resumo-total-valor').textContent = formatarPreco(tipoEscolhido.preco * quantidade);
 
-                // Pré-preenche os dados de contato com o que já sabemos
-                // do usuário logado.
+                // Pré-preenche o nome com o que já sabemos do usuário
+                // logado. O e-mail de confirmação não precisa de campo
+                // próprio aqui — usamos direto o e-mail da conta logada
+                // (usuario.email), já confirmado no cadastro.
                 if (usuario) {
                     document.getElementById('nome_titular').value = usuario.nome || '';
-                    document.getElementById('email_titular').value = usuario.email || '';
                 }
 
             } catch (erro) {
@@ -323,18 +334,19 @@
             document.getElementById('pagamento-sucesso').classList.remove('hidden');
         }
 
-        // Usada pelo cartão: o próprio Card Payment Brick já pede o CPF
-        // dele (é parte do formulário seguro), então aqui só conferimos
-        // nome e e-mail.
+        // Usada pelo cartão, Pix e ingresso gratuito: o e-mail de
+        // confirmação é sempre o da conta logada (usuario.email) — o
+        // Card Payment Brick pede o dele próprio, mas é só pra parte
+        // do Mercado Pago, e não muda pra onde o NOSSO e-mail de
+        // confirmação/PDF do ingresso é enviado.
         function dadosContatoBasicosValidos() {
             const nomeTitular = document.getElementById('nome_titular').value.trim();
-            const emailTitular = document.getElementById('email_titular').value.trim();
 
-            if (!nomeTitular || !emailTitular) {
-                mostrarToast('Preencha nome e e-mail do titular antes de continuar.', 'erro');
+            if (!nomeTitular) {
+                mostrarToast('Preencha o nome do titular antes de continuar.', 'erro');
                 return null;
             }
-            return { nomeTitular, emailTitular };
+            return { nomeTitular, emailTitular: usuario.email };
         }
 
         // Usada pelo Pix: como não existe um formulário próprio pedindo
@@ -550,12 +562,67 @@
         });
 
         // ------------------------------------------------------------------
+        // INGRESSO GRATUITO — sem Mercado Pago
+        // ------------------------------------------------------------------
+        document.getElementById('btn-confirmar-gratis').addEventListener('click', async () => {
+            const contato = dadosContatoBasicosValidos();
+            if (!contato) {
+                return;
+            }
+
+            const botao = document.getElementById('btn-confirmar-gratis');
+            botao.disabled = true;
+            botao.textContent = 'Confirmando...';
+
+            try {
+                const resposta = await fetch('/pagamento/gratis', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        tipo_ingresso_id: tipoEscolhido.id,
+                        usuario_id: usuario.id,
+                        quantidade: quantidade,
+                        nome_titular: contato.nomeTitular,
+                        email_titular: contato.emailTitular
+                    })
+                });
+
+                const dados = await resposta.json();
+
+                if (resposta.ok) {
+                    mostrarSucesso(dados, contato.emailTitular);
+                } else {
+                    mostrarToast(dados.mensagem || 'Não foi possível confirmar a inscrição.', 'erro');
+                    botao.disabled = false;
+                    botao.textContent = 'Confirmar inscrição';
+                }
+            } catch (erro) {
+                console.error('Erro ao confirmar ingresso gratuito:', erro);
+                mostrarToast('Não foi possível conectar ao servidor. Tente novamente.', 'erro');
+                botao.disabled = false;
+                botao.textContent = 'Confirmar inscrição';
+            }
+        });
+
+        // ------------------------------------------------------------------
         // PONTO DE PARTIDA
         // ------------------------------------------------------------------
         carregarResumo().then(() => {
-            if (tipoEscolhido) {
-                iniciarCardBrick(tipoEscolhido.preco * quantidade);
+            if (!tipoEscolhido) {
+                return;
             }
+
+            // Ingresso gratuito: o Card Payment Brick não aceita amount
+            // 0 (fica preso no esqueleto de carregamento pra sempre) e
+            // não existe Pix de valor zero — pulamos os dois e mostramos
+            // só o botão de confirmar inscrição.
+            if (tipoEscolhido.preco === 0) {
+                document.getElementById('metodos-pagos').classList.add('hidden');
+                document.getElementById('painel-gratis').classList.remove('hidden');
+                return;
+            }
+
+            iniciarCardBrick(tipoEscolhido.preco * quantidade);
         });
     </script>
 

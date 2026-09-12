@@ -32,7 +32,7 @@ from compras import criar_tipo_ingresso, remover_tipos_ingresso_evento, listar_t
 from ingresso_pdf import gerar_pdf_ingresso
 from email_service import enviar_email_confirmacao, enviar_email_boas_vindas, enviar_email_evento_criado, enviar_email_redefinicao_senha
 from validacao_email import dominio_aceita_email
-from pagamentos import pagar_com_cartao, pagar_com_pix, consultar_status_pix
+from pagamentos import pagar_com_cartao, pagar_com_pix, consultar_status_pix, confirmar_ingresso_gratuito
 from chatbot import responder_chat
 # Cria a aplicação Flask. "__name__" aqui tem o mesmo papel que
 # vimos antes — ajuda o Flask a saber onde ele está localizado
@@ -593,6 +593,29 @@ def rota_pagamento_pix():
         nome_titular=dados.get("nome_titular"),
         email_titular=dados.get("email_titular"),
         cpf=dados.get("cpf"),
+    )
+
+    if resultado["sucesso"]:
+        return jsonify(resultado)
+    else:
+        return jsonify({"mensagem": resultado["mensagem"]}), 400
+
+
+# Rota que confirma um ingresso GRATUITO (tipo de ingresso com preço
+# 0), sem passar pelo Mercado Pago — ver confirmar_ingresso_gratuito()
+# em pagamentos.py pro motivo (o Card Payment Brick não aceita amount
+# 0, e não existe Pix de valor zero).
+@app.route("/pagamento/gratis", methods=["POST"])
+def rota_pagamento_gratis():
+
+    dados = request.json
+
+    resultado = confirmar_ingresso_gratuito(
+        tipo_ingresso_id=dados.get("tipo_ingresso_id"),
+        usuario_id=dados.get("usuario_id"),
+        quantidade=dados.get("quantidade"),
+        nome_titular=dados.get("nome_titular"),
+        email_titular=dados.get("email_titular"),
     )
 
     if resultado["sucesso"]:
