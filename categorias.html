@@ -190,24 +190,33 @@
                 ? `<span>próximo em <strong>${formatarDataCurta(proximo.data)}</strong></span>`
                 : '';
 
+            const listaEventosHtml = `
+                <div class="cat-event-list">
+                    ${eventos
+                        .slice()
+                        .sort((a, b) => a.data.localeCompare(b.data))
+                        .map((evento) => `
+                            <div class="cat-event-item cat-event-item-link" data-evento-id="${evento.id}">
+                                <span class="ce-date">${formatarDataCurta(evento.data)}</span>
+                                <span class="ce-name">${evento.titulo}</span>
+                                <span class="ce-place">${evento.local}, ${evento.cidade}</span>
+                            </div>
+                        `)
+                        .join('')}
+                </div>`;
+
+            // Com "Todas" as categorias na tela ao mesmo tempo, o toggle
+            // "Ver eventos" evita uma lista gigante — mas quando a pessoa
+            // já escolheu UMA categoria na barra lateral, não faz sentido
+            // pedir mais um clique: mostra a lista direto, sem o toggle.
             const listaEventos = eventos.length === 0
                 ? '<p style="color:var(--text-low); font-size:0.78rem; margin-top:12px;">Nenhum evento cadastrado nesta categoria ainda.</p>'
-                : `<details${abrirEventos ? ' open' : ''}>
-                        <summary class="cat-row-toggle">Ver eventos <span class="chevron">▾</span></summary>
-                        <div class="cat-event-list">
-                            ${eventos
-                                .slice()
-                                .sort((a, b) => a.data.localeCompare(b.data))
-                                .map((evento) => `
-                                    <div class="cat-event-item cat-event-item-link" data-evento-id="${evento.id}">
-                                        <span class="ce-date">${formatarDataCurta(evento.data)}</span>
-                                        <span class="ce-name">${evento.titulo}</span>
-                                        <span class="ce-place">${evento.local}, ${evento.cidade}</span>
-                                    </div>
-                                `)
-                                .join('')}
-                        </div>
-                   </details>`;
+                : abrirEventos
+                    ? listaEventosHtml
+                    : `<details>
+                            <summary class="cat-row-toggle">Ver eventos <span class="chevron">▾</span></summary>
+                            ${listaEventosHtml}
+                       </details>`;
 
             row.innerHTML = `
                 <div class="cat-row-visual ${categoria.tom}">
